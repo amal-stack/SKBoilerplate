@@ -1,53 +1,35 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../domain/entities/authentication_result.dart';
+import '../../domain/repositories/auth_repository.dart';
+import 'auth_cubit.dart';
+import 'state.dart';
 
-class ForgotPasswordState {
-  final bool loading;
-  final bool success;
-  final String? error;
-  final String? email;
+class ForgotPasswordCubit extends AuthCubit<ForgotPasswordDetails> {
+  ForgotPasswordCubit(this._authRepository)
+    : super(const AuthOperationInitial<ForgotPasswordDetails>());
 
-  const ForgotPasswordState({
-    this.loading = false,
-    this.success = false,
-    this.error,
-    this.email,
-  });
+  final AuthRepository _authRepository;
 
-  ForgotPasswordState copyWith({
-    bool? loading,
-    bool? success,
-    String? error,
-    String? email,
-  }) {
-    return ForgotPasswordState(
-      loading: loading ?? this.loading,
-      success: success ?? this.success,
-      error: error,
-      email: email ?? this.email,
-    );
+  Future<void> forgotPassword(String email) async {
+    loading();
+    final result = await _authRepository.sendResetEmail(email);
+
+    emit(stateFromResult(email, result));
   }
+
+  AuthOperationState<ForgotPasswordDetails> stateFromResult(
+    String email,
+    AuthenticationResult<Object?> result,
+  ) => switch (result) {
+    AuthenticationResult(isSuccess: true, message: final message) =>
+      AuthOperationSuccess(ForgotPasswordDetails(email, message)),
+    AuthenticationResult(isSuccess: false, message: final message) =>
+      AuthOperationFailure(message),
+  };
 }
 
+class ForgotPasswordDetails {
+  const ForgotPasswordDetails(this.email, this.message);
 
-class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
-  ForgotPasswordCubit() : super(const ForgotPasswordState());
-
-  Future<void> sendResetLink(String email) async {
-    emit(state.copyWith(loading: true, error: null));
-    // fake API delay
-    await Future.delayed(const Duration(seconds: 2));
-
-    if (email == "chintandave3019@gmail.com") {
-      emit(state.copyWith(
-        loading: false,
-        success: true,
-        email: email,
-      ));
-    } else {
-      emit(state.copyWith(
-        loading: false,
-        error: "No account found with this email",
-      ));
-    }
-  }
+  final String email;
+  final String message;
 }

@@ -1,38 +1,29 @@
+import 'dart:async';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../repositories/auth_repository.dart';
+import '../../domain/entities/authentication.dart';
+import '../../domain/repositories/auth_repository.dart';
 
-class LoginState {
-  final bool loading;
-  final bool success;
-  final String? error;
-
-  const LoginState({this.loading = false, this.success = false, this.error});
-
-  LoginState copyWith({bool? loading, bool? success, String? error}) {
-    return LoginState(
-      loading: loading ?? this.loading,
-      success: success ?? this.success,
-      error: error,
-    );
+class LoginCubit extends Cubit<Authentication> {
+  LoginCubit(this._repository) : super(const Authentication.unknown()) {
+    _authSubscription = _repository.state.listen(emit);
   }
-}
-
-class LoginCubit extends Cubit<LoginState> {
   final AuthRepository _repository;
 
-  LoginCubit(this._repository) : super(const LoginState());
+  StreamSubscription<Authentication>? _authSubscription;
 
   Future<void> login(String email, String password) async {
-    emit(state.copyWith(loading: true, error: null));
-    await Future.delayed(const Duration(seconds: 2));
-    // try {
-    //   final response = await _repository.login(email, password);
-    //   if (response["success"] == true) {
-    //     emit(state.copyWith(loading: false, success: true));
-    //   }
-    // } catch (e) {
-    //   emit(state.copyWith(loading: false, error: e.toString()));
-    // }
+    await _repository.login(email, password);
+  }
+
+  Future<void> logout() async {
+    await _repository.logout();
+  }
+
+  @override
+  Future<void> close() {
+    _authSubscription?.cancel();
+    return super.close();
   }
 }
