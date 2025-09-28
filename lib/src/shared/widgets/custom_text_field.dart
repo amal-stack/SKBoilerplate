@@ -4,8 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../utils/app_colors.dart';
-
 class InputTextField extends StatefulWidget {
   const InputTextField({
     super.key,
@@ -164,8 +162,8 @@ class _InputTextFieldState extends State<InputTextField> {
           hintText: widget.hintMessage,
           hintStyle: TextStyle(
             color: AppColors.lightGreyColor,
-            fontSize: 14.sp ?? 18.sp,
-            fontWeight:FontWeight.w500,
+            fontSize: 14.sp,
+            fontWeight: FontWeight.w500,
             //height: height,
             fontFamily: "Modelica",
           ),
