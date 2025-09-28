@@ -13,25 +13,25 @@ class ConnectivityService {
   final _controller = StreamController<bool>.broadcast();
   Stream<bool> get connectionStream => _controller.stream;
 
-  StreamSubscription<ConnectivityResult>? _connectivitySub;
+  StreamSubscription<List<ConnectivityResult>>? _connectivitySub;
   StreamSubscription<InternetConnectionStatus>? _internetSub;
 
   Future<void> _init() async {
     // Connectivity type change
     _connectivitySub =
         Connectivity().onConnectivityChanged.listen((_) async {
-      final has = await InternetConnectionChecker().hasConnection;
+      final has = await InternetConnectionChecker.instance.hasConnection;
       _controller.add(has);
     });
 
     // Periodic checks
     _internetSub =
-        InternetConnectionChecker().onStatusChange.listen((status) {
+        InternetConnectionChecker.instance.onStatusChange.listen((status) {
       _controller.add(status == InternetConnectionStatus.connected);
     });
 
     // Initial check
-    final initial = await InternetConnectionChecker().hasConnection;
+    final initial = await InternetConnectionChecker.instance.hasConnection;
     _controller.add(initial);
   }
 
