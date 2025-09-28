@@ -1,8 +1,8 @@
+import 'package:boilerplate/src/shared/utils/app_routes.dart';
 import 'package:go_router/go_router.dart';
 
 import '../features/auth/presentation/screens/forgot_password_screen.dart';
 import '../features/auth/presentation/screens/login_screen.dart';
-import '../features/auth/presentation/screens/otp_verification_screen.dart';
 import '../features/auth/presentation/screens/reset_password_screen.dart';
 import '../features/auth/presentation/screens/success_screen.dart';
 import '../features/dashboard/presentation/screens/brands_screen.dart';
@@ -29,30 +29,31 @@ final GoRouter appRouter = GoRouter(
   initialLocation: '/splash',
   routes: [
     GoRoute(path: '/splash', builder: (context, state) => const SplashScreen()),
-    GoRoute(path: '/login', builder: (context, state) => const LoginScreen()),
     GoRoute(path: '/dashboard', builder: (context, state) => DashboardScreen()),
     GoRoute(
-      path: '/forgot-password',
-      builder: (context, state) => const ForgotPasswordScreen(),
-    ),
-    GoRoute(
-      path: '/otp-verification',
-      builder: (context, state) {
-        final email = state.extra as String? ?? '';
-        return OtpVerificationScreen(email: email);
-      },
-    ),
-    GoRoute(
-      path: '/reset-password',
-      builder: (context, state) => const ResetPasswordScreen(),
-    ),
-    GoRoute(
-      path: '/success-screen',
-      builder: (context, state) => const SuccessScreen(),
+      path: AppRoutes.auth,
+      builder: (context, state) => const LoginScreen(),
+      routes: [
+        GoRoute(
+          path: 'forgot-password',
+          builder: (context, state) => const ForgotPasswordScreen(),
+        ),
+        GoRoute(
+          path: 'reset-password',
+          builder: (context, state) {
+            final email = state.extra as String? ?? '';
+            return ResetPasswordScreen(email: email);
+          },
+        ),
+        GoRoute(
+          path: 'success-screen',
+          builder: (context, state) => const SuccessScreen(),
+        ),
+      ],
     ),
     GoRoute(
       path: '/introslider-screen',
-      builder: (context, state) => IntroSlider(),
+      builder: (context, state) => IntroSliderScreen(),
     ),
     GoRoute(path: '/brands', builder: (context, state) => BrandsScreen()),
     GoRoute(
