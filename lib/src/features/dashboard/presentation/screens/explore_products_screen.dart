@@ -5,7 +5,7 @@ import 'package:boilerplate/src/shared/utils/app_assets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:boilerplate/src/shared/widgets/custom_text_feild.dart';
+import 'package:boilerplate/src/shared/widgets/custom_text_field.dart';
 
 
 class ExploreProductsScreen extends StatefulWidget {

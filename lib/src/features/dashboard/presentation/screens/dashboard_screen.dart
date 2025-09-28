@@ -2,13 +2,26 @@ import 'package:boilerplate/src/shared/themes/text.dart';
 import 'package:boilerplate/src/shared/utils/app_assets.dart';
 import 'package:boilerplate/src/shared/utils/app_colors.dart';
 import 'package:boilerplate/src/shared/utils/app_texts.dart';
-import 'package:boilerplate/src/shared/widgets/custom_text_feild.dart';
+import 'package:boilerplate/src/shared/widgets/custom_text_field.dart';
 import 'package:boilerplate/src/shared/widgets/qa_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widget_previews.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
+Widget screenUtilWrapper(Widget child) => ScreenUtilInit(
+  designSize: const Size(375, 812),
+  minTextAdapt: true,
+  splitScreenMode: true,
+  builder: (_, _) => MaterialApp(
+    debugShowCheckedModeBanner: false,
+    home: child,
+  ),
+);
+
+
 class DashboardScreen extends StatefulWidget {
+  @Preview(wrapper: screenUtilWrapper)
   const DashboardScreen({super.key});
 
   @override

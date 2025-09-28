@@ -201,7 +201,6 @@ class _PhoneDetailsScreenState extends State<PhoneDetailsScreen> {
                   spacing: 12,
                   runSpacing: 12,
                   children: List.generate(ramTypeList.length, (index) {
-                    final isSelected = selectedIndex == index;
                     return GestureDetector(
                       onTap: () {
                         setState(() {
