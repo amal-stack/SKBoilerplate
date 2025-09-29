@@ -3,8 +3,10 @@ import 'package:boilerplate/src/features/auth/data/repositories/remote/remote_au
 import 'package:boilerplate/src/features/auth/data/repositories/remote/remote_user_repository.dart';
 import 'package:boilerplate/src/features/auth/domain/repositories/auth_repository.dart';
 import 'package:boilerplate/src/features/auth/domain/repositories/user_repository.dart';
-import 'package:boilerplate/src/features/dashboard/data/repositories/remote/remote_brands_repository.dart';
-import 'package:boilerplate/src/features/dashboard/domain/repositories/brands_repository.dart';
+import 'package:boilerplate/src/features/brands/data/repositories/remote/remote_brands_repository.dart';
+import 'package:boilerplate/src/features/brands/domain/repositories/brands_repository.dart';
+import 'package:boilerplate/src/features/products/data/repositories/remote/remote_products_repository.dart';
+import 'package:boilerplate/src/features/products/domain/repositories/products_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -37,6 +39,9 @@ class SwitchKartApp extends StatelessWidget {
       ),
       RepositoryProvider<BrandsRepository>(
         create: (context) => RemoteBrandsRepository(dependencies.brandsDataSource),
+      ),
+      RepositoryProvider<ProductsRepository>(
+        create: (context) => RemoteProductsRepository(dependencies.productsDataSource),
       ),
     ],
     child: const AppView(),

@@ -5,12 +5,12 @@ import '../features/auth/presentation/screens/forgot_password_screen.dart';
 import '../features/auth/presentation/screens/login_screen.dart';
 import '../features/auth/presentation/screens/reset_password_screen.dart';
 import '../features/auth/presentation/screens/success_screen.dart';
-import '../features/dashboard/presentation/screens/brands_screen.dart';
+import '../features/brands/presentation/screens/brands_screen.dart';
 import '../features/dashboard/presentation/screens/dashboard_screen.dart';
-import '../features/dashboard/presentation/screens/explore_products_screen.dart';
+import '../features/products/presentation/screens/explore_products_screen.dart';
 import '../features/dashboard/presentation/screens/phone_details_screen.dart';
 import '../features/dashboard/presentation/screens/top_selling_phone_screen.dart';
-import '../features/introslider/screen/introslider_screen.dart';
+import '../features/introslider/screens/introslider_screen.dart';
 import '../features/questionaire/presentation/screen/defects_selection_screen.dart';
 import '../features/questionaire/presentation/screen/dents_selection_screen.dart';
 import '../features/questionaire/presentation/screen/imel_screen.dart';
@@ -57,8 +57,8 @@ final GoRouter appRouter = GoRouter(
     ),
     GoRoute(path: '/brands', builder: (context, state) => BrandsScreen()),
     GoRoute(
-      path: '/explore-brands',
-      builder: (context, state) => ExploreProductsScreen(),
+      path: '/explore-brands/:brandId',
+      builder: (context, state) => ExploreProductsScreen(brandId: state.pathParameters['brandId']!),
     ),
     GoRoute(
       path: '/phone-details',
