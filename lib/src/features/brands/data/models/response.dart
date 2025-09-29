@@ -1,5 +1,5 @@
 import 'package:boilerplate/src/core/models/paginated_response.dart';
-import 'package:boilerplate/src/features/dashboard/domain/entities/brand.dart';
+import 'package:boilerplate/src/features/brands/domain/entities/brand.dart';
 
 class BrandsResponse extends PaginatedResponse<Brand> {
   const BrandsResponse({

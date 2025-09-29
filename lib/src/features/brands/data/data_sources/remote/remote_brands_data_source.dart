@@ -1,9 +1,8 @@
 import 'package:boilerplate/src/core/config/api_options.dart';
 import 'package:boilerplate/src/core/network/api_client.dart';
 import 'package:boilerplate/src/core/network/models/api_request.dart';
-import 'package:boilerplate/src/features/dashboard/data/data_sources/brands_data_source.dart';
-import 'package:boilerplate/src/features/dashboard/data/models/response.dart';
-import 'package:flutter/material.dart';
+import 'package:boilerplate/src/features/brands/data/data_sources/brands_data_source.dart';
+import 'package:boilerplate/src/features/brands/data/models/response.dart';
 
 const _baseUrl = '${ApiOptions.baseUrl}/devices/brands';
 
@@ -23,8 +22,6 @@ class RemoteBrandsDataSource implements BrandsDataSource {
         },
       ),
     );
-
-    debugPrint('Brands Response: ${response.data}');
 
     return BrandsResponse.fromJson(response.data as Map<String, dynamic>);
   }

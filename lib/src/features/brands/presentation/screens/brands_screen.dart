@@ -1,5 +1,6 @@
-import 'package:boilerplate/src/features/dashboard/domain/repositories/brands_repository.dart';
-import 'package:boilerplate/src/features/dashboard/presentation/cubit/brands_cubit.dart';
+import 'package:boilerplate/src/features/brands/domain/repositories/brands_repository.dart';
+import 'package:boilerplate/src/features/brands/presentation/cubit/brands_cubit.dart';
+import 'package:boilerplate/src/features/brands/presentation/widgets/brands_grid.dart';
 import 'package:boilerplate/src/shared/themes/text.dart';
 import 'package:boilerplate/src/shared/utils/app_colors.dart';
 import 'package:boilerplate/src/shared/utils/app_texts.dart';
@@ -16,7 +17,8 @@ class BrandsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) => BlocProvider(
     lazy: false,
-    create: (context) => BrandsCubit(context.read<BrandsRepository>())..fetchBrands(),
+    create: (context) =>
+        BrandsCubit(context.read<BrandsRepository>())..fetchBrands(),
     child: Scaffold(
       backgroundColor: AppColors.white,
       appBar: AppBar(
@@ -61,7 +63,6 @@ class BrandsScreen extends StatelessWidget {
           child: Container(color: AppColors.dividerColor, height: 1),
         ),
       ),
-
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 24.w),
@@ -110,100 +111,6 @@ class BrandsScreen extends StatelessWidget {
             ],
           ),
         ),
-      ),
-    ),
-  );
-}
-
-class BrandsGrid extends StatelessWidget {
-  const BrandsGrid({super.key});
-
-  static const List<String> brandImageList = [
-    "assets/images/brands/iphone_brand.png",
-    "assets/images/brands/huawel.png",
-    "assets/images/brands/samsung_brand.png",
-    "assets/images/brands/oneplus.png",
-    "assets/images/brands/realme.png",
-    "assets/images/brands/oppo.png",
-    "assets/images/brands/vivo.png",
-    "assets/images/brands/mi.png",
-    "assets/images/brands/google_pixel.png",
-    "assets/images/brands/iqoo.png",
-    "assets/images/brands/infinix.png",
-    "assets/images/brands/motorola.png",
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<BrandsCubit, BrandsState>(
-      builder: (context, state) => switch (state) {
-        BrandsInitial() => const Center(child: Text("No brands loaded")),
-        BrandsLoading() => const Center(child: CircularProgressIndicator()),
-        BrandsError(:final message) => SingleChildScrollView(
-          child: Center(
-            child: RegularText(
-              text: "Failed to load brands. Cause: $message",
-              textColor: AppColors.errorColor,
-              textSize: 16.sp,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        ),
-        BrandsFetched(:final brands) => SingleChildScrollView(
-          child: GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: brands.length,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3, // 3 per row
-              crossAxisSpacing: 8,
-              mainAxisSpacing: 8,
-            ),
-            itemBuilder: (context, index) => BrandCard(
-              name: brands[index].name,
-              image: brandImageList[index],
-            ),
-          ),
-        ),
-      },
-    );
-  }
-}
-
-class BrandCard extends StatelessWidget {
-  const BrandCard({super.key, required this.name, required this.image});
-
-  final String name;
-
-  final String image;
-
-  @override
-  Widget build(BuildContext context) => GestureDetector(
-    child: Container(
-      padding: EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(
-          color: AppColors.borderBlack.withValues(alpha: 0.10),
-        ),
-        borderRadius: BorderRadius.circular(8.r),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          SizedBox(height: 10.h),
-          Image.asset(image, height: 34.h, width: 61.w),
-          RegularText(
-            textAlign: TextAlign.center,
-            textSize: 12.sp,
-            maxLines: 1,
-            fontWeight: FontWeight.w500,
-            textColor: AppColors.black,
-            textOverflow: TextOverflow.ellipsis,
-            text: name,
-          ),
-        ],
       ),
     ),
   );
