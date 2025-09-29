@@ -1,15 +1,5 @@
 class Paginated<T> with Iterable<T> {
 
-  final List<T> items;
-
-  final int page;
-
-  final int limit;
-
-  final int total;
-
-  final int totalPages;
-
   const Paginated(
     this.items, {
     required this.page,
@@ -21,6 +11,16 @@ class Paginated<T> with Iterable<T> {
       assert(limit > 0),
       assert(total >= 0),
       assert(totalPages > 0);
+
+  final List<T> items;
+
+  final int page;
+
+  final int limit;
+
+  final int total;
+
+  final int totalPages;
 
   T operator [](int index) => items[index];
   
