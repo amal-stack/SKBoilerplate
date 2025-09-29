@@ -18,13 +18,18 @@ abstract class PaginatedResponse<T>
         (data) => PaginatedResponseData.fromJson(data, itemFromJson, itemsKey),
       );
 
-  Paginated<T> toPaginated() => Paginated(
-    data!.items,
-    page: data!.pagination.page,
-    limit: data!.pagination.limit,
-    total: data!.pagination.total,
-    totalPages: data!.pagination.totalPages,
-  );
+  Paginated<T> toPaginated() => switch (data) {
+    final data? => Paginated(
+      data.items,
+      page: data.pagination.page,
+      limit: data.pagination.limit,
+      total: data.pagination.total,
+      totalPages: data.pagination.totalPages,
+    ),
+    null => throw StateError(
+      'No response data available to convert to Paginated',
+    ),
+  };
 
   @override
   dynamic dataToJson(PaginatedResponseData<T> data) => data.toJson(itemToJson);
