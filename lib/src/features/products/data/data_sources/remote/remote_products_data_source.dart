@@ -4,8 +4,11 @@ import 'package:boilerplate/src/core/network/models/api_request.dart';
 import 'package:boilerplate/src/features/products/data/data_sources/products_data_source.dart';
 import 'package:boilerplate/src/features/products/data/models/response.dart';
 
-String _baseUrl(String brandId) =>
+String _productsUrl(String brandId) =>
     '${ApiOptions.baseUrl}/devices/brands/$brandId/models';
+
+String _variantsUrl(String modelId) =>
+    '${ApiOptions.baseUrl}/devices/models/$modelId/variants';
 
 class RemoteProductsDataSource implements ProductsDataSource {
   const RemoteProductsDataSource(this._client);
@@ -20,7 +23,7 @@ class RemoteProductsDataSource implements ProductsDataSource {
   }) async {
     final response = await _client.get(
       ApiRequest(
-        path: _baseUrl(brandId),
+        path: _productsUrl(brandId),
         queryParameters: {
           if (page != null) 'page': page,
           if (limit != null) 'limit': limit,
@@ -29,5 +32,18 @@ class RemoteProductsDataSource implements ProductsDataSource {
     );
 
     return ProductsResponse.fromJson(response.data as Map<String, dynamic>);
+  }
+
+  @override
+  Future<ProductVariantsResponse> variants({
+    required String modelId
+  }) async {
+    final response = await _client.get(
+      ApiRequest(
+        path: _variantsUrl(modelId),
+      ),
+    );
+
+    return ProductVariantsResponse.fromJson(response.data as Map<String, dynamic>);
   }
 }

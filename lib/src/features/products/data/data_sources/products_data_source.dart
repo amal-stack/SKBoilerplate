@@ -1,11 +1,14 @@
 
-import 'package:boilerplate/src/core/models/paginated_response.dart';
-import 'package:boilerplate/src/features/products/domain/product.dart';
+import 'package:boilerplate/src/features/products/data/models/response.dart';
 
 abstract interface class ProductsDataSource {
-  Future<PaginatedResponse<Product>> products({
+  Future<ProductsResponse> products({
     required String brandId,
     int? page,
     int? limit,
+  });
+
+  Future<ProductVariantsResponse> variants({
+    required String modelId,
   });
 }
