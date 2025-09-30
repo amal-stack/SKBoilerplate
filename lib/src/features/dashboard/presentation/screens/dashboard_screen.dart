@@ -338,7 +338,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         padding: EdgeInsets.only(right: 5.w),
                         child: GestureDetector(
                           onTap: () {
-                            context.push('/explore-brands');
+                            // context.push('/explore-brands/');
                           },
                           child: Image.asset(
                             imageList[index],

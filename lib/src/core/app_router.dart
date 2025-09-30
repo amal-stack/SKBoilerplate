@@ -8,7 +8,7 @@ import '../features/auth/presentation/screens/success_screen.dart';
 import '../features/brands/presentation/screens/brands_screen.dart';
 import '../features/dashboard/presentation/screens/dashboard_screen.dart';
 import '../features/products/presentation/screens/explore_products_screen.dart';
-import '../features/dashboard/presentation/screens/phone_details_screen.dart';
+import '../features/products/presentation/screens/phone_details_screen.dart';
 import '../features/dashboard/presentation/screens/top_selling_phone_screen.dart';
 import '../features/introslider/screens/introslider_screen.dart';
 import '../features/questionaire/presentation/screen/defects_selection_screen.dart';
@@ -61,8 +61,8 @@ final GoRouter appRouter = GoRouter(
       builder: (context, state) => ExploreProductsScreen(brandId: state.pathParameters['brandId']!),
     ),
     GoRoute(
-      path: '/phone-details',
-      builder: (context, state) => PhoneDetailsScreen(),
+      path: '/phone-details/:modelId',
+      builder: (context, state) => PhoneDetailsScreen(modelId: state.pathParameters['modelId']!),
     ),
     GoRoute(
       path: '/top-selling-phones',
