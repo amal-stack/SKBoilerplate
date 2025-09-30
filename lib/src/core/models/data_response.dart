@@ -62,3 +62,30 @@ class _DataResponseWithConverter<T> extends DataResponse<T> {
   @override
   Map<String, dynamic> dataToJson(T data) => dataToJsonConverter(data);
 }
+
+
+abstract class ListDataResponse<T> extends DataResponse<List<T>> {
+  const ListDataResponse({
+    required super.success,
+    required super.message,
+    required super.data,
+  });
+
+  ListDataResponse.fromJson(
+    Map<String, dynamic> json,
+    DataFromJson<T> itemFromJson,
+    String itemsKey,
+  ) : super.fromJson(
+        json,
+        (data) => [
+          for (var item in (data[itemsKey] as List<dynamic>))
+            itemFromJson(item as Map<String, dynamic>),
+        ],
+      );
+
+  @override
+  List<Map<String, dynamic>> dataToJson(List<T> data) =>
+      data.map(itemToJson).toList();
+
+  Map<String, dynamic> itemToJson(T item);
+}
