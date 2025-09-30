@@ -80,7 +80,7 @@ class ResponsePagination {
     : page = json['page'] as int,
       limit = json['limit'] as int,
       total = json['total'] as int,
-      totalPages = json['totalPages'] as int;
+      totalPages = json['pages'] as int;
 
   final int page;
 

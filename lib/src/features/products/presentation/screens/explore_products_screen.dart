@@ -154,20 +154,6 @@ class ProductsGrid extends StatelessWidget {
   }
 }
 
-const List<String> brandImageList = [
-    "assets/images/brands/iphone_brand.png",
-    "assets/images/brands/huawel.png",
-    "assets/images/brands/samsung_brand.png",
-    "assets/images/brands/oneplus.png",
-    "assets/images/brands/realme.png",
-    "assets/images/brands/oppo.png",
-    "assets/images/brands/vivo.png",
-    "assets/images/brands/mi.png",
-    "assets/images/brands/google_pixel.png",
-    "assets/images/brands/iqoo.png",
-    "assets/images/brands/infinix.png",
-    "assets/images/brands/motorola.png",
-  ];
 
 class ProductCard extends StatelessWidget {
   const ProductCard(this.product, {super.key});
@@ -189,8 +175,8 @@ class ProductCard extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset(
-            AppAssets.iphoneDisplay,
+          Image.network(
+            product.imageUrl,
             height: 60.h,
             width: 60.w,
             fit: BoxFit.contain,

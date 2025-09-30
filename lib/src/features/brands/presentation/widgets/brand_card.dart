@@ -5,21 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
-const List<String> brandImageList = [
-  "assets/images/brands/iphone_brand.png",
-  "assets/images/brands/huawel.png",
-  "assets/images/brands/samsung_brand.png",
-  "assets/images/brands/oneplus.png",
-  "assets/images/brands/realme.png",
-  "assets/images/brands/oppo.png",
-  "assets/images/brands/vivo.png",
-  "assets/images/brands/mi.png",
-  "assets/images/brands/google_pixel.png",
-  "assets/images/brands/iqoo.png",
-  "assets/images/brands/infinix.png",
-  "assets/images/brands/motorola.png",
-];
-
 class BrandCard extends StatelessWidget {
   const BrandCard({super.key, required this.brand});
 
@@ -44,11 +29,8 @@ class BrandCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           SizedBox(height: 10.h),
-          Image.asset(
-            brandImageList.firstWhere(
-              (imagePath) => imagePath.contains(brand.name.toLowerCase()),
-              orElse: () => brandImageList[0],
-            ),
+          Image.network(
+            brand.imageUrl,
             height: 34.h,
             width: 61.w,
           ),

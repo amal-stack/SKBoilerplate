@@ -6,16 +6,16 @@ class Product {
     required this.id,
     required this.name,
     required this.brandId,
-    required this.createdAt,
-    required this.updatedAt,
+    required this.deviceCount,
+    required this.imageUrl,
   });
 
   Product.fromJson(Map<String, dynamic> json)
     : id = json['id'] as String,
       name = json['name'] as String,
       brandId = json['brandId'] as String,
-      createdAt = DateTime.parse(json['createdAt'] as String),
-      updatedAt = DateTime.parse(json['updatedAt'] as String);
+      deviceCount = json['deviceCount'] as int,
+      imageUrl = json['image'] as String;
 
   final String id;
 
@@ -23,15 +23,15 @@ class Product {
 
   final String brandId;
 
-  final DateTime createdAt;
+  final int deviceCount;
 
-  final DateTime updatedAt;
+  final String imageUrl;
 
   Map<String, dynamic> toJson() => {
     'id': id,
     'name': name,
     'brandId': brandId,
-    'createdAt': createdAt.toIso8601String(),
-    'updatedAt': updatedAt.toIso8601String(),
+    'deviceCount': deviceCount,
+    'image': imageUrl,
   };
 }
