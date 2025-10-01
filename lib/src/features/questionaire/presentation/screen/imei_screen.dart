@@ -5,6 +5,7 @@ import 'package:boilerplate/src/shared/utils/app_texts.dart';
 import 'package:boilerplate/src/shared/widgets/custom_text_field.dart';
 import 'package:boilerplate/src/shared/widgets/qa_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../shared/widgets/animated_button.dart';
@@ -39,7 +40,7 @@ class _ImeiScreenState extends State<ImeiScreen> {
         backgroundColor: Colors.white,
         scrolledUnderElevation: 0.0,
         leading: IconButton(
-          icon:  GestureDetector(
+          icon: GestureDetector(
             onTap: () {
               context.pop();
             },
@@ -51,13 +52,13 @@ class _ImeiScreenState extends State<ImeiScreen> {
                 height: 24.h,
                 fit: BoxFit.contain,
               ),
-            )
+            ),
           ),
           onPressed: () {
             Navigator.pop(context);
           },
         ),
-        title:RegularText(
+        title: RegularText(
           textAlign: TextAlign.start,
           textSize: 20.sp,
           maxLines: 1,
@@ -67,7 +68,7 @@ class _ImeiScreenState extends State<ImeiScreen> {
           text: "Enter IMEI number",
         ),
         bottom: PreferredSize(
-          preferredSize:  Size.fromHeight(1),
+          preferredSize: Size.fromHeight(1),
           child: Container(
             color: AppColors.dividerColor, // grey divider line
             height: 1,
@@ -91,18 +92,24 @@ class _ImeiScreenState extends State<ImeiScreen> {
                   textColor: AppColors.borderBlack,
                   textOverflow: TextOverflow.ellipsis,
                   text:
-                  "Please enter  the IMEI number to fetch the accurate price",
+                      "Please enter the IMEI number to fetch the accurate price",
                 ),
                 SizedBox(height: 40.h),
                 Align(
                   alignment: Alignment.center,
-                  child: Image.asset(AppAssets.imel, width: 234.w, height: 120.h),
+                  child: Image.asset(
+                    AppAssets.imei,
+                    width: 234.w,
+                    height: 120.h,
+                  ),
                 ),
-
                 SizedBox(height: 24.h),
                 InputTextField(
                   label: "Enter IMEI number",
                   hintMessage: "Enter IMEI number",
+                  textInputType: TextInputType.number,
+                  maxLength: 16,
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                 ),
                 SizedBox(height: 22.h),
                 SizedBox(
@@ -147,7 +154,7 @@ class _ImeiScreenState extends State<ImeiScreen> {
             ),
           ),
         ),
-      )
+      ),
     );
   }
 }
