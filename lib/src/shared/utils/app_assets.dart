@@ -17,7 +17,5 @@ class AppAssets {
   static const String appLogoBlack = "assets/images/app_logo_black.png";
   static const String rightArrow = "assets/images/right_arrow.png";
   static const String quote = "assets/images/quote.png";
-  static const String imel = "assets/images/imel.png";
-
-
+  static const String imei = "assets/images/imel.png";
 }

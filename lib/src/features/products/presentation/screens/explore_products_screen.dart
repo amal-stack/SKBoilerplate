@@ -131,29 +131,39 @@ class ProductsGrid extends StatelessWidget {
         ProductsError(message: var message) => Center(
           child: Text('Error: $message'),
         ),
-        ProductsFetched(products: var products) => SingleChildScrollView(
-          child: Column(
-            children: [
-              GridView.builder(
-                shrinkWrap: true,
-                physics: ScrollPhysics(),
-                itemCount: products.length,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3, // 3 per row
-                  crossAxisSpacing: 8.w, // horizontal spacing
-                  mainAxisSpacing: 12.h, // vertical spacing
-                  childAspectRatio: 0.85,
+        ProductsFetched(products: var products) =>
+          products.isEmpty
+              ? Center(
+                  child: RegularText(
+                    text: 'No products found for this brand.',
+                    textColor: AppColors.black,
+                    fontWeight: FontWeight.w500,
+                    textSize: 16.sp,
+                  ),
+                )
+              : SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      GridView.builder(
+                        shrinkWrap: true,
+                        physics: ScrollPhysics(),
+                        itemCount: products.length,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3, // 3 per row
+                          crossAxisSpacing: 8.w, // horizontal spacing
+                          mainAxisSpacing: 12.h, // vertical spacing
+                          childAspectRatio: 0.85,
+                        ),
+                        itemBuilder: (context, index) =>
+                            ProductCard(products[index]),
+                      ),
+                    ],
+                  ),
                 ),
-                itemBuilder: (context, index) => ProductCard(products[index]),
-              ),
-            ],
-          ),
-        ),
       },
     );
   }
 }
-
 
 class ProductCard extends StatelessWidget {
   const ProductCard(this.product, {super.key});

@@ -6,6 +6,8 @@ import 'package:boilerplate/src/features/auth/data/data_sources/auth_source.dart
 import 'package:boilerplate/src/features/auth/data/data_sources/remote/remote_auth_source.dart';
 import 'package:boilerplate/src/features/brands/data/data_sources/brands_data_source.dart';
 import 'package:boilerplate/src/features/brands/data/data_sources/remote/remote_brands_data_source.dart';
+import 'package:boilerplate/src/features/dashboard/data/data_sources/dashboard_data_source.dart';
+import 'package:boilerplate/src/features/dashboard/data/data_sources/remote/remote_dashboard_data_source.dart';
 import 'package:boilerplate/src/features/products/data/data_sources/products_data_source.dart';
 import 'package:boilerplate/src/features/products/data/data_sources/remote/remote_products_data_source.dart';
 import 'package:dio/dio.dart';
@@ -16,9 +18,13 @@ final class Dependencies {
     AuthSource? authClient,
     BrandsDataSource? brandsDataSource,
     ProductsDataSource? productsDataSource,
+    DashboardDataSource? dashboardDataSource,
   }) : authSource = authClient ?? RemoteAuthSource(apiClient),
        brandsDataSource = brandsDataSource ?? RemoteBrandsDataSource(apiClient),
-       productsDataSource = productsDataSource ?? RemoteProductsDataSource(apiClient);
+       productsDataSource =
+           productsDataSource ?? RemoteProductsDataSource(apiClient),
+       dashboardDataSource =
+           dashboardDataSource ?? RemoteDashboardDataSource(apiClient);
 
   factory Dependencies.defaults() => Dependencies(
     apiClient: DioApiClient.fromOptions(
@@ -33,4 +39,6 @@ final class Dependencies {
   final BrandsDataSource brandsDataSource;
 
   final ProductsDataSource productsDataSource;
+
+  final DashboardDataSource dashboardDataSource;
 }

@@ -3,24 +3,29 @@ import 'package:boilerplate/src/shared/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class QnAItem extends StatelessWidget {
-  final String question;
-  final String answer;
-  final bool isExpanded;
-  final VoidCallback onTap;
-
-  const QnAItem({
-    Key? key,
+class FaqItem extends StatelessWidget {
+  const FaqItem({
+    super.key,
     required this.question,
     required this.answer,
-    required this.isExpanded,
+    required this.index,
+    required this.expandedIndex,
     required this.onTap,
-  }) : super(key: key);
+  });
+
+  final String question;
+  final String answer;
+  final int index;
+  final int? expandedIndex;
+  bool get isExpanded => index == expandedIndex;
+  final ValueChanged<int> onTap;
+
+  
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: () => onTap(index),
       child: Container(
         padding: EdgeInsets.all(16.w),
         decoration: BoxDecoration(
@@ -28,7 +33,7 @@ class QnAItem extends StatelessWidget {
           borderRadius: BorderRadius.circular(8.w),
           border: Border.all(
             width: 1.w,
-            color: AppColors.borderBlack.withOpacity(0.10),
+            color: AppColors.borderBlack.withValues(alpha: 0.10),
           ),
         ),
         child: Column(
