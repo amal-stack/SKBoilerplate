@@ -1,8 +1,11 @@
 import 'package:boilerplate/src/core/dependencies.dart';
 import 'package:boilerplate/src/features/auth/data/repositories/remote/remote_auth_repository.dart';
 import 'package:boilerplate/src/features/auth/data/repositories/remote/remote_user_repository.dart';
+import 'package:boilerplate/src/features/auth/domain/entities/authentication.dart';
 import 'package:boilerplate/src/features/auth/domain/repositories/auth_repository.dart';
 import 'package:boilerplate/src/features/auth/domain/repositories/user_repository.dart';
+import 'package:boilerplate/src/features/auth/presentation/cubit/login_cubit.dart';
+import 'package:boilerplate/src/features/auth/presentation/widgets/auth_bloc_listener.dart';
 import 'package:boilerplate/src/features/brands/data/repositories/remote/remote_brands_repository.dart';
 import 'package:boilerplate/src/features/brands/domain/repositories/brands_repository.dart';
 
@@ -55,7 +58,18 @@ class SwitchKartApp extends StatelessWidget {
             RemoteDashboardRepository(dependencies.dashboardDataSource),
       ),
     ],
-    child: const AppView(),
+    child: BlocProvider(
+      create: (context) => LoginCubit(context.read()),
+      child: AuthBlocListener<LoginCubit, Authentication>(
+        onSuccess: (context, auth) {
+          if (auth is Unauthenticated) {
+            appRouter.go('/auth');
+          }
+        },
+
+        child: const AppView(),
+      ),
+    ),
   );
 }
 

@@ -1,16 +1,16 @@
+import 'package:boilerplate/src/features/auth/presentation/cubit/login_cubit.dart';
 import 'package:boilerplate/src/shared/themes/text.dart';
 import 'package:boilerplate/src/shared/utils/app_colors.dart';
 import 'package:boilerplate/src/shared/widgets/animated_button.dart';
 import 'package:boilerplate/src/shared/widgets/app_bottom_sheet.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
-import 'package:go_router/go_router.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 
 
 class SignOutConfirmationSheet extends StatelessWidget {
-  const SignOutConfirmationSheet({Key? key}) : super(key: key);
+  const SignOutConfirmationSheet({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -44,11 +44,8 @@ class SignOutConfirmationSheet extends StatelessWidget {
     child: AnimatedButton(
       isSmallButton: true,
       onPressed: () {
-        context.go('/auth');
-        var box = Hive.box('prefs');
-        box.put('isLoggedIn', false);
-
-      },
+        context.read<LoginCubit>().logout();
+      },      
       buttonColor: AppColors.baseColor.withOpacity(0.8),
       label: 'Yes',
       labelColor: AppColors.white,
