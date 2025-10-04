@@ -306,18 +306,20 @@ class _DeviceValueScreenState extends State<DeviceValueScreen> {
                   text: "Frequently asked question",
                 ),
                 SizedBox(height: 20.h),
-                QnAItem(
+                FaqItem(
                   question: "Method 1 : From the phone box",
                   answer: AppTexts.answer,
-                  isExpanded: _expandedIndex == 0,
-                  onTap: () => toggleExpansion(0),
+                  expandedIndex: _expandedIndex,
+                  index: 0,
+                  onTap: toggleExpansion,
                 ),
                 SizedBox(height: 8.h),
-                QnAItem(
+                FaqItem(
                   question: "Method 1 : From the phone box",
                   answer: AppTexts.answer,
-                  isExpanded: _expandedIndex == 1,
-                  onTap: () => toggleExpansion(1),
+                  expandedIndex: _expandedIndex,
+                  index: 1,
+                  onTap: toggleExpansion,
                 ),
 
                 SizedBox(height: 24.h),

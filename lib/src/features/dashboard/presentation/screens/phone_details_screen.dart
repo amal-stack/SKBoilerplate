@@ -104,9 +104,13 @@ class _PhoneDetailsBody extends StatefulWidget {
 
 class _PhoneDetailsBodyState extends State<_PhoneDetailsBody> {
   final PageController _controller = PageController();
-  int _currentIndex = 0;
-  int? selectedIndex;
+  int? _currentIndex;
   int? _expandedIndex;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   List<String> brandNameList = [
     "Apple",
@@ -198,15 +202,16 @@ class _PhoneDetailsBodyState extends State<_PhoneDetailsBody> {
                 length: widget.variants.length,
               ),
               SizedBox(height: 20.h),
-              RegularText(
-                textAlign: TextAlign.start,
-                textSize: 20.sp,
-                maxLines: 1,
-                fontWeight: FontWeight.w700,
-                textColor: AppColors.black,
-                textOverflow: TextOverflow.ellipsis,
-                text: widget.variants[_currentIndex].modelName,
-              ),
+              if (_currentIndex != null)
+                RegularText(
+                  textAlign: TextAlign.start,
+                  textSize: 20.sp,
+                  maxLines: 1,
+                  fontWeight: FontWeight.w700,
+                  textColor: AppColors.black,
+                  textOverflow: TextOverflow.ellipsis,
+                  text: widget.variants[_currentIndex!].modelName,
+                ),
               SizedBox(height: 20.h),
               Wrap(
                 spacing: 12,
@@ -215,20 +220,21 @@ class _PhoneDetailsBodyState extends State<_PhoneDetailsBody> {
                   return GestureDetector(
                     onTap: () {
                       setState(() {
-                        selectedIndex = index; // deselect old + select new
+                        _currentIndex = index;
+                        _controller.jumpToPage(index);
                       });
                     },
                     child: Container(
                       width: 69.w,
                       height: 39.h,
                       decoration: BoxDecoration(
-                        color: selectedIndex == index
+                        color: _currentIndex == index
                             ? AppColors.lightBorderColor
                             : AppColors.white,
                         borderRadius: BorderRadius.circular(4.r),
                         border: Border.all(
                           width: 1.w,
-                          color: selectedIndex == index
+                          color: _currentIndex == index
                               ? AppColors.lightBorderColor
                               : AppColors.borderBlack.withOpacity(0.10),
                         ),
@@ -238,7 +244,7 @@ class _PhoneDetailsBodyState extends State<_PhoneDetailsBody> {
                           textAlign: TextAlign.start,
                           textSize: 12.sp,
                           maxLines: 1,
-                          fontWeight: selectedIndex == index
+                          fontWeight: _currentIndex == index
                               ? FontWeight.w600
                               : FontWeight.w500,
                           textColor: AppColors.borderBlack,
@@ -273,7 +279,7 @@ class _PhoneDetailsBodyState extends State<_PhoneDetailsBody> {
                 height: 45.h,
                 width: double.infinity,
                 child: AnimatedButton(
-                  disableButton: selectedIndex == null ? true : false,
+                  disableButton: _currentIndex == null ? true : false,
                   isLoading: false,
                   onPressed: () {
                     context.push('/imei-screen');
@@ -294,18 +300,20 @@ class _PhoneDetailsBodyState extends State<_PhoneDetailsBody> {
                 text: AppTexts.frequentlyAskedQuestion,
               ),
               SizedBox(height: 20.h),
-              QnAItem(
+              FaqItem(
                 question: AppTexts.question,
                 answer: AppTexts.answer,
-                isExpanded: _expandedIndex == 1,
-                onTap: () => toggleExpansion(1),
+                index: 0,
+                expandedIndex: _expandedIndex,
+                onTap: toggleExpansion,
               ),
               SizedBox(height: 8.h),
-              QnAItem(
+              FaqItem(
                 question: AppTexts.question,
                 answer: AppTexts.answer,
-                isExpanded: _expandedIndex == 2,
-                onTap: () => toggleExpansion(2),
+                index: 1,
+                expandedIndex: _expandedIndex,
+                onTap: toggleExpansion,
               ),
 
               SizedBox(height: 24.h),
