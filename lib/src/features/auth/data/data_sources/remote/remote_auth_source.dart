@@ -26,6 +26,10 @@ class RemoteAuthSource implements AuthSource {
     return authResponse;
   }
 
+  @override
+  Future<void> logout() {
+    return _client.clearToken();
+  }
 
 
   @override
