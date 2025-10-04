@@ -80,7 +80,7 @@ class ExploreProductsScreen extends StatelessWidget {
                   fontWeight: FontWeight.w700,
                   textColor: AppColors.black,
                   textOverflow: TextOverflow.ellipsis,
-                  text: AppTexts.exploreAppleProducts,
+                  text: 'Explore Products',
                 ),
                 SizedBox(height: 8.h),
                 RegularText(
