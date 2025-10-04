@@ -35,5 +35,3 @@ class Product {
     'image': imageUrl,
   };
 }
-
-class DevicePricing {}

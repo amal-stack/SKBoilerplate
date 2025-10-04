@@ -25,15 +25,15 @@ class _ScratchSelectionScreenState extends State<ScratchSelectionScreen> {
     },
     {
       "title": "Cracks Outside the Display Area",
-      "image": "assets/images/question/lines_1.png",
+      "image": "assets/images/question/scratch_2.png",
     },
     {
       "title": "Multiple Scratches (More than 2)",
-      "image": "assets/images/question/scratch_1.png",
+      "image": "assets/images/question/scratch_3.png",
     },
     {
       "title": "Minor Scratches (1–2 on Screen)",
-      "image": "assets/images/question/lines_1.png",
+      "image": "assets/images/question/scratches_4.png",
     },
   ];
 

@@ -1,4 +1,5 @@
 import 'package:boilerplate/src/features/dashboard/presentation/screens/faq_screen.dart';
+
 import 'package:boilerplate/src/shared/utils/app_routes.dart';
 import 'package:go_router/go_router.dart';
 
@@ -8,13 +9,27 @@ import '../features/auth/presentation/screens/reset_password_screen.dart';
 import '../features/auth/presentation/screens/success_screen.dart';
 import '../features/brands/presentation/screens/brands_screen.dart';
 import '../features/dashboard/presentation/screens/dashboard_screen.dart';
+
+import '../features/kyc/presentation/screen/kyc_details_screen.dart';
+import '../features/kyc/presentation/screen/order_success_screen.dart';
+import '../features/kyc/presentation/screen/phone_number_verification.dart';
+import '../features/kyc/presentation/screen/phone_verification_success_screen.dart';
+import '../features/kyc/presentation/screen/upload_document_screen.dart';
+import '../features/kyc/presentation/screen/upload_invoice_screen.dart';
+import '../features/orders/presentations/screen/completed_order_details_screen.dart';
+import '../features/orders/presentations/screen/pending_order_details_screen.dart';
 import '../features/products/presentation/screens/explore_products_screen.dart';
-import '../features/products/presentation/screens/phone_details_screen.dart';
+import '../features/dashboard/presentation/screens/phone_details_screen.dart';
+
 import '../features/dashboard/presentation/screens/top_selling_phone_screen.dart';
 import '../features/introslider/screens/introslider_screen.dart';
 import '../features/questionaire/presentation/screen/defects_selection_screen.dart';
 import '../features/questionaire/presentation/screen/dents_selection_screen.dart';
+
+import '../features/questionaire/presentation/screen/device_value_screen.dart';
+
 import '../features/questionaire/presentation/screen/imei_screen.dart';
+
 import '../features/questionaire/presentation/screen/missing_panel_selection_screen.dart';
 import '../features/questionaire/presentation/screen/product_condition_screen.dart';
 import '../features/questionaire/presentation/screen/product_question_answer_screen.dart';
@@ -30,13 +45,13 @@ final GoRouter appRouter = GoRouter(
   initialLocation: '/splash',
   routes: [
     GoRoute(path: '/splash', builder: (context, state) => const SplashScreen()),
-    GoRoute(path: '/dashboard', builder: (context, state) => DashboardScreen(),
-    routes: [
-      GoRoute(
-        path: 'faqs',
-        builder: (context, state) => const FaqScreen(),
-      ),
-    ],
+
+    GoRoute(
+      path: '/dashboard',
+      builder: (context, state) => DashboardScreen(),
+      routes: [
+        GoRoute(path: 'faqs', builder: (context, state) => const FaqScreen()),
+      ],
     ),
     GoRoute(
       path: AppRoutes.auth,
@@ -55,6 +70,7 @@ final GoRouter appRouter = GoRouter(
                   'email',
                   'reset-password',
                 ));
+
             return ResetPasswordScreen(email: email);
           },
         ),
@@ -71,6 +87,7 @@ final GoRouter appRouter = GoRouter(
     GoRoute(path: '/brands', builder: (context, state) => BrandsScreen()),
     GoRoute(
       path: '/explore-brands/:brandId',
+
       builder: (context, state) =>
           ExploreProductsScreen(brandId: state.pathParameters['brandId']!),
     ),
@@ -127,6 +144,42 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: '/order-history-screen',
       builder: (context, state) => OrderHistoryScreen(),
+    ),
+    GoRoute(
+      path: '/device-value-screen',
+      builder: (context, state) => DeviceValueScreen(),
+    ),
+    GoRoute(
+      path: '/phone-number-verification-screen',
+      builder: (context, state) => PhoneNumberVerification(),
+    ),
+    GoRoute(
+      path: '/kyc-details-screen',
+      builder: (context, state) => KycDetailsScreen(),
+    ),
+    GoRoute(
+      path: '/phone-number-verification-success-screen',
+      builder: (context, state) => PhoneVerificationSuccessScreen(),
+    ),
+    GoRoute(
+      path: '/upload-document-screen',
+      builder: (context, state) => UploadDocumentScreen(),
+    ),
+    GoRoute(
+      path: '/upload-invoice-screen',
+      builder: (context, state) => UploadInvoiceScreen(),
+    ),
+    GoRoute(
+      path: '/order-success-screen',
+      builder: (context, state) => OrderSuccessScreen(),
+    ),
+    GoRoute(
+      path: '/pending-order-screen',
+      builder: (context, state) => PendingOrderDetailsScreen(),
+    ),
+    GoRoute(
+      path: '/completed-order-details-screen',
+      builder: (context, state) => CompletedOrderDetailsScreen(),
     ),
   ],
 );

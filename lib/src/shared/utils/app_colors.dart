@@ -20,6 +20,9 @@ class AppColors {
   static const Color introSliderCircleColor = Color(0xffA0FF77);
   static const Color lightBorderColor = Color(0xffA0FF77);
 
+  static const Color lightBlackShade = Color(0xff4F4F59);
+
+
   static const Color borderBlack = Color(0xff0D0D19);
   static const Color lightGreenColor = Color(0xff00C639);
   static const Color darkGreenColor = Color(0xff006B3B);

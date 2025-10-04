@@ -103,13 +103,17 @@ class _ImeiScreenState extends State<ImeiScreen> {
                     height: 120.h,
                   ),
                 ),
+
                 SizedBox(height: 24.h),
                 InputTextField(
                   label: "Enter IMEI number",
                   hintMessage: "Enter IMEI number",
                   textInputType: TextInputType.number,
                   maxLength: 16,
-                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                    LengthLimitingTextInputFormatter(16),
+                  ],
                 ),
                 SizedBox(height: 22.h),
                 SizedBox(
@@ -140,16 +144,16 @@ class _ImeiScreenState extends State<ImeiScreen> {
                 FaqItem(
                   question: "Method 1 : From the phone box",
                   answer: AppTexts.answer,
-                  index: 0,
                   expandedIndex: _expandedIndex,
+                  index: 0,
                   onTap: toggleExpansion,
                 ),
                 SizedBox(height: 8.h),
                 FaqItem(
                   question: "Method 1 : From the phone box",
                   answer: AppTexts.answer,
-                  index: 1,
                   expandedIndex: _expandedIndex,
+                  index: 1,
                   onTap: toggleExpansion,
                 ),
               ],

@@ -9,6 +9,9 @@ import '../../../../shared/utils/app_colors.dart';
 import '../../../../shared/utils/app_images.dart';
 import '../../../../shared/validators.dart';
 import '../../../../shared/widgets/animated_button.dart';
+
+import '../../../../shared/widgets/custom_text_field.dart';
+
 import '../cubit/forgot_password_cubit.dart';
 import '../cubit/state.dart';
 
@@ -86,15 +89,28 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
         ),
         SizedBox(height: 30.h),
 
-        TextFormField(
-          controller: _emailController,
-          decoration: InputDecoration(
-            labelText: 'Email',
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8.r),
+        Align(
+          alignment: Alignment.topLeft,
+          child: Padding(
+            padding: EdgeInsets.only(left: 8.w),
+            child: RegularText(
+              textAlign: TextAlign.start,
+              textSize: 14.sp,
+              maxLines: 2,
+              fontWeight: FontWeight.w600,
+              textColor: AppColors.borderBlack,
+              textOverflow: TextOverflow.ellipsis,
+              text: "Email",
             ),
           ),
+        ),
+        SizedBox(height: 8.h),
+        InputTextField(
+          label: "Email",
+          hintMessage: "Enter Email",
           validator: Validators.validateEmail,
+          controller: _emailController,
+          // onChanged: (val) => _validateForm(),
         ),
         SizedBox(height: 30.h),
         BlocBuilder<

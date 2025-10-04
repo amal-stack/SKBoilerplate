@@ -36,6 +36,9 @@ dependencies:
   lottie: ^3.3.2
   flutter_secure_storage: ^9.2.4
   meta: ^1.16.0
+  image_picker: ^1.2.0
+  permission_handler: ^12.0.1
+
 
 
 dev_dependencies:
@@ -95,14 +98,56 @@ flutter:
     - assets/images/imel.png
     - assets/images/search.png
     - assets/images/left_arrow.png
+    - assets/images/download_icon.png
     - assets/images/valid_purchase.png
+    - assets/images/invoice.png
+    - assets/images/warning.png
+    - assets/images/order_success.png
     - assets/gifs/Success.json
+    - assets/gifs/log-out.json
     - assets/images/brands/iphone_brand.png
     - assets/images/question/scratch_1.png
+    - assets/images/question/scratch_2.png
+    - assets/images/question/scratch_3.png
+    - assets/images/question/scratches_4.png
+    - assets/images/question/dead_1.png
+    - assets/images/question/dead_2.png
+    - assets/images/question/dead_3.png
+    - assets/images/question/dead_4.png
+    - assets/images/question/discolor_1.png
+    - assets/images/question/discolor_3.png
+    - assets/images/question/discolor_2.png
+    - assets/images/question/dent_sub_1.png
+    - assets/images/question/dent_sub_2.png
+    - assets/images/question/dent_sub_3.png
+    - assets/images/question/dent_sub_3.png
+    - assets/images/question/dent_sub_4.png
+    - assets/images/question/dent_sub_5.png
+    - assets/images/question/dent_sub_6.png
+    - assets/images/question/additional_1.png
+    - assets/images/question/additional_2.png
+    - assets/images/question/additional_4.png
+    - assets/images/question/additional_5.png
+    - assets/images/question/additional_11.png
+    - assets/images/question/additioal_8.png
+    - assets/images/question/additional_12.png
+    - assets/images/question/additional_13.png
+    - assets/images/question/additional_14.png
+    - assets/images/question/additional_15.png
+    - assets/images/question/additional_16.png
+    - assets/images/question/mobile_front.png
+    - assets/images/question/mobile_back.png
+    - assets/images/question/battery_1.png
+    - assets/images/question/battery_2.png
     - assets/images/question/lines_1.png
+    - assets/images/question/visible_line_1.png
+    - assets/images/question/visible_line_2.png
+    - assets/images/question/visible_line_3.png
     - assets/images/question/unchecked_checkbox.png
+    - assets/images/question/charger.png
     - assets/images/question/dent_1.png
     - assets/images/question/panel_1.png
+    - assets/images/question/original_box.png
     - assets/images/selected_checkbox.png
 
 

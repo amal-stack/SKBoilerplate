@@ -6,6 +6,8 @@ abstract interface class ApiClient {
   Future<ApiResponse> fetch(String method, ApiRequest request);
 
   Future<void> saveToken(String token);
+
+  Future<void> clearToken();
 }
 
 /// Extension methods for common HTTP methods on the ApiClient.

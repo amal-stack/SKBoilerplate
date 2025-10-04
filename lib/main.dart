@@ -1,17 +1,23 @@
 import 'package:boilerplate/src/core/dependencies.dart';
 import 'package:boilerplate/src/features/auth/data/repositories/remote/remote_auth_repository.dart';
 import 'package:boilerplate/src/features/auth/data/repositories/remote/remote_user_repository.dart';
+import 'package:boilerplate/src/features/auth/domain/entities/authentication.dart';
 import 'package:boilerplate/src/features/auth/domain/repositories/auth_repository.dart';
 import 'package:boilerplate/src/features/auth/domain/repositories/user_repository.dart';
+import 'package:boilerplate/src/features/auth/presentation/cubit/login_cubit.dart';
+import 'package:boilerplate/src/features/auth/presentation/widgets/auth_bloc_listener.dart';
 import 'package:boilerplate/src/features/brands/data/repositories/remote/remote_brands_repository.dart';
 import 'package:boilerplate/src/features/brands/domain/repositories/brands_repository.dart';
+
 import 'package:boilerplate/src/features/dashboard/data/repositories/remote/remote_dashboard_repository.dart';
 import 'package:boilerplate/src/features/dashboard/domain/repositories/dashboard_repository.dart';
+
 import 'package:boilerplate/src/features/products/data/repositories/remote/remote_products_repository.dart';
 import 'package:boilerplate/src/features/products/domain/repositories/products_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import 'src/core/app_router.dart';
 import 'src/core/network/connectivity_service.dart';
 import 'src/shared/themes/app_theme.dart';
@@ -52,7 +58,18 @@ class SwitchKartApp extends StatelessWidget {
             RemoteDashboardRepository(dependencies.dashboardDataSource),
       ),
     ],
-    child: const AppView(),
+    child: BlocProvider(
+      create: (context) => LoginCubit(context.read()),
+      child: AuthBlocListener<LoginCubit, Authentication>(
+        onSuccess: (context, auth) {
+          if (auth is Unauthenticated) {
+            appRouter.go('/auth');
+          }
+        },
+
+        child: const AppView(),
+      ),
+    ),
   );
 }
 

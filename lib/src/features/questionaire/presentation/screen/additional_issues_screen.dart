@@ -21,27 +21,27 @@ class _AdditionalIssuesScreenState extends State<AdditionalIssuesScreen> {
   int selectedBatteryIndex = -1;
 
   final List<Map<String, String>> deviceIssues = [
-    {"title": "Front Camera is not working", "image": "assets/images/question/scratch_1.png"},
-    {"title": "Rear Camera is not working", "image": "assets/images/question/lines_1.png"},
+    {"title": "Front Camera is not working", "image": "assets/images/question/additional_1.png"},
+    {"title": "Rear Camera is not working", "image": "assets/images/question/additional_2.png"},
     {"title": "Volume Buttons are unresponsive", "image": "assets/images/question/scratch_1.png"},
-    {"title": "Fingerprint sensor not working", "image": "assets/images/question/scratch_1.png"},
-    {"title": "Wi-Fi not connecting", "image": "assets/images/question/scratch_1.png"},
+    {"title": "Fingerprint sensor not working", "image": "assets/images/question/additional_4.png"},
+    {"title": "Wi-Fi not connecting", "image": "assets/images/question/additional_5.png"},
     {"title": "Speaker malfunctioning", "image": "assets/images/question/scratch_1.png"},
     {"title": "Silent switch not working", "image": "assets/images/question/scratch_1.png"},
-    {"title": "Face recognition sensor not working", "image": "assets/images/question/scratch_1.png"},
+    {"title": "Face recognition sensor not working", "image": "assets/images/question/additioal_8.png"},
     {"title": "Power button unresponsive", "image": "assets/images/question/scratch_1.png"},
     {"title": "Charging port not working", "image": "assets/images/question/scratch_1.png"},
-    {"title": "Audio receiver faulty", "image": "assets/images/question/scratch_1.png"},
-    {"title": "Camera glass broken", "image": "assets/images/question/scratch_1.png"},
-    {"title": "Microphone not working", "image": "assets/images/question/scratch_1.png"},
-    {"title": "Bluetooth not connecting", "image": "assets/images/question/scratch_1.png"},
-    {"title": "Vibration motor not working", "image": "assets/images/question/scratch_1.png"},
-    {"title": "Proximity sensor not functioning", "image": "assets/images/question/scratch_1.png"},
+    {"title": "Audio receiver faulty", "image": "assets/images/question/additional_11.png"},
+    {"title": "Camera glass broken", "image": "assets/images/question/additional_12.png"},
+    {"title": "Microphone not working", "image": "assets/images/question/additioal_13.png"},
+    {"title": "Bluetooth not connecting", "image": "assets/images/question/additional_14.png"},
+    {"title": "Vibration motor not working", "image": "assets/images/question/additional_15.png"},
+    {"title": "Proximity sensor not functioning", "image": "assets/images/question/additional_16.png"},
   ];
 
   final List<Map<String, String>> batteryIssues = [
-    {"title": "Battery requires service (health below 80%)", "image": "assets/images/question/scratch_1.png"},
-    {"title": "Battery health at 80–85%", "image": "assets/images/question/lines_1.png"},
+    {"title": "Battery requires service (health below 80%)", "image": "assets/images/question/battery_1.png"},
+    {"title": "Battery health at 80–85%", "image": "assets/images/question/battery_2.png"},
   ];
 
   Widget buildIssueRow(List<Map<String, String>> issues, int selectedIndex, Function(int) onSelect) {

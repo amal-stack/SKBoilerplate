@@ -15,6 +15,8 @@ class AnimatedButton extends StatefulWidget {
   final double? fontSize;
   final bool isLoading;
 
+  bool get isDisabled => disableButton || isLoading;
+
   const AnimatedButton({
     super.key,
     required this.onPressed,
@@ -36,9 +38,7 @@ class AnimatedButton extends StatefulWidget {
 class _AnimatedButtonState extends State<AnimatedButton> {
   @override
   Widget build(BuildContext context) {
-    final bool isDisabled = widget.disableButton || widget.isLoading;
-
-    final Color currentButtonColor = isDisabled
+    final Color currentButtonColor = widget.isDisabled
         ? Color.alphaBlend(
             AppColors.baseColor.withValues(alpha: 0.3),
             Colors.white,
@@ -55,7 +55,7 @@ class _AnimatedButtonState extends State<AnimatedButton> {
         border: Border.all(color: widget.borderColor ?? Colors.transparent),
       ),
       child: MaterialButton(
-        onPressed: isDisabled ? null : widget.onPressed,
+        onPressed: widget.isDisabled ? null : widget.onPressed,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15.r),
         ),

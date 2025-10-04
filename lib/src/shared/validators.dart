@@ -35,7 +35,20 @@ class Validators {
     }
     return null;
   }
+  // Validate Mobile
+  static String? validateMobileNumber(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Mobile Number is required';
+    }
+    if (_hasLeadingSpace(value)) {
+      return 'Mobile Number cannot start with a space';
+    }
+    if (value.length < 10) {
 
+      return 'Mobile Number must be at least 10 digit';
+    }
+    return null;
+  }
   // Validate Name
   static String? validateName(String? value) {
     if (value == null || value.isEmpty) {

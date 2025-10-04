@@ -21,15 +21,15 @@ class _DentsSelectionScreenState extends State<DentsSelectionScreen> {
   int selectedDentsIndex = -1;
 
   final List<Map<String, String>> scratches = [
-    {"title": "More than 2 scratches", "image": "assets/images/question/scratch_1.png"},
-    {"title": "1-2 scratches", "image": "assets/images/question/lines_1.png"},
-    {"title": "No scratches", "image": "assets/images/question/scratch_1.png"},
+    {"title": "More than 2 scratches", "image": "assets/images/question/dent_sub_1.png"},
+    {"title": "1-2 scratches", "image": "assets/images/question/dent_sub_2.png"},
+    {"title": "No scratches", "image": "assets/images/question/dent_sub_3.png"},
   ];
 
   final List<Map<String, String>> dents = [
-    {"title": "Multiple dents", "image": "assets/images/question/scratch_1.png"},
-    {"title": "1-2 minor dents", "image": "assets/images/question/lines_1.png"},
-    {"title": "No dents", "image": "assets/images/question/scratch_1.png"},
+    {"title": "Multiple dents", "image": "assets/images/question/dent_sub_4.png"},
+    {"title": "1-2 minor dents", "image": "assets/images/question/dent_sub_5.png"},
+    {"title": "No dents", "image": "assets/images/question/dent_sub_6.png"},
   ];
 
   Widget buildIssueRow(List<Map<String, String>> issues, int selectedIndex, Function(int) onSelect) {

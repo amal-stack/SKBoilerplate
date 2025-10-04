@@ -17,6 +17,30 @@ class ProductConditionScreen extends StatefulWidget {
 
 class _ProductConditionScreenState extends State<ProductConditionScreen> {
   bool isSelected = false;
+  List<String> selectedIssues = [];
+
+  Future<void> navigateIssuesSequentially(List<String> issues) async {
+    for (var issue in issues) {
+      String screenRoute;
+
+      if (issue == "Cracks/scratch on device screen") {
+        screenRoute = "/scratch-selection-screen";
+      } else if (issue == "Display defects (spots/lines)") {
+        screenRoute = "/defects-selection-screen";
+      } else if (issue == "Scratch/Dent on device body") {
+        screenRoute = "/dents-selection-screen";
+      }else if (issue == "Device panel missing/broken") {
+        screenRoute = "/missing-panel-selection-screen";
+      }else {
+        screenRoute = "/generic-issue-screen";
+      }
+
+
+
+      await context.push(screenRoute); // waits for screen to pop
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -100,10 +124,42 @@ class _ProductConditionScreenState extends State<ProductConditionScreen> {
                           IssueWidget(
                             title: "Cracks/scratch on device screen",
                             image: "assets/images/question/scratch_1.png",
+                            isSelected: isSelected ? false : null,
+                            onTap: () {
+                              setState(() {
+                                if (selectedIssues.contains(
+                                  "Cracks/scratch on device screen",
+                                )) {
+                                  selectedIssues.remove(
+                                    "Cracks/scratch on device screen",
+                                  );
+                                } else {
+                                  selectedIssues.add(
+                                    "Cracks/scratch on device screen",
+                                  );
+                                }
+                              });
+                            },
                           ),
                           IssueWidget(
                             title: "Display defects (spots/lines)",
                             image: "assets/images/question/lines_1.png",
+                            isSelected: isSelected ? false : null,
+                            onTap: () {
+                              setState(() {
+                                if (selectedIssues.contains(
+                                  "Display defects (spots/lines)",
+                                )) {
+                                  selectedIssues.remove(
+                                    "Display defects (spots/lines)",
+                                  );
+                                } else {
+                                  selectedIssues.add(
+                                    "Display defects (spots/lines)",
+                                  );
+                                }
+                              });
+                            },
                           ),
                         ],
                       ),
@@ -114,10 +170,43 @@ class _ProductConditionScreenState extends State<ProductConditionScreen> {
                           IssueWidget(
                             title: "Scratch/Dent on device body",
                             image: "assets/images/question/dent_1.png",
+                            isSelected: isSelected ? false : null,
+                            onTap: () {
+                              setState(() {
+                                if (selectedIssues.contains(
+                                  "Scratch/Dent on device body",
+                                )) {
+                                  selectedIssues.remove(
+                                    "Scratch/Dent on device body",
+                                  );
+                                } else {
+                                  selectedIssues.add(
+                                    "Scratch/Dent on device body",
+                                  );
+                                }
+                              });
+                            },
                           ),
                           IssueWidget(
                             title: "Device panel missing/broken",
                             image: "assets/images/question/panel_1.png",
+                            onTap: () {
+                              setState(() {
+                                if (selectedIssues.contains(
+                                  "Device panel missing/broken",
+                                )) {
+                                  selectedIssues.remove(
+                                    "Device panel missing/broken",
+                                  );
+                                } else {
+                                  selectedIssues.add(
+                                    "Device panel missing/broken",
+                                  );
+                                }
+                              });
+                            },
+
+                            isSelected: isSelected ? false : null,
                           ),
                         ],
                       ),
@@ -165,7 +254,10 @@ class _ProductConditionScreenState extends State<ProductConditionScreen> {
                       disableButton: false,
                       isLoading: false,
                       onPressed: () {
-                        context.push('/scratch-selection-screen');
+                       // if (selectedIssues.isEmpty) return;
+
+                       // navigateIssuesSequentially(selectedIssues);
+                       context.push('/scratch-selection-screen');
                       },
                       label: AppTexts.continueTitle,
                       fontSize: 12.sp,

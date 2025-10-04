@@ -8,7 +8,9 @@ import '../../../../shared/themes/text.dart' as custom;
 import '../../../../shared/themes/text.dart';
 import '../../../../shared/utils/app_colors.dart';
 import '../../../../shared/utils/app_images.dart';
+import '../../../../shared/validators.dart';
 import '../../../../shared/widgets/animated_button.dart';
+import '../../../../shared/widgets/custom_text_field.dart';
 import '../cubit/reset_password_cubit.dart';
 import '../cubit/state.dart';
 import 'remember_password_link.dart';
@@ -124,7 +126,7 @@ class _ResetPasswordFormState extends State<ResetPasswordForm> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Image.asset(AppImages.appThemeIcon, width: 122.w, height: 48.h),
-            SizedBox(height: 80.h),
+            SizedBox(height: 40.h),
             RegularText(
               textAlign: TextAlign.center,
               textSize: 24.sp,
@@ -198,16 +200,29 @@ class _ResetPasswordFormState extends State<ResetPasswordForm> {
                   ResendOtpLink(timer: timer, onResendOtp: _onResendOtp),
                   SizedBox(height: 20.h),
                   SizedBox(height: 30.h),
-                  TextFormField(
-                    controller: _passwordController,
-                    decoration: InputDecoration(
-                      labelText: 'Enter New Password',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8.r),
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Padding(
+                      padding: EdgeInsets.only(left: 8.w),
+                      child: RegularText(
+                        textAlign: TextAlign.start,
+                        textSize: 14.sp,
+                        maxLines: 2,
+                        fontWeight: FontWeight.w600,
+                        textColor: AppColors.borderBlack,
+                        textOverflow: TextOverflow.ellipsis,
+                        text: "Enter new password",
                       ),
                     ),
-                    obscureText: true,
-                    //  validator: Validators.validatePassword(),
+                  ),
+                  SizedBox(height: 8.h),
+                  InputTextField(
+                    label: "Password",
+                    hintMessage: "Enter Password",
+                    validator: Validators.validatePassword,
+                    controller: _passwordController,
+                    onChanged: (val) => _validateForm(),
+                    isSecure: true,
                   ),
                   SizedBox(height: 30.h),
                   SizedBox(
@@ -246,7 +261,6 @@ class ResendOtpLink extends StatelessWidget {
   });
 
   final CountdownTimer timer;
-
   final VoidCallback onResendOtp;
 
   @override

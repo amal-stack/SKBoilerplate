@@ -14,14 +14,13 @@ class RemoteAuthRepository implements AuthRepository {
   final AuthSource _auth;
 
   final _controller = StreamController<Authentication>.broadcast()
-    ..add(const Authentication.unknown());
+    ..add(const Authentication.initial());
 
   @override
   Stream<Authentication> get state => _controller.stream;
 
   @override
   Future<void> login(String email, String password) async {
-    _controller.add(const Authentication.loading());
 
     try {
       final response = await _auth.login(email, password);
@@ -41,8 +40,9 @@ class RemoteAuthRepository implements AuthRepository {
   }
 
   @override
-  Future<void> logout() {
-    throw UnimplementedError();
+  Future<void> logout() async {
+    await _auth.logout();
+    _controller.add(const Authentication.unauthenticated('Logged out'));
   }
 
   @override

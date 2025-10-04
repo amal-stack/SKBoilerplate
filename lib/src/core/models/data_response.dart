@@ -3,7 +3,6 @@ import 'package:boilerplate/src/core/models/response.dart';
 typedef DataFromJson<T> = T Function(Map<String, dynamic> json);
 typedef DataToJson<T> = Map<String, dynamic> Function(T data);
 
-
 /// A [Response] that includes additional data.
 abstract class DataResponse<T> extends Response {
   const DataResponse({
@@ -62,7 +61,6 @@ class _DataResponseWithConverter<T> extends DataResponse<T> {
   @override
   Map<String, dynamic> dataToJson(T data) => dataToJsonConverter(data);
 }
-
 
 abstract class ListDataResponse<T> extends DataResponse<List<T>> {
   const ListDataResponse({

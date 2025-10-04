@@ -10,24 +10,18 @@ import 'package:boilerplate/src/shared/utils/app_assets.dart';
 import 'package:boilerplate/src/shared/utils/app_colors.dart';
 import 'package:boilerplate/src/shared/utils/app_texts.dart';
 import 'package:boilerplate/src/shared/widgets/custom_text_field.dart';
-import 'package:boilerplate/src/shared/widgets/qa_widget.dart';
-import 'package:boilerplate/src/shared/widgets/view_bloc_builder.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widget_previews.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
-Widget screenUtilWrapper(Widget child) => ScreenUtilInit(
-  designSize: const Size(375, 812),
-  minTextAdapt: true,
-  splitScreenMode: true,
-  builder: (_, _) =>
-      MaterialApp(debugShowCheckedModeBanner: false, home: child),
-);
+import '../../../../shared/widgets/sign_out_connfirmation_sheet.dart';
+
+import 'package:boilerplate/src/shared/widgets/view_bloc_builder.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+
 
 class DashboardScreen extends StatefulWidget {
-  @Preview(wrapper: screenUtilWrapper)
   const DashboardScreen({super.key});
 
   @override
@@ -94,6 +88,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           "assets/images/menu.png",
                           width: 24.w,
                           height: 24.h,
+                        ),
+                        SizedBox(width: 8.w),
+                        GestureDetector(
+                          onTap: () {
+                            showModalBottomSheet(
+                              context: context,
+                              isScrollControlled: true,
+                              backgroundColor: Colors.transparent,
+                              builder: (context) =>
+                                  const SignOutConfirmationSheet(),
+                            );
+                          },
+                          child: Icon(Icons.logout_outlined, size: 22.w),
                         ),
                       ],
                     ),
@@ -253,6 +260,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   textSize: 14.sp,
                   maxLines: 1,
                   fontWeight: FontWeight.w700,
+
                   textColor: AppColors.black,
                   textOverflow: TextOverflow.ellipsis,
                   text: AppTexts.frequentlyAskedQuestion,
@@ -673,6 +681,9 @@ class OrderCards extends StatelessWidget {
     children: [
       // context.push('/top-selling-phones');
       OrderCard(
+        onTap: () {
+          context.push('/order-history-screen');
+        },
         color: AppColors.lightBorderColor.withValues(alpha: 0.13),
         borderColor: AppColors.lightBorderColor.withValues(alpha: 0.13),
         titleColor: AppColors.lightGreenColor,
@@ -689,6 +700,9 @@ class OrderCards extends StatelessWidget {
       ),
       SizedBox(width: 8.w),
       OrderCard(
+        onTap: () {
+          context.push('/pending-order-screen');
+        },
         color: AppColors.titleRedColor.withValues(alpha: 0.10),
         borderColor: AppColors.titleRedColor.withValues(alpha: 0.05),
         titleColor: AppColors.titleRedColor,
@@ -787,10 +801,7 @@ class DashboardFaqs extends StatelessWidget {
   Widget build(BuildContext context) {
     return ViewBlocSelector<DashboardCubit, Dashboard, List<Faq>>(
       selector: (state) => state.faqs,
-      builder: (context, faqs) => SizedBox(
-        height: 200.h,
-        child: FaqList(faqs),
-      ),
+      builder: (context, faqs) => SizedBox(height: 200.h, child: FaqList(faqs)),
     );
   }
 }

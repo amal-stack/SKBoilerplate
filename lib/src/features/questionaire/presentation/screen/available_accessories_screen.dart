@@ -89,11 +89,11 @@ class _AvailableAccessoriesScreenState extends State<AvailableAccessoriesScreen>
                         children: [
                           IssueWidget(
                             title: "Original charger of device",
-                            image: "assets/images/question/scratch_1.png",
+                            image: "assets/images/question/charger.png",
                           ),
                           IssueWidget(
                             title: "Original box of the phone",
-                            image: "assets/images/question/lines_1.png",
+                            image: "assets/images/question/original_box.png",
                           ),
                         ],
                       ),

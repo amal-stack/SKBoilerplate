@@ -231,7 +231,11 @@ class _PhoneDetailsBodyState extends State<_PhoneDetailsBody> {
                       setState(() {
                         selectedIndex = index; // deselect old + select new
                         _currentIndex = index;
-                        _controller.jumpToPage(index);
+                        _controller.animateToPage(
+                          index,
+                          duration: Duration(milliseconds: 300),
+                          curve: Curves.easeInOut,
+                        );
                       });
                     },
                     child: Container(
@@ -378,12 +382,7 @@ class _PhoneDetailsBodyState extends State<_PhoneDetailsBody> {
                         ),
                       ],
                     ),
-                    // margin: EdgeInsets.zero,
-                    // color: Colors.white,
-                    // shape: RoundedRectangleBorder(
-                    //   borderRadius: BorderRadius.circular(8),
-                    // ),
-                    // elevation: 3,
+
                     child: SizedBox(
                       child: Padding(
                         padding: EdgeInsets.all(12.w),

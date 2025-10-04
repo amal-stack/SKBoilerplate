@@ -37,8 +37,13 @@ class DioApiClient implements ApiClient {
   }
 
   @override
-  Future<void> saveToken(String token) async {
-    await tokenStore.saveToken(token);
+  Future<void> saveToken(String token)  {
+    return tokenStore.saveToken(token);
+  }
+
+  @override
+  Future<void> clearToken()  {
+    return tokenStore.clearToken();
   }
 
   Options _createOptions(

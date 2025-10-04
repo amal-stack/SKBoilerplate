@@ -79,6 +79,7 @@ class RichText extends StatelessWidget {
                           return;
                         }
                       }),
+
               text: text.formattedText,
               style: GoogleFonts.montserrat(
                 color: text.color ?? texts.first.color,
@@ -126,13 +127,11 @@ class TextModel {
     this.onTap,
   });
 
-  static List<TextModel> fromList(List? data) {
-    if (data == null || data.isEmpty) return [];
-    return data.fold<List<TextModel>>(
-      [],
-      (previousValue, element) => [...previousValue, TextModel(element)],
-    );
-  }
+  static List<TextModel> fromList(List? data) => 
+   data == null || data.isEmpty ? const [] : [
+      for (var element in data) TextModel(element),
+   ];
+    
 
   @override
   String toString() {
@@ -140,27 +139,26 @@ class TextModel {
   }
 
   @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-
-    return other is TextModel &&
-        other.color == color &&
-        other.text == text &&
-        other.fontWeight == fontWeight &&
-        other.alignment == alignment &&
-        other.size == size &&
-        other.isUnderLineRequired == isUnderLineRequired &&
-        other.maxLines == maxLines;
-  }
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is TextModel &&
+          runtimeType == other.runtimeType &&
+          color == other.color &&
+          text == other.text &&
+          fontWeight == other.fontWeight &&
+          alignment == other.alignment &&
+          size == other.size &&
+          maxLines == other.maxLines &&
+          isUnderLineRequired == other.isUnderLineRequired;
 
   @override
-  int get hashCode {
-    return color.hashCode ^
-        text.hashCode ^
-        fontWeight.hashCode ^
-        alignment.hashCode ^
-        size.hashCode ^
-        isUnderLineRequired.hashCode ^
-        maxLines.hashCode;
-  }
+  int get hashCode => Object.hash(
+    color,
+    text,
+    fontWeight,
+    alignment,
+    size,
+    maxLines,
+    isUnderLineRequired,
+  );
 }

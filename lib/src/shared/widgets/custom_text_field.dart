@@ -19,9 +19,12 @@ class InputTextField extends StatefulWidget {
     this.controller,
     this.mixLines,
     this.hintMessage,
+
+
     this.enabledTextField,
     this.labelSize = 12,
     this.inputFormatters,
+
     this.errorText,
     this.maxLength,
     this.minLength,
@@ -59,9 +62,11 @@ class InputTextField extends StatefulWidget {
   final TextInputType? textInputType;
   final TextInputAction? textInputAction;
   final TextEditingController? controller;
+
   final List<TextInputFormatter>? inputFormatters;
   final String? hintMessage;
   final bool? enabledTextField;
+
   final double labelSize;
   final int? maxLength;
   final int? minLength;
@@ -96,18 +101,22 @@ class _InputTextFieldState extends State<InputTextField> {
     return ClipRRect(
       borderRadius: BorderRadius.circular(8.w),
       child: TextFormField(
+
         inputFormatters: widget.inputFormatters,
         onChanged: widget.onChanged,
         controller: widget.controller,
         enabled: widget.enabledTextField ?? true,
+
         onTap: widget.onTap ?? () {},
         obscuringCharacter: '●',
         onFieldSubmitted: widget.onSubmitted,
         readOnly: widget.readOnly ?? false,
         obscureText: widget.isSecure ?? false,
+
         maxLines: widget.mixLines ?? 1,
         textInputAction: widget.textInputAction ?? TextInputAction.done,
         keyboardType: widget.textInputType ?? TextInputType.text,
+
         //textCapitalization: TextCapitalization.words,
         style: GoogleFonts.montserrat(
           fontWeight: FontWeight.w400,
@@ -137,15 +146,15 @@ class _InputTextFieldState extends State<InputTextField> {
             borderRadius: BorderRadius.circular(8.r),
           ),
           focusedBorder:
-              widget.activeBorder
-                  ? OutlineInputBorder(
-                    borderSide: BorderSide(color: AppColors.baseColor),
-                    borderRadius: BorderRadius.circular(8.r),
-                  )
-                  : OutlineInputBorder(
-                    borderSide: BorderSide(color: AppColors.greyBorderColor),
-                    borderRadius: BorderRadius.circular(8.r),
-                  ),
+          widget.activeBorder
+              ? OutlineInputBorder(
+            borderSide: BorderSide(color: AppColors.baseColor),
+            borderRadius: BorderRadius.circular(8.r),
+          )
+              : OutlineInputBorder(
+            borderSide: BorderSide(color: AppColors.greyBorderColor),
+            borderRadius: BorderRadius.circular(8.r),
+          ),
           border: OutlineInputBorder(
             borderSide: const BorderSide(
               // color: Colors.transparent
