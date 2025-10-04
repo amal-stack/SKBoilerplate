@@ -1,0 +1,164 @@
+name: boilerplate
+description: "A new Flutter project."
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+# The following defines the version and build number for your application.
+# A version number is three numbers separated by dots, like 1.2.43
+# followed by an optional build number separated by a +.
+# Both the version and the builder number may be overridden in flutter
+# build by specifying --build-name and --build-number, respectively.
+# In Android, build-name is used as versionName while build-number used as versionCode.
+# Read more about Android versioning at https://developer.android.com/studio/publish/versioning
+# In iOS, build-name is used as CFBundleShortVersionString while build-number is used as CFBundleVersion.
+# Read more about iOS versioning at
+# https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
+# In Windows, build-name is used as the major, minor, and patch parts
+# of the product and file versions while build-number is used as the build suffix.
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.9.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.8
+  go_router: ^16.2.4
+  connectivity_plus: ^6.1.5
+  internet_connection_checker: ^3.0.1
+  flutter_screenutil: ^5.9.3
+  google_fonts: ^6.3.1
+  pinput: ^5.0.2
+  flutter_bloc: ^9.1.1
+  awesome_dialog: ^3.2.1
+  dio: ^5.9.0
+  lottie: ^3.3.2
+  flutter_secure_storage: ^9.2.4
+  meta: ^1.16.0
+  image_picker: ^1.2.0
+  permission_handler: ^12.0.1
+  hive_flutter: ^1.1.0
+  hive: ^2.2.3
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^6.0.0
+
+flutter:
+
+  uses-material-design: true
+
+  assets:
+    - assets/images/onboarding/
+    - assets/images/app_theme_icon.png
+    - assets/images/app_splash.png
+    - assets/images/background_image.png
+    - assets/images/background_type_1.png
+    - assets/images/success_icon.png
+    - assets/images/sub_background.png
+    - assets/images/illustrations_first.png
+    - assets/images/illustrations_second.png
+    - assets/images/illustrations_third.png
+    - assets/images/app_logo_black.png
+    - assets/images/app_name_logo.png
+    - assets/images/huawei.png
+    - assets/images/iphone.png
+    - assets/images/location.png
+    - assets/images/menu.png
+    - assets/images/brands/google_pixel.png
+    - assets/images/brands/huawel.png
+    - assets/images/brands/mi.png
+    - assets/images/brands/infinix.png
+    - assets/images/brands/iphone_brand.png
+    - assets/images/brands/iqoo.png
+    - assets/images/brands/motorola.png
+    - assets/images/brands/oneplus.png
+    - assets/images/brands/oppo.png
+    - assets/images/brands/realme.png
+    - assets/images/brands/samsung_brand.png
+    - assets/images/brands/vivo.png
+    - assets/images/notification.png
+    - assets/images/phone_ad.png
+    - assets/images/phone_card.png
+    - assets/images/samsung.png
+    - assets/images/left_arrow.png
+    - assets/images/right_arrow.png
+    - assets/images/sub_background.png
+    - assets/images/instant_payment.png
+    - assets/images/best_price.png
+    - assets/images/door_step.png
+    - assets/images/simple.png
+    - assets/images/factory.png
+    - assets/images/quote.png
+    - assets/images/right_arrow_black.png
+    - assets/images/filter.png
+    - assets/images/imel.png
+    - assets/images/search.png
+    - assets/images/left_arrow.png
+    - assets/images/download_icon.png
+    - assets/images/valid_purchase.png
+    - assets/images/invoice.png
+    - assets/images/warning.png
+    - assets/images/order_success.png
+    - assets/gifs/Success.json
+    - assets/gifs/log-out.json
+    - assets/images/brands/iphone_brand.png
+    - assets/images/question/scratch_1.png
+    - assets/images/question/scratch_2.png
+    - assets/images/question/scratch_3.png
+    - assets/images/question/scratches_4.png
+    - assets/images/question/dead_1.png
+    - assets/images/question/dead_2.png
+    - assets/images/question/dead_3.png
+    - assets/images/question/dead_4.png
+    - assets/images/question/discolor_1.png
+    - assets/images/question/discolor_3.png
+    - assets/images/question/discolor_2.png
+    - assets/images/question/dent_sub_1.png
+    - assets/images/question/dent_sub_2.png
+    - assets/images/question/dent_sub_3.png
+    - assets/images/question/dent_sub_3.png
+    - assets/images/question/dent_sub_4.png
+    - assets/images/question/dent_sub_5.png
+    - assets/images/question/dent_sub_6.png
+    - assets/images/question/additional_1.png
+    - assets/images/question/additional_2.png
+    - assets/images/question/additional_4.png
+    - assets/images/question/additional_5.png
+    - assets/images/question/additional_11.png
+    - assets/images/question/additioal_8.png
+    - assets/images/question/additional_12.png
+    - assets/images/question/additional_13.png
+    - assets/images/question/additional_14.png
+    - assets/images/question/additional_15.png
+    - assets/images/question/additional_16.png
+    - assets/images/question/mobile_front.png
+    - assets/images/question/mobile_back.png
+    - assets/images/question/battery_1.png
+    - assets/images/question/battery_2.png
+    - assets/images/question/lines_1.png
+    - assets/images/question/visible_line_1.png
+    - assets/images/question/visible_line_2.png
+    - assets/images/question/visible_line_3.png
+    - assets/images/question/unchecked_checkbox.png
+    - assets/images/question/charger.png
+    - assets/images/question/dent_1.png
+    - assets/images/question/panel_1.png
+    - assets/images/question/original_box.png
+    - assets/images/selected_checkbox.png
+
+
+
+  fonts:
+    - family: Modelica
+      fonts:
+        - asset: assets/fonts/BwModelica-Regular.otf
+        - asset: assets/fonts/BwModelica-Medium.otf
+        - asset: assets/fonts/BwModelica-Bold.otf
+          weight: 700
+
+  
