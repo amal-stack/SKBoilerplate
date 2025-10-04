@@ -1,7 +1,7 @@
+import 'package:boilerplate/src/core/network/models/api_exception.dart';
 import 'package:dio/dio.dart';
 
 import 'api_client.dart';
-import 'models/api_exception.dart';
 import 'models/api_request.dart';
 import 'models/api_response.dart';
 import 'token_store.dart';
@@ -16,6 +16,8 @@ class DioApiClient implements ApiClient {
   final Dio _dio;
 
   final TokenStore tokenStore;
+
+  final List<ApiErrorHandler> _errorHandlers = [];
 
   @override
   Future<ApiResponse> fetch(String method, ApiRequest request) async {
@@ -32,18 +34,41 @@ class DioApiClient implements ApiClient {
 
       return ApiResponse(data: response.data, statusCode: response.statusCode);
     } on DioException catch (e) {
-      throw ApiException(message: e.message, error: e);
+      final response = ApiResponse.error(
+        failureType: _failureTypeFromDioException(e),
+        error: e,
+        message: e.response?.data?['message'] as String?,
+        statusCode: e.response?.statusCode,
+      );
+
+      for (final handler in _errorHandlers) {
+        handler(response.error!);
+      }
+
+      return response;
     }
   }
 
   @override
-  Future<void> saveToken(String token)  {
+  Future<void> saveToken(String token) {
     return tokenStore.saveToken(token);
   }
 
   @override
-  Future<void> clearToken()  {
+  Future<void> clearToken() {
     return tokenStore.clearToken();
+  }
+
+  @override
+  void addErrorHandler(ApiErrorHandler handler) {
+    if (!_errorHandlers.contains(handler)) {
+      _errorHandlers.add(handler);
+    }
+  }
+
+  @override
+  void removeErrorHandler(ApiErrorHandler handler) {
+    _errorHandlers.remove(handler);
   }
 
   Options _createOptions(
@@ -60,3 +85,20 @@ class DioApiClient implements ApiClient {
         : headers,
   );
 }
+
+ApiFailureType _failureTypeFromDioException(DioException exception) =>
+    switch (exception.type) {
+      DioExceptionType.badResponse => ApiFailureType.fromStatusCode(
+        exception.response?.statusCode,
+      ),
+      DioExceptionType.connectionTimeout => ApiFailureType.connectionTimeout,
+      DioExceptionType.sendTimeout => ApiFailureType.sendTimeout,
+      DioExceptionType.receiveTimeout => ApiFailureType.receiveTimeout,
+
+      DioExceptionType.cancel => ApiFailureType.cancelled,
+
+      DioExceptionType.connectionError => ApiFailureType.networkError,
+
+      DioExceptionType.badCertificate ||
+      DioExceptionType.unknown => ApiFailureType.unknownError,
+    };

@@ -1,5 +1,9 @@
+import 'package:boilerplate/src/core/network/models/api_exception.dart';
+
 import 'models/api_request.dart';
 import 'models/api_response.dart';
+
+typedef ApiErrorHandler = void Function(ApiException error);
 
 /// Interface for an API client to perform HTTP requests.
 abstract interface class ApiClient {
@@ -8,6 +12,10 @@ abstract interface class ApiClient {
   Future<void> saveToken(String token);
 
   Future<void> clearToken();
+
+  void addErrorHandler(ApiErrorHandler handler);
+
+  void removeErrorHandler(ApiErrorHandler handler);
 }
 
 /// Extension methods for common HTTP methods on the ApiClient.
