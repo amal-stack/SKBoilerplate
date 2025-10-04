@@ -80,9 +80,17 @@ class _PhoneDetailsScreenState extends State<PhoneDetailsScreen> {
             ProductVariantsInitial() => Center(
               child: CircularProgressIndicator(color: AppColors.baseColor),
             ),
-            ProductVariantsFetched(:final variants) => _PhoneDetailsBody(
-              variants: variants,
-            ),
+            ProductVariantsFetched(:final variants) =>
+              variants.isEmpty
+                  ? Center(
+                      child: RegularText(
+                        text: "No variants available",
+                        textColor: AppColors.black,
+                        fontWeight: FontWeight.w500,
+                        textSize: 16.sp,
+                      ),
+                    )
+                  : _PhoneDetailsBody(variants: variants),
             ProductVariantsError(:final message) => Center(
               child: Text(message, style: TextStyle(color: Colors.red)),
             ),
