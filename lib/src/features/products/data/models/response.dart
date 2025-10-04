@@ -1,8 +1,7 @@
+import 'package:boilerplate/src/core/models/data_response.dart';
 import 'package:boilerplate/src/core/models/paginated_response.dart';
 import 'package:boilerplate/src/features/products/domain/product.dart';
-
-import '../../../../core/models/data_response.dart';
-import '../../domain/product_variant.dart';
+import 'package:boilerplate/src/features/products/domain/product_variant.dart';
 
 class ProductsResponse extends PaginatedResponse<Product> {
   const ProductsResponse({
@@ -26,7 +25,7 @@ class ProductVariantsResponse extends ListDataResponse<ProductVariant> {
   });
 
   ProductVariantsResponse.fromJson(Map<String, dynamic> json)
-      : super.fromJson(json, ProductVariant.fromJson, 'variantOptions');
+    : super.fromJson(json, ProductVariant.fromJson, 'variantOptions');
 
   @override
   Map<String, dynamic> itemToJson(ProductVariant item) => item.toJson();

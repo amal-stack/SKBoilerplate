@@ -11,11 +11,11 @@ class Product {
   });
 
   Product.fromJson(Map<String, dynamic> json)
-      : id = json['id'] as String,
-        name = json['name'] as String,
-        brandId = json['brandId'] as String,
-        deviceCount = json['deviceCount'] as int,
-        imageUrl = json['image'] as String;
+    : id = json['id'] as String,
+      name = json['name'] as String,
+      brandId = json['brandId'] as String,
+      deviceCount = json['deviceCount'] as int,
+      imageUrl = json['image'] as String;
 
   final String id;
 

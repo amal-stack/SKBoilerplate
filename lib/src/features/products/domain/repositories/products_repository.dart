@@ -10,8 +10,8 @@ abstract interface class ProductsRepository {
     int? limit,
   });
 
+
   Future<List<ProductVariant>> variants({
     required String modelId,
   });
-
 }

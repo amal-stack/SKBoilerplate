@@ -11,6 +11,7 @@ class AuthScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Scaffold(
     resizeToAvoidBottomInset: false,
+
     body: DecoratedBox(
       decoration: const BoxDecoration(
         image: DecorationImage(

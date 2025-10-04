@@ -12,14 +12,14 @@ class Brand {
   Brand.fromJson(Map<String, dynamic> json)
     : id = json['id'] as String,
       name = json['name'] as String,
-      deviceCount = json['deviceCount'] as int,
+      deviceCount = json['deviceCount'] as int?,
       imageUrl = json['image'] as String;
 
   final String id;
 
   final String name;
 
-  final int deviceCount;
+  final int? deviceCount;
 
   final String imageUrl;
 

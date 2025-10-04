@@ -21,25 +21,23 @@ class _DefectsSelectionScreenState extends State<DefectsSelectionScreen> {
   int selectedVisibleLinesIndex = -1;
   int selectedDiscolorationIndex = -1;
 
-
   final List<Map<String, String>> deadPixelIssues = [
-    {"title": "Large or Heavy Visible Spots", "image": "assets/images/question/dead_1.png"},
-    {"title": "Three or More Small Spots", "image": "assets/images/question/dead_2.png"},
-    {"title": "One or Two Small Spots", "image": "assets/images/question/dead_3.png"},
-    {"title": "No Spots onScreen", "image": "assets/images/question/dead_4.png"},
+    {"title": "Large or Heavy Visible Spots", "image": "assets/images/question/scratch_1.png"},
+    {"title": "Three or More Small Spots", "image": "assets/images/question/lines_1.png"},
+    {"title": "One or Two Small Spots", "image": "assets/images/question/scratch_1.png"},
+    {"title": "No Spots onScreen", "image": "assets/images/question/lines_1.png"},
   ];
 
-
   final List<Map<String, String>> visibleLineIssues = [
-    {"title": "Visible Lines on Screen", "image": "assets/images/question/visible_line_1.png"},
-    {"title": "Faded Display Edges", "image": "assets/images/question/visible_line_2.png"},
-    {"title": "No Lines on Screen", "image": "assets/images/question/visible_line_3.png"},
+    {"title": "Visible Lines on Screen", "image": "assets/images/question/scratch_1.png"},
+    {"title": "Faded Display Edges", "image": "assets/images/question/lines_1.png"},
+    {"title": "No Lines on Screen", "image": "assets/images/question/lines_1.png"},
   ];
 
   final List<Map<String, String>> discolorationIssues = [
-    {"title": "Severe Discoloration", "image": "assets/images/question/discolor_1.png"},
-    {"title": "Minor Discoloration", "image": "assets/images/question/discolor_2.png"},
-    {"title": "No Discoloration", "image": "assets/images/question/discolor_3.png"},
+    {"title": "Severe Discoloration", "image": "assets/images/question/scratch_1.png"},
+    {"title": "Minor Discoloration", "image": "assets/images/question/lines_1.png"},
+    {"title": "No Discoloration", "image": "assets/images/question/scratch_1.png"},
   ];
 
   Widget buildIssueRow(List<Map<String, String>> issues, int selectedIndex, Function(int) onSelect) {

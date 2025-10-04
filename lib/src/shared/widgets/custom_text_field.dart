@@ -19,9 +19,12 @@ class InputTextField extends StatefulWidget {
     this.controller,
     this.mixLines,
     this.hintMessage,
-    this.enabledTextFeild,
+
+
+    this.enabledTextField,
     this.labelSize = 12,
-    this.inputFormatter,
+    this.inputFormatters,
+
     this.errorText,
     this.maxLength,
     this.minLength,
@@ -59,9 +62,11 @@ class InputTextField extends StatefulWidget {
   final TextInputType? textInputType;
   final TextInputAction? textInputAction;
   final TextEditingController? controller;
-  final List<TextInputFormatter>? inputFormatter;
+
+  final List<TextInputFormatter>? inputFormatters;
   final String? hintMessage;
-  final bool? enabledTextFeild;
+  final bool? enabledTextField;
+
   final double labelSize;
   final int? maxLength;
   final int? minLength;
@@ -96,10 +101,12 @@ class _InputTextFieldState extends State<InputTextField> {
     return ClipRRect(
       borderRadius: BorderRadius.circular(8.w),
       child: TextFormField(
-        inputFormatters: widget.inputFormatter,
+
+        inputFormatters: widget.inputFormatters,
         onChanged: widget.onChanged,
         controller: widget.controller,
-        enabled: widget.enabledTextFeild ?? true,
+        enabled: widget.enabledTextField ?? true,
+
         onTap: widget.onTap ?? () {},
         obscuringCharacter: '●',
         onFieldSubmitted: widget.onSubmitted,
@@ -162,8 +169,8 @@ class _InputTextFieldState extends State<InputTextField> {
           hintText: widget.hintMessage,
           hintStyle: TextStyle(
             color: AppColors.lightGreyColor,
-            fontSize: 14.sp ?? 18.sp,
-            fontWeight:FontWeight.w500,
+            fontSize: 14.sp,
+            fontWeight: FontWeight.w500,
             //height: height,
             fontFamily: "Modelica",
           ),

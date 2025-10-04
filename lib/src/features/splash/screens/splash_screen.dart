@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:hive/hive.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -16,8 +15,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-
-
+    // Navigate after 3 seconds
     Timer(const Duration(seconds: 3), () {
       if (mounted) {
         context.go('/introslider-screen');

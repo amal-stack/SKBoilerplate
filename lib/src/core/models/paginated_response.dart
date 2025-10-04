@@ -10,13 +10,13 @@ abstract class PaginatedResponse<T>
   });
 
   PaginatedResponse.fromJson(
-      Map<String, dynamic> json,
-      DataFromJson<T> itemFromJson,
-      String itemsKey,
-      ) : super.fromJson(
-    json,
+    Map<String, dynamic> json,
+    DataFromJson<T> itemFromJson,
+    String itemsKey,
+  ) : super.fromJson(
+        json,
         (data) => PaginatedResponseData.fromJson(data, itemFromJson, itemsKey),
-  );
+      );
 
   Paginated<T> toPaginated() => switch (data) {
     final data? => Paginated(
@@ -44,25 +44,25 @@ class PaginatedResponseData<T> {
   const PaginatedResponseData({required this.items, required this.pagination});
 
   PaginatedResponseData.fromJson(
-      Map<String, dynamic> json,
-      DataFromJson<T> itemFromJson,
-      String itemsKey,
-      ) : items = [
-    for (var item in (json[itemsKey] as List<dynamic>))
-      itemFromJson(item as Map<String, dynamic>),
-  ],
-        pagination = ResponsePagination.fromJson(
-          json['pagination'] as Map<String, dynamic>,
-        );
+    Map<String, dynamic> json,
+    DataFromJson<T> itemFromJson,
+    String itemsKey,
+  ) : items = [
+        for (var item in (json[itemsKey] as List<dynamic>))
+          itemFromJson(item as Map<String, dynamic>),
+      ],
+      pagination = ResponsePagination.fromJson(
+        json['pagination'] as Map<String, dynamic>,
+      );
 
   final List<T> items;
 
   final ResponsePagination pagination;
 
   Map<String, dynamic> toJson(
-      DataToJson<T> itemToJson, {
-        String itemsKey = 'items',
-      }) => {
+    DataToJson<T> itemToJson, {
+    String itemsKey = 'items',
+  }) => {
     itemsKey: [for (var item in items) itemToJson(item)],
     'pagination': pagination.toJson(),
   };
@@ -77,10 +77,10 @@ class ResponsePagination {
   });
 
   ResponsePagination.fromJson(Map<String, dynamic> json)
-      : page = json['page'] as int,
-        limit = json['limit'] as int,
-        total = json['total'] as int,
-        totalPages = json['pages'] as int;
+    : page = json['page'] as int,
+      limit = json['limit'] as int,
+      total = json['total'] as int,
+      totalPages = json['pages'] as int;
 
   final int page;
 

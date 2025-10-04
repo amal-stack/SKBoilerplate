@@ -1,3 +1,5 @@
+import 'package:boilerplate/src/features/dashboard/presentation/screens/faq_screen.dart';
+
 import 'package:boilerplate/src/shared/utils/app_routes.dart';
 import 'package:go_router/go_router.dart';
 
@@ -7,6 +9,7 @@ import '../features/auth/presentation/screens/reset_password_screen.dart';
 import '../features/auth/presentation/screens/success_screen.dart';
 import '../features/brands/presentation/screens/brands_screen.dart';
 import '../features/dashboard/presentation/screens/dashboard_screen.dart';
+
 import '../features/kyc/presentation/screen/kyc_details_screen.dart';
 import '../features/kyc/presentation/screen/order_success_screen.dart';
 import '../features/kyc/presentation/screen/phone_number_verification.dart';
@@ -17,12 +20,16 @@ import '../features/orders/presentations/screen/completed_order_details_screen.d
 import '../features/orders/presentations/screen/pending_order_details_screen.dart';
 import '../features/products/presentation/screens/explore_products_screen.dart';
 import '../features/dashboard/presentation/screens/phone_details_screen.dart';
+
 import '../features/dashboard/presentation/screens/top_selling_phone_screen.dart';
 import '../features/introslider/screens/introslider_screen.dart';
 import '../features/questionaire/presentation/screen/defects_selection_screen.dart';
 import '../features/questionaire/presentation/screen/dents_selection_screen.dart';
+
 import '../features/questionaire/presentation/screen/device_value_screen.dart';
-import '../features/questionaire/presentation/screen/imel_screen.dart';
+
+import '../features/questionaire/presentation/screen/imei_screen.dart';
+
 import '../features/questionaire/presentation/screen/missing_panel_selection_screen.dart';
 import '../features/questionaire/presentation/screen/product_condition_screen.dart';
 import '../features/questionaire/presentation/screen/product_question_answer_screen.dart';
@@ -38,7 +45,14 @@ final GoRouter appRouter = GoRouter(
   initialLocation: '/splash',
   routes: [
     GoRoute(path: '/splash', builder: (context, state) => const SplashScreen()),
-    GoRoute(path: '/dashboard', builder: (context, state) => DashboardScreen()),
+
+    GoRoute(
+      path: '/dashboard',
+      builder: (context, state) => DashboardScreen(),
+      routes: [
+        GoRoute(path: 'faqs', builder: (context, state) => const FaqScreen()),
+      ],
+    ),
     GoRoute(
       path: AppRoutes.auth,
       builder: (context, state) => const LoginScreen(),
@@ -50,7 +64,13 @@ final GoRouter appRouter = GoRouter(
         GoRoute(
           path: 'reset-password',
           builder: (context, state) {
-            final email = state.extra as String? ?? '';
+            final email =
+                (state.extra as String?) ??
+                (throw AppRoutingError.missingParameter(
+                  'email',
+                  'reset-password',
+                ));
+
             return ResetPasswordScreen(email: email);
           },
         ),
@@ -67,11 +87,14 @@ final GoRouter appRouter = GoRouter(
     GoRoute(path: '/brands', builder: (context, state) => BrandsScreen()),
     GoRoute(
       path: '/explore-brands/:brandId',
-      builder: (context, state) => ExploreProductsScreen(brandId: state.pathParameters['brandId']!),
+
+      builder: (context, state) =>
+          ExploreProductsScreen(brandId: state.pathParameters['brandId']!),
     ),
     GoRoute(
       path: '/phone-details/:modelId',
-      builder: (context, state) => PhoneDetailsScreen(modelId: state.pathParameters['modelId']!),
+      builder: (context, state) =>
+          PhoneDetailsScreen(modelId: state.pathParameters['modelId']!),
     ),
     GoRoute(
       path: '/top-selling-phones',
@@ -160,3 +183,15 @@ final GoRouter appRouter = GoRouter(
     ),
   ],
 );
+
+class AppRoutingError extends Error {
+  AppRoutingError(this.message);
+
+  AppRoutingError.missingParameter(String paramName, String route)
+    : message = 'Missing required parameter "$paramName" for route "$route"';
+
+  final String message;
+
+  @override
+  String toString() => 'AppRoutingError: $message';
+}

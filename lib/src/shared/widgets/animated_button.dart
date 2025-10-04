@@ -15,6 +15,8 @@ class AnimatedButton extends StatefulWidget {
   final double? fontSize;
   final bool isLoading;
 
+  bool get isDisabled => disableButton || isLoading;
+
   const AnimatedButton({
     super.key,
     required this.onPressed,
@@ -36,10 +38,11 @@ class AnimatedButton extends StatefulWidget {
 class _AnimatedButtonState extends State<AnimatedButton> {
   @override
   Widget build(BuildContext context) {
-    final bool isDisabled = widget.disableButton || widget.isLoading;
-
-    final Color currentButtonColor = isDisabled
-        ? AppColors.baseColor.withOpacity(0.3)
+    final Color currentButtonColor = widget.isDisabled
+        ? Color.alphaBlend(
+            AppColors.baseColor.withValues(alpha: 0.3),
+            Colors.white,
+          )
         : widget.buttonColor ?? AppColors.baseColor;
 
     return AnimatedContainer(
@@ -52,41 +55,38 @@ class _AnimatedButtonState extends State<AnimatedButton> {
         border: Border.all(color: widget.borderColor ?? Colors.transparent),
       ),
       child: MaterialButton(
-        onPressed: isDisabled ? null : widget.onPressed,
+        onPressed: widget.isDisabled ? null : widget.onPressed,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15.r),
         ),
         child: Center(
           child: widget.isLoading
               ? SizedBox(
-            width: 22.w,
-            height: 22.h,
-            child: const CircularProgressIndicator(
-              strokeWidth: 2,
-              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-            ),
-          )
+                  width: 22.w,
+                  height: 22.h,
+                  child: const CircularProgressIndicator(
+                    strokeWidth: 2,
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                  ),
+                )
               : Text(
-            widget.label,
-            style: TextStyle(
-              fontSize: widget.fontSize ?? 14.sp,
-              color: widget.labelColor ?? Colors.white,
-              fontWeight: widget.labelFontWeight,
-            ),
-          ),
+                  widget.label,
+                  style: TextStyle(
+                    fontSize: widget.fontSize ?? 14.sp,
+                    color: widget.labelColor ?? Colors.white,
+                    fontWeight: widget.labelFontWeight,
+                  ),
+                ),
         ),
       ),
     );
   }
 }
 
-
 Widget animatedLoader() {
   return SizedBox(
     height: 1.sh, // ScreenUtil → full height
     width: 1.sw, // ScreenUtil → full width
-    child: const Center(
-      child: CircularProgressIndicator(color: Colors.pink),
-    ),
+    child: const Center(child: CircularProgressIndicator(color: Colors.pink)),
   );
 }

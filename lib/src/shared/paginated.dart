@@ -8,9 +8,7 @@ class Paginated<T> with Iterable<T> {
     required this.totalPages,
   }) : assert(items.length <= limit),
       assert(page > 0),
-      assert(limit > 0),
-      assert(total >= 0),
-      assert(totalPages > 0);
+      assert(limit > 0);
 
   final List<T> items;
 

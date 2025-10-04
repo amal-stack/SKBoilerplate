@@ -10,7 +10,9 @@ import '../../../../shared/utils/app_routes.dart';
 import '../../../../shared/utils/app_texts.dart';
 import '../../../../shared/validators.dart';
 import '../../../../shared/widgets/animated_button.dart';
+
 import '../../../../shared/widgets/custom_text_field.dart';
+
 import '../../domain/entities/authentication.dart';
 import '../cubit/login_cubit.dart';
 
@@ -53,11 +55,7 @@ class _LoginFormState extends State<LoginForm> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset(
-            AppImages.appLogoBlack,
-            width: 210.w,
-            height: 48.h,
-          ),
+          Image.asset(AppImages.appLogoBlack, width: 210.w, height: 48.h),
           SizedBox(height: 20.h),
           RegularText(
             textAlign: TextAlign.center,
@@ -91,19 +89,8 @@ class _LoginFormState extends State<LoginForm> {
             hintMessage: "Enter Email",
             validator: Validators.validateEmail,
             controller: _emailController,
-            // onChanged: (val) => _validateForm(),
+            onChanged: (val) => _validateForm(),
           ),
-          // TextFormField(
-          //   controller: _emailController,
-          //   validator: Validators.validateEmail,
-          //   autovalidateMode: AutovalidateMode.onUserInteraction,
-          //   decoration: InputDecoration(
-          //     labelText: AppTexts.enterEmailId,
-          //     border: OutlineInputBorder(
-          //       borderRadius: BorderRadius.circular(8.r),
-          //     ),
-          //   ),
-          // ),
           SizedBox(height: 20.h),
           Align(
             alignment: Alignment.topLeft,
@@ -129,19 +116,6 @@ class _LoginFormState extends State<LoginForm> {
             onChanged: (val) => _validateForm(),
             isSecure: true,
           ),
-          // TextFormField(
-          //   controller: _passwordController,
-          //   obscureText: true,
-          //   validator: Validators.validatePassword,
-          //   autovalidateMode: AutovalidateMode.onUserInteraction,
-          //   onChanged: (val) => _validateForm(),
-          //   decoration: InputDecoration(
-          //     labelText: 'Enter Password',
-          //     border: OutlineInputBorder(
-          //       borderRadius: BorderRadius.circular(8.r),
-          //     ),
-          //   ),
-          // ),
           SizedBox(height: 20.h),
           Align(
             alignment: Alignment.topRight,

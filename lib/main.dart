@@ -1,7 +1,3 @@
-import 'dart:io';
-import 'package:flutter/services.dart';
-import 'package:path_provider/path_provider.dart';
-
 import 'package:boilerplate/src/core/dependencies.dart';
 import 'package:boilerplate/src/features/auth/data/repositories/remote/remote_auth_repository.dart';
 import 'package:boilerplate/src/features/auth/data/repositories/remote/remote_user_repository.dart';
@@ -9,12 +5,16 @@ import 'package:boilerplate/src/features/auth/domain/repositories/auth_repositor
 import 'package:boilerplate/src/features/auth/domain/repositories/user_repository.dart';
 import 'package:boilerplate/src/features/brands/data/repositories/remote/remote_brands_repository.dart';
 import 'package:boilerplate/src/features/brands/domain/repositories/brands_repository.dart';
+
+import 'package:boilerplate/src/features/dashboard/data/repositories/remote/remote_dashboard_repository.dart';
+import 'package:boilerplate/src/features/dashboard/domain/repositories/dashboard_repository.dart';
+
 import 'package:boilerplate/src/features/products/data/repositories/remote/remote_products_repository.dart';
 import 'package:boilerplate/src/features/products/domain/repositories/products_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:hive/hive.dart';
+
 import 'src/core/app_router.dart';
 import 'src/core/network/connectivity_service.dart';
 import 'src/shared/themes/app_theme.dart';
@@ -24,14 +24,7 @@ void main() async {
   await ConnectivityService.initialize();
 
   final dependencies = Dependencies.defaults();
-  // Get application documents directory
- // Directory appDocDir = await getApplicationDocumentsDirectory();
 
-  // Initialize Hive with custom path
-//  Hive.init('${appDocDir.path}/db');
-
-  // Open prefs box
-//  await Hive.openBox('prefs');
   runApp(SwitchKartApp(dependencies: dependencies));
 }
 
@@ -50,10 +43,16 @@ class SwitchKartApp extends StatelessWidget {
         create: (context) => RemoteUserRepository(dependencies.authSource),
       ),
       RepositoryProvider<BrandsRepository>(
-        create: (context) => RemoteBrandsRepository(dependencies.brandsDataSource),
+        create: (context) =>
+            RemoteBrandsRepository(dependencies.brandsDataSource),
       ),
       RepositoryProvider<ProductsRepository>(
-        create: (context) => RemoteProductsRepository(dependencies.productsDataSource),
+        create: (context) =>
+            RemoteProductsRepository(dependencies.productsDataSource),
+      ),
+      RepositoryProvider<DashboardRepository>(
+        create: (context) =>
+            RemoteDashboardRepository(dependencies.dashboardDataSource),
       ),
     ],
     child: const AppView(),

@@ -48,20 +48,30 @@ class RegularText extends StatelessWidget {
   }
 }
 
-Widget RichText({
-  required List<TextModel> texts,
-  int maxLines = 10,
-  TextAlign alignment = TextAlign.start,
-}) {
-  return Text.rich(
-    TextSpan(
-      children: <TextSpan>[
-        for (var text in texts)
-          TextSpan(
-            recognizer:
-                !(text.onTap != null)
-                    ? null
-                    : (TapGestureRecognizer()
+class RichText extends StatelessWidget {
+  const RichText({
+    super.key,
+    required this.texts,
+    this.maxLines = 10,
+    this.alignment = TextAlign.start,
+  });
+
+  final List<TextModel> texts;
+
+  final TextAlign alignment;
+
+  final int maxLines;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text.rich(
+      TextSpan(
+        children: <TextSpan>[
+          for (var text in texts)
+            TextSpan(
+              recognizer: !(text.onTap != null)
+                  ? null
+                  : (TapGestureRecognizer()
                       ..onTap = () async {
                         if (text.onTap != null) {
                           text.onTap!();
@@ -69,27 +79,29 @@ Widget RichText({
                           return;
                         }
                       }),
-            text: text.formattedText,
-            style: GoogleFonts.montserrat(
-              color: text.color ?? texts.first.color,
-              decoration:
-                  text.isUnderLineRequired == true
-                      ? TextDecoration.underline
-                      : TextDecoration.none,
-              decorationColor: text.color ?? texts.first.color,
-              decorationThickness: 2,
-              fontWeight: text.fontWeight ?? texts.first.fontWeight,
-              fontSize: text.size ?? texts.first.size,
-              // fontFamily: "ProximaNovaExcn"
+
+              text: text.formattedText,
+              style: GoogleFonts.montserrat(
+                color: text.color ?? texts.first.color,
+                decoration: text.isUnderLineRequired == true
+                    ? TextDecoration.underline
+                    : TextDecoration.none,
+                decorationColor: text.color ?? texts.first.color,
+                decorationThickness: 2,
+                fontWeight: text.fontWeight ?? texts.first.fontWeight,
+                fontSize: text.size ?? texts.first.size,
+                // fontFamily: "ProximaNovaExcn"
+              ),
             ),
-          ),
-      ],
-    ),
-    textAlign: alignment,
-    maxLines: maxLines,
-  );
+        ],
+      ),
+      textAlign: alignment,
+      maxLines: maxLines,
+    );
+  }
 }
 
+@immutable
 class TextModel {
   final Color? color;
   final String text;
@@ -103,7 +115,7 @@ class TextModel {
 
   String get formattedText => text;
 
-  TextModel(
+  const TextModel(
     this.text, {
     this.format,
     this.color = const Color(0xff2e2e2e),
@@ -115,13 +127,11 @@ class TextModel {
     this.onTap,
   });
 
-  static List<TextModel> fromList(List? data) {
-    if (data == null || data.isEmpty) return [];
-    return data.fold<List<TextModel>>(
-      [],
-      (previousValue, element) => [...previousValue, TextModel(element)],
-    );
-  }
+  static List<TextModel> fromList(List? data) => 
+   data == null || data.isEmpty ? const [] : [
+      for (var element in data) TextModel(element),
+   ];
+    
 
   @override
   String toString() {
@@ -129,27 +139,26 @@ class TextModel {
   }
 
   @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-
-    return other is TextModel &&
-        other.color == color &&
-        other.text == text &&
-        other.fontWeight == fontWeight &&
-        other.alignment == alignment &&
-        other.size == size &&
-        other.isUnderLineRequired == isUnderLineRequired &&
-        other.maxLines == maxLines;
-  }
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is TextModel &&
+          runtimeType == other.runtimeType &&
+          color == other.color &&
+          text == other.text &&
+          fontWeight == other.fontWeight &&
+          alignment == other.alignment &&
+          size == other.size &&
+          maxLines == other.maxLines &&
+          isUnderLineRequired == other.isUnderLineRequired;
 
   @override
-  int get hashCode {
-    return color.hashCode ^
-        text.hashCode ^
-        fontWeight.hashCode ^
-        alignment.hashCode ^
-        size.hashCode ^
-        isUnderLineRequired.hashCode ^
-        maxLines.hashCode;
-  }
+  int get hashCode => Object.hash(
+    color,
+    text,
+    fontWeight,
+    alignment,
+    size,
+    maxLines,
+    isUnderLineRequired,
+  );
 }

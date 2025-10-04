@@ -3,8 +3,6 @@ import 'package:boilerplate/src/features/products/domain/product.dart';
 import 'package:boilerplate/src/features/products/domain/product_variant.dart';
 import 'package:boilerplate/src/features/products/domain/repositories/products_repository.dart';
 import 'package:boilerplate/src/shared/paginated.dart';
-import 'package:boilerplate/src/features/products/data/models/response.dart';
-
 
 class RemoteProductsRepository implements ProductsRepository {
   const RemoteProductsRepository(this.dataSource);

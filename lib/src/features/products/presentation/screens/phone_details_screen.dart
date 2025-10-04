@@ -80,9 +80,17 @@ class _PhoneDetailsScreenState extends State<PhoneDetailsScreen> {
             ProductVariantsInitial() => Center(
               child: CircularProgressIndicator(color: AppColors.baseColor),
             ),
-            ProductVariantsFetched(:final variants) => _PhoneDetailsBody(
-              variants: variants,
-            ),
+            ProductVariantsFetched(:final variants) =>
+              variants.isEmpty
+                  ? Center(
+                      child: RegularText(
+                        text: "No variants available",
+                        textColor: AppColors.black,
+                        fontWeight: FontWeight.w500,
+                        textSize: 16.sp,
+                      ),
+                    )
+                  : _PhoneDetailsBody(variants: variants),
             ProductVariantsError(:final message) => Center(
               child: Text(message, style: TextStyle(color: Colors.red)),
             ),
@@ -104,9 +112,14 @@ class _PhoneDetailsBody extends StatefulWidget {
 
 class _PhoneDetailsBodyState extends State<_PhoneDetailsBody> {
   final PageController _controller = PageController();
-  int _currentIndex = 0;
+  int? _currentIndex;
   int? selectedIndex;
   int? _expandedIndex;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   List<String> brandNameList = [
     "Apple",
@@ -198,15 +211,16 @@ class _PhoneDetailsBodyState extends State<_PhoneDetailsBody> {
                 length: widget.variants.length,
               ),
               SizedBox(height: 20.h),
-              RegularText(
-                textAlign: TextAlign.start,
-                textSize: 20.sp,
-                maxLines: 1,
-                fontWeight: FontWeight.w700,
-                textColor: AppColors.black,
-                textOverflow: TextOverflow.ellipsis,
-                text: widget.variants[_currentIndex].modelName,
-              ),
+              if (_currentIndex != null)
+                RegularText(
+                  textAlign: TextAlign.start,
+                  textSize: 20.sp,
+                  maxLines: 1,
+                  fontWeight: FontWeight.w700,
+                  textColor: AppColors.black,
+                  textOverflow: TextOverflow.ellipsis,
+                  text: widget.variants[_currentIndex!].modelName,
+                ),
               SizedBox(height: 20.h),
               Wrap(
                 spacing: 12,
@@ -216,6 +230,12 @@ class _PhoneDetailsBodyState extends State<_PhoneDetailsBody> {
                     onTap: () {
                       setState(() {
                         selectedIndex = index; // deselect old + select new
+                        _currentIndex = index;
+                        _controller.animateToPage(
+                          index,
+                          duration: Duration(milliseconds: 300),
+                          curve: Curves.easeInOut,
+                        );
                       });
                     },
                     child: Container(
@@ -294,18 +314,20 @@ class _PhoneDetailsBodyState extends State<_PhoneDetailsBody> {
                 text: AppTexts.frequentlyAskedQuestion,
               ),
               SizedBox(height: 20.h),
-              QnAItem(
+              FaqItem(
                 question: AppTexts.question,
                 answer: AppTexts.answer,
-                isExpanded: _expandedIndex == 1,
-                onTap: () => toggleExpansion(1),
+                index: 0,
+                expandedIndex: _expandedIndex,
+                onTap: toggleExpansion,
               ),
               SizedBox(height: 8.h),
-              QnAItem(
+              FaqItem(
                 question: AppTexts.question,
                 answer: AppTexts.answer,
-                isExpanded: _expandedIndex == 2,
-                onTap: () => toggleExpansion(2),
+                index: 1,
+                expandedIndex: _expandedIndex,
+                onTap: toggleExpansion,
               ),
 
               SizedBox(height: 24.h),
@@ -360,12 +382,7 @@ class _PhoneDetailsBodyState extends State<_PhoneDetailsBody> {
                         ),
                       ],
                     ),
-                    // margin: EdgeInsets.zero,
-                    // color: Colors.white,
-                    // shape: RoundedRectangleBorder(
-                    //   borderRadius: BorderRadius.circular(8),
-                    // ),
-                    // elevation: 3,
+
                     child: SizedBox(
                       child: Padding(
                         padding: EdgeInsets.all(12.w),
