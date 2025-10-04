@@ -3,7 +3,8 @@ import '../../domain/entities/authentication_result.dart';
 import 'state.dart';
 
 class AuthCubit<T> extends Cubit<AuthOperationState<T>> {
-  AuthCubit(super.initialState);
+  AuthCubit([AuthOperationState<T>? initialState])
+    : super(initialState ?? AuthOperationInitial<T>());
 
   void initial() => emit(AuthOperationInitial<T>());
 

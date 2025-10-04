@@ -12,9 +12,8 @@ sealed class Authentication {
     Object? error,
   ]) = Unauthenticated;
 
-  const factory Authentication.unknown() = UnknownAuthentication;
 
-  const factory Authentication.loading() = LoadingAuthentication;
+  const factory Authentication.initial() = AuthenticationInitial;
 }
 
 class Authenticated extends Authentication {
@@ -31,10 +30,6 @@ class Unauthenticated extends Authentication {
   final Object? error;
 }
 
-class UnknownAuthentication extends Authentication {
-  const UnknownAuthentication();
-}
-
-class LoadingAuthentication extends Authentication {
-  const LoadingAuthentication();
+class AuthenticationInitial extends Authentication {
+  const AuthenticationInitial();
 }
