@@ -1,12 +1,13 @@
+import 'package:boilerplate/src/features/dashboard/presentation/screens/faq_screen.dart';
 import 'package:boilerplate/src/features/introslider/widgets/indicator.dart';
 import 'package:boilerplate/src/features/products/domain/product_variant.dart';
 import 'package:boilerplate/src/features/products/presentation/cubits/variants_cubit.dart';
+import 'package:boilerplate/src/shared/models/faq.dart';
 import 'package:boilerplate/src/shared/themes/text.dart' as custom;
 import 'package:boilerplate/src/shared/themes/text.dart';
 import 'package:boilerplate/src/shared/utils/app_assets.dart';
 import 'package:boilerplate/src/shared/utils/app_colors.dart';
 import 'package:boilerplate/src/shared/utils/app_texts.dart';
-import 'package:boilerplate/src/shared/widgets/qa_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -314,22 +315,16 @@ class _PhoneDetailsBodyState extends State<_PhoneDetailsBody> {
                 text: AppTexts.frequentlyAskedQuestion,
               ),
               SizedBox(height: 20.h),
-              FaqItem(
-                question: AppTexts.question,
-                answer: AppTexts.answer,
-                index: 0,
-                expandedIndex: _expandedIndex,
-                onTap: toggleExpansion,
+              FaqList(
+                List.filled(
+                  2,
+                  Faq(
+                    id: -1,
+                    question: AppTexts.question,
+                    answer: AppTexts.answer,
+                  ),
+                ),
               ),
-              SizedBox(height: 8.h),
-              FaqItem(
-                question: AppTexts.question,
-                answer: AppTexts.answer,
-                index: 1,
-                expandedIndex: _expandedIndex,
-                onTap: toggleExpansion,
-              ),
-
               SizedBox(height: 24.h),
               Align(
                 alignment: Alignment.center,

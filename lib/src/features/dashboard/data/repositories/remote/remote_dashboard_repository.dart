@@ -1,6 +1,6 @@
 import 'package:boilerplate/src/features/dashboard/data/data_sources/dashboard_data_source.dart';
 import 'package:boilerplate/src/features/dashboard/domain/entities/dashboard.dart';
-import 'package:boilerplate/src/features/dashboard/domain/entities/faq.dart';
+import 'package:boilerplate/src/shared/models/faq.dart';
 import 'package:boilerplate/src/features/dashboard/domain/repositories/dashboard_repository.dart';
 
 class RemoteDashboardRepository implements DashboardRepository {
@@ -10,9 +10,9 @@ class RemoteDashboardRepository implements DashboardRepository {
 
   @override
   Future<Dashboard> dashboardData() =>
-      dataSource.dashboardData().then((response) => response.data!);
+      dataSource.dashboardData().then((response) => response.data);
 
   @override
   Future<List<Faq>> faqs() =>
-      dataSource.faqs().then((response) => response.data!);
+      dataSource.faqs().then((response) => response.data);
 }

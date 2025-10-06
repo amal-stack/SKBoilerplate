@@ -1,4 +1,8 @@
 import 'dart:async';
+import 'package:boilerplate/src/features/auth/domain/entities/authentication.dart';
+import 'package:boilerplate/src/features/auth/presentation/cubit/login_cubit.dart';
+import 'package:boilerplate/src/features/auth/presentation/cubit/state.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:flutter/material.dart';
@@ -12,15 +16,31 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  Timer? _timer;
+
   @override
   void initState() {
     super.initState();
     // Navigate after 3 seconds
-    Timer(const Duration(seconds: 3), () {
+    _timer = Timer(const Duration(seconds: 3), () {
       if (mounted) {
+        final auth = context.read<LoginCubit>().state;
+
+        if (auth case AuthOperationSuccess(:final data)) {
+          if (data is Authenticated) {
+            context.go('/dashboard');
+          }
+        }
+
         context.go('/introslider-screen');
       }
     });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
   }
 
   @override

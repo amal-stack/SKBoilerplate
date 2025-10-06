@@ -30,6 +30,19 @@ class ApiResponse {
   /// The data returned from the API, if any.
   Object get data => _providedData ?? (throw error!);
 
+  Object? get maybeData => _providedData;
+
+  T dataAs<T>() => data as T;
+
+  T? maybeDataAs<T>() => data as T?;
+
+  Map<String, dynamic> dataAsMap() => data as Map<String, dynamic>;
+
+  Map<String, dynamic>? maybeDataAsMap() => switch (data) {
+    Map<String, dynamic> map => map,
+    _ => null,
+  };
+
   /// The error, if any.
   final ApiException? error;
 

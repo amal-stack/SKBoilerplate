@@ -1,3 +1,4 @@
+import 'package:boilerplate/src/features/auth/presentation/screens/verify_otp_screen.dart';
 import 'package:boilerplate/src/features/dashboard/presentation/screens/faq_screen.dart';
 import 'package:boilerplate/src/features/products/presentation/screens/phone_details_screen.dart';
 
@@ -63,10 +64,17 @@ final GoRouter appRouter = GoRouter(
           builder: (context, state) => const ForgotPasswordScreen(),
         ),
         GoRoute(
+          path: 'verify-otp',
+          builder: (context, state) => VerifyOtpScreen(
+              email: AppRouter.extra<String>(state),
+            ),
+        ),
+        GoRoute(
           path: 'reset-password',
-          builder: (context, state) {
-            return ResetPasswordScreen(email: AppRouter.extra<String>(state));
-          },
+          builder: (context, state) => ResetPasswordScreen(
+              email: AppRouter.extraMapValue<String>(state, 'email'),
+              code: AppRouter.extraMapValue<String>(state, 'code'),
+            ),
         ),
         GoRoute(
           path: 'success-screen',

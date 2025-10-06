@@ -1,4 +1,4 @@
-import 'package:boilerplate/src/features/dashboard/domain/entities/faq.dart';
+import 'package:boilerplate/src/shared/models/faq.dart';
 
 class FaqsResponse {
   const FaqsResponse({

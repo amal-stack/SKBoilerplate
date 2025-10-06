@@ -10,8 +10,8 @@ class ProductsResponse extends PaginatedResponse<Product> {
     required super.data,
   });
 
-  ProductsResponse.fromJson(Map<String, dynamic> json)
-    : super.fromJson(json, Product.fromJson, 'models');
+  ProductsResponse.fromJson(super.json)
+    : super.fromJson(itemFromJson: Product.fromJson, itemsKey: 'models');
 
   @override
   Map<String, dynamic> itemToJson(Product item) => item.toJson();
@@ -24,8 +24,11 @@ class ProductVariantsResponse extends ListDataResponse<ProductVariant> {
     required super.data,
   });
 
-  ProductVariantsResponse.fromJson(Map<String, dynamic> json)
-    : super.fromJson(json, ProductVariant.fromJson, 'variantOptions');
+  ProductVariantsResponse.fromJson(super.json)
+    : super.fromJson(
+        itemFromJson: ProductVariant.fromJson,
+        itemsKey: 'variantOptions',
+      );
 
   @override
   Map<String, dynamic> itemToJson(ProductVariant item) => item.toJson();

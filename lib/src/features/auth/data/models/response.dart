@@ -13,8 +13,8 @@ class AuthResponse extends DataResponse<UserResponseData> {
     required super.data,
   });
 
-  AuthResponse.fromJson(Map<String, dynamic> json)
-    : super.fromJson(json, UserResponseData.fromJson);
+  AuthResponse.fromJson(super.json)
+    : super.fromJson(dataFromJson: UserResponseData.fromJson);
 
   @override
   Map<String, dynamic> dataToJson(UserResponseData data) => data.toJson();
@@ -28,8 +28,8 @@ class UserProfileResponse extends DataResponse<AppUser> {
     required super.data,
   });
 
-  UserProfileResponse.fromJson(Map<String, dynamic> json)
-    : super.fromJson(json, AppUser.fromJson);
+  UserProfileResponse.fromJson(super.json)
+    : super.fromJson(dataFromJson: AppUser.fromJson);
 
   @override
   Map<String, dynamic> dataToJson(AppUser data) => data.toJson();
@@ -42,8 +42,8 @@ class ForgotPasswordResponse extends DataResponse<ForgotPasswordResponseData> {
     required super.data,
   });
 
-  ForgotPasswordResponse.fromJson(Map<String, dynamic> json)
-    : super.fromJson(json, ForgotPasswordResponseData.fromJson);
+  ForgotPasswordResponse.fromJson(super.json)
+    : super.fromJson(dataFromJson: ForgotPasswordResponseData.fromJson);
 
   @override
   Map<String, dynamic> dataToJson(ForgotPasswordResponseData data) =>

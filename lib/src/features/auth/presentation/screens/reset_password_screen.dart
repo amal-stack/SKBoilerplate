@@ -9,9 +9,11 @@ import '../widgets/auth_scaffold.dart';
 import '../widgets/reset_password_form.dart';
 
 class ResetPasswordScreen extends StatelessWidget {
-  const ResetPasswordScreen({super.key, required this.email});
+  const ResetPasswordScreen({super.key, required this.email, required this.code});
 
   final String email;
+
+  final String code;
 
   @override
   Widget build(BuildContext context) => BlocProvider(
@@ -25,7 +27,7 @@ class ResetPasswordScreen extends StatelessWidget {
           context.go(AppRoutes.authSuccess);
         }
       },
-      child: AuthScaffold(child: ResetPasswordForm(email: email)),
+      child: AuthScaffold(child: ResetPasswordForm(email: email, code: code)),
     ),
   );
 }

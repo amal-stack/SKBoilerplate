@@ -8,8 +8,8 @@ class BrandsResponse extends PaginatedResponse<Brand> {
     required super.data,
   });
 
-  BrandsResponse.fromJson(Map<String, dynamic> json)
-    : super.fromJson(json, Brand.fromJson, 'brands');
+  BrandsResponse.fromJson(super.json)
+    : super.fromJson(itemFromJson: Brand.fromJson, itemsKey: 'brands');
 
   @override
   Map<String, dynamic> itemToJson(Brand item) => item.toJson();

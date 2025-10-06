@@ -1,6 +1,11 @@
 import 'package:boilerplate/src/features/brands/domain/entities/brand.dart';
 import 'package:boilerplate/src/features/dashboard/domain/entities/dashboard.dart';
-import 'package:boilerplate/src/features/dashboard/domain/entities/faq.dart';
+import 'package:boilerplate/src/features/dashboard/presentation/screens/offer_widget.dart';
+import 'package:boilerplate/src/features/dashboard/presentation/screens/order_card.dart';
+import 'package:boilerplate/src/features/dashboard/presentation/screens/top_selling_brand_card.dart';
+import 'package:boilerplate/src/features/dashboard/presentation/screens/top_selling_product_card.dart';
+import 'package:boilerplate/src/features/dashboard/presentation/screens/user_review_card.dart';
+import 'package:boilerplate/src/shared/models/faq.dart';
 import 'package:boilerplate/src/features/dashboard/domain/entities/order_metrics.dart';
 import 'package:boilerplate/src/features/dashboard/domain/entities/user_review.dart';
 import 'package:boilerplate/src/features/dashboard/presentation/cubits/dashboard_cubit.dart';
@@ -383,168 +388,6 @@ class DashboardUserReviews extends StatelessWidget {
   }
 }
 
-class UserReviewCard extends StatelessWidget {
-  const UserReviewCard(this.review, {super.key});
-
-  final UserReview review;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(right: 5.w),
-      child: Column(
-        children: [
-          Container(
-            height: 174.h,
-            width: 194.w,
-            padding: EdgeInsets.all(18.w),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16.r),
-              boxShadow: [
-                BoxShadow(
-                  color: Color(0x0D2D2E39),
-                  offset: Offset(2, 4),
-                  blurRadius: 10,
-                  spreadRadius: 2, // spread
-                ),
-              ],
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Image.asset(AppAssets.quote, width: 24.w, height: 24.h),
-                SizedBox(height: 18.h),
-                RegularText(
-                  textAlign: TextAlign.center,
-                  textSize: 12.sp,
-                  maxLines: 4,
-                  fontWeight: FontWeight.w500,
-                  textColor: AppColors.orderTitleColor,
-                  textOverflow: TextOverflow.ellipsis,
-                  text: review.message,
-                ),
-                SizedBox(height: 8.h),
-                RegularText(
-                  textAlign: TextAlign.center,
-                  textSize: 12.sp,
-                  maxLines: 1,
-                  fontWeight: FontWeight.w500,
-                  textColor: AppColors.orderTitleColor,
-                  textOverflow: TextOverflow.ellipsis,
-                  text: '~${review.username}',
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class TopSellingProductCard extends StatelessWidget {
-  const TopSellingProductCard(this.product, {super.key});
-
-  final TopSellingProduct product;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        context.push('/phone-details/${product.id}');
-      },
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Color(0x0D2D2E39),
-              offset: Offset(2, 4),
-              blurRadius: 10,
-              spreadRadius: 2,
-            ),
-          ],
-          borderRadius: BorderRadius.circular(12.r),
-        ),
-        child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 12.h),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: Center(
-                  child: Image.network(
-                    product.imageUrl,
-                    height: 100.h,
-                    fit: BoxFit.contain,
-                  ),
-                ),
-              ),
-              SizedBox(height: 8.h),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 12.h),
-                child: RegularText(
-                  text: product.model,
-                  textAlign: TextAlign.start,
-                  textSize: 12.sp,
-                  fontWeight: FontWeight.w700,
-                  textColor: AppColors.black,
-                  maxLines: 2,
-                  textOverflow: TextOverflow.ellipsis,
-                ),
-              ),
-
-              SizedBox(height: 4.h),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 12.h),
-                child: RegularText(
-                  text: '${product.storage} / ${product.ram}',
-                  textAlign: TextAlign.start,
-                  textSize: 10.sp,
-                  fontWeight: FontWeight.w600,
-                  textColor: AppColors.greyColor,
-                  maxLines: 1,
-                  textOverflow: TextOverflow.ellipsis,
-                ),
-              ),
-
-              SizedBox(height: 4.h),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 12.h),
-                child: RegularText(
-                  text: "Get Upto",
-                  textAlign: TextAlign.start,
-                  textSize: 8.sp,
-                  fontWeight: FontWeight.w700,
-                  textColor: AppColors.black,
-                ),
-              ),
-              SizedBox(height: 8.h),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 12.h),
-                    child: RegularText(
-                      text: "₹ 48,000",
-                      textAlign: TextAlign.start,
-                      textSize: 12.sp,
-                      fontWeight: FontWeight.w700,
-                      textColor: AppColors.darkGreenColor,
-                    ),
-                  ),
-                  const BestPriceTag(),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
 class BestPriceTag extends StatelessWidget {
   const BestPriceTag({super.key});
 
@@ -567,102 +410,6 @@ class BestPriceTag extends StatelessWidget {
           textSize: 10.sp,
           fontWeight: FontWeight.w600,
           textColor: AppColors.white,
-        ),
-      ),
-    );
-  }
-}
-
-class TopSellingBrandCard extends StatelessWidget {
-  const TopSellingBrandCard(this.brand, {super.key});
-
-  final Brand brand;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(right: 5.w),
-      child: GestureDetector(
-        onTap: () {
-          context.push('/explore-brands/${brand.id}');
-        },
-        child: Image.network(
-          brand.imageUrl,
-          width: 104.w,
-          height: 89.h,
-          fit: BoxFit.contain,
-        ),
-      ),
-    );
-  }
-}
-
-class OfferWidget extends StatelessWidget {
-  const OfferWidget({
-    super.key,
-    required this.image,
-    required this.title,
-    required this.subtitle,
-  });
-
-  final String image;
-
-  final String title;
-
-  final String subtitle;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 75.h,
-      width: MediaQuery.of(context).size.width,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        // card background
-        borderRadius: BorderRadius.circular(8),
-        // optional corner radius
-        boxShadow: [
-          BoxShadow(
-            color: Color(0x0D2D2E39), // #2D2E390D in Flutter ARGB
-            offset: Offset(2, 4), // horizontal & vertical offset
-            blurRadius: 10, // blur radius
-            spreadRadius: 2, // spread radius
-          ),
-        ],
-      ),
-      child: Padding(
-        padding: EdgeInsets.all(16.r),
-        child: Row(
-          children: [
-            Image.asset(image, height: 22.h, width: 24.w, fit: BoxFit.contain),
-            SizedBox(width: 20.w),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                RegularText(
-                  textAlign: TextAlign.end,
-                  textSize: 12.sp,
-                  maxLines: 1,
-                  fontWeight: FontWeight.w700,
-                  textColor: AppColors.black,
-                  textOverflow: TextOverflow.ellipsis,
-                  text: title,
-                ),
-                SizedBox(height: 5.h),
-                RegularText(
-                  textAlign: TextAlign.end,
-                  textSize: 10.sp,
-                  maxLines: 2,
-                  fontWeight: FontWeight.w500,
-                  textColor: AppColors.black,
-                  textOverflow: TextOverflow.ellipsis,
-                  text: subtitle,
-                ),
-                SizedBox(height: 5.h),
-              ],
-            ),
-          ],
         ),
       ),
     );
@@ -714,86 +461,6 @@ class OrderCards extends StatelessWidget {
   );
 }
 
-class OrderCard extends StatelessWidget {
-  const OrderCard({
-    super.key,
-    this.onTap,
-    required this.color,
-    required this.borderColor,
-    required this.titleColor,
-    required this.title,
-    required this.value,
-  });
-
-  final VoidCallback? onTap;
-
-  final Color color;
-
-  final Color borderColor;
-
-  final Color titleColor;
-
-  final String title;
-
-  final int value;
-
-  @override
-  Widget build(BuildContext context) => GestureDetector(
-    onTap: onTap,
-    child: Container(
-      width: 100.w,
-      height: 84.h,
-      decoration: BoxDecoration(
-        color: color,
-        border: Border.all(width: 1.w, color: borderColor),
-        borderRadius: BorderRadius.circular(10.r),
-      ),
-      child: Padding(
-        padding: EdgeInsets.all(10.w),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            RegularText(
-              textAlign: TextAlign.center,
-              textSize: 24.sp,
-              maxLines: 2,
-              fontWeight: FontWeight.bold,
-              textColor: titleColor,
-              textOverflow: TextOverflow.ellipsis,
-              text: "$value",
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                SizedBox(
-                  width: 58.h,
-                  child: RegularText(
-                    textAlign: TextAlign.start,
-                    textSize: 9.sp,
-                    maxLines: 2,
-                    fontWeight: FontWeight.w700,
-                    textColor: AppColors.orderTitleColor,
-                    textOverflow: TextOverflow.ellipsis,
-                    text: title,
-                  ),
-                ),
-                Center(
-                  child: Image.asset(
-                    "assets/images/right_arrow_black.png",
-                    width: 18.w,
-                    height: 18.h,
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    ),
-  );
-}
-
 class DashboardFaqs extends StatelessWidget {
   const DashboardFaqs({super.key});
 
@@ -801,7 +468,7 @@ class DashboardFaqs extends StatelessWidget {
   Widget build(BuildContext context) {
     return ViewBlocSelector<DashboardCubit, Dashboard, List<Faq>>(
       selector: (state) => state.faqs,
-      builder: (context, faqs) => SizedBox(height: 200.h, child: FaqList(faqs)),
+      builder: (context, faqs) => FaqList(faqs),
     );
   }
 }

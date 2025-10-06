@@ -12,12 +12,12 @@ class QaExpansionPanelWidget extends StatelessWidget {
   final Map<String, String> submittedAnswers;
 
   const QaExpansionPanelWidget({
-    Key? key,
+    super.key,
     required this.title,
     required this.isExpanded,
     required this.onTap,
     required this.submittedAnswers,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -105,7 +105,7 @@ class QaExpansionPanelWidget extends StatelessWidget {
                     ],
                   ),
                 );
-              }).toList(),
+              }),
           ],
         ),
       ),

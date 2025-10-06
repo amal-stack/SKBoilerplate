@@ -8,7 +8,9 @@ import '../../domain/repositories/auth_repository.dart';
 
 class LoginCubit extends AuthCubit<Authentication> {
   LoginCubit(this._repository) {
-    _authSubscription = _repository.state.map(AuthOperationSuccess.new).listen(emit);
+    _authSubscription = _repository.state
+        .map(AuthOperationSuccess.new)
+        .listen(emit);
   }
   final AuthRepository _repository;
 

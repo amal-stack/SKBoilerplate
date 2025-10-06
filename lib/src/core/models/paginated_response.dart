@@ -10,13 +10,16 @@ abstract class PaginatedResponse<T>
   });
 
   PaginatedResponse.fromJson(
-    Map<String, dynamic> json,
-    DataFromJson<T> itemFromJson,
-    String itemsKey,
-  ) : super.fromJson(
-        json,
-        (data) => PaginatedResponseData.fromJson(data, itemFromJson, itemsKey),
-      );
+    super.json, {
+    required DataFromJson<T> itemFromJson,
+    required String itemsKey,
+  }) : super.fromJson(
+         dataFromJson: (data) => PaginatedResponseData.fromJson(
+           data,
+           itemFromJson: itemFromJson,
+           itemsKey: itemsKey,
+         ),
+       );
 
   Paginated<T> toPaginated() => switch (data) {
     final data? => Paginated(
@@ -44,16 +47,16 @@ class PaginatedResponseData<T> {
   const PaginatedResponseData({required this.items, required this.pagination});
 
   PaginatedResponseData.fromJson(
-    Map<String, dynamic> json,
-    DataFromJson<T> itemFromJson,
-    String itemsKey,
-  ) : items = [
-        for (var item in (json[itemsKey] as List<dynamic>))
-          itemFromJson(item as Map<String, dynamic>),
-      ],
-      pagination = ResponsePagination.fromJson(
-        json['pagination'] as Map<String, dynamic>,
-      );
+    Map<String, dynamic> json, {
+    required DataFromJson<T> itemFromJson,
+    required String itemsKey,
+  }) : items = [
+         for (var item in (json[itemsKey] as List<dynamic>))
+           itemFromJson(item as Map<String, dynamic>),
+       ],
+       pagination = ResponsePagination.fromJson(
+         json['pagination'] as Map<String, dynamic>,
+       );
 
   final List<T> items;
 

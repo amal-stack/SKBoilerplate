@@ -1,5 +1,5 @@
 import 'package:boilerplate/src/features/brands/domain/entities/brand.dart';
-import 'package:boilerplate/src/features/dashboard/domain/entities/faq.dart';
+import 'package:boilerplate/src/shared/models/faq.dart';
 import 'package:boilerplate/src/features/dashboard/domain/entities/order_metrics.dart';
 import 'package:boilerplate/src/features/dashboard/domain/entities/user_review.dart';
 import 'package:meta/meta.dart';
