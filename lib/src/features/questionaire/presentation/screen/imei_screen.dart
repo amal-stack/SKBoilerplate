@@ -3,7 +3,7 @@ import 'package:boilerplate/src/shared/utils/app_assets.dart';
 import 'package:boilerplate/src/shared/utils/app_colors.dart';
 import 'package:boilerplate/src/shared/utils/app_texts.dart';
 import 'package:boilerplate/src/shared/widgets/custom_text_field.dart';
-import 'package:boilerplate/src/shared/widgets/qa_widget.dart';
+import 'package:boilerplate/src/shared/widgets/faq_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

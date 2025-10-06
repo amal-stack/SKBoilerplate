@@ -1,3 +1,5 @@
+import 'package:boilerplate/src/features/questionaire/data/data_sources/questionnaire_data_source.dart';
+import 'package:boilerplate/src/features/questionaire/domain/entities/assessment_question.dart';
 import 'package:boilerplate/src/shared/themes/text.dart';
 import 'package:boilerplate/src/shared/utils/app_colors.dart';
 import 'package:boilerplate/src/shared/utils/app_texts.dart';
@@ -15,17 +17,9 @@ class ProductQuestionAnswerScreen extends StatefulWidget {
       _ProductQuestionAnswerScreenState();
 }
 
-class _ProductQuestionAnswerScreenState extends State<ProductQuestionAnswerScreen> {
+class _ProductQuestionAnswerScreenState
+    extends State<ProductQuestionAnswerScreen> {
   Map<int, String> selectedAnswers = {}; // Track each question's answer
-
-  List<String> questionList = [
-    "1. Are you able to make and receive calls?",
-    "2. Is the touch screen working?",
-    "3. Is your phone's screen original?",
-    "4. Is the device under warranty?",
-    "5. Do you have a GST bill with the same IMEI?",
-    "6. How many eSIMs are supported?",
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -61,10 +55,7 @@ class _ProductQuestionAnswerScreenState extends State<ProductQuestionAnswerScree
         ),
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(1),
-          child: Container(
-            color: AppColors.dividerColor,
-            height: 1,
-          ),
+          child: Container(color: AppColors.dividerColor, height: 1),
         ),
       ),
       body: SafeArea(
@@ -81,7 +72,7 @@ class _ProductQuestionAnswerScreenState extends State<ProductQuestionAnswerScree
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SizedBox(height: 30.h),
-                     // SizedBox(height: 24.h),
+                      // SizedBox(height: 24.h),
                       RegularText(
                         textAlign: TextAlign.start,
                         textSize: 12.sp,
@@ -93,14 +84,14 @@ class _ProductQuestionAnswerScreenState extends State<ProductQuestionAnswerScree
                       ),
                       SizedBox(height: 20.h),
                       ListView.builder(
-                        itemCount: questionList.length,
+                        itemCount: QuestionnaireData.questions.length,
                         shrinkWrap: true,
                         physics: const ScrollPhysics(),
                         itemBuilder: (context, index) {
                           return Padding(
                             padding: EdgeInsets.symmetric(vertical: 10.h),
                             child: questionAnswerWidget(
-                              question: questionList[index],
+                              question: QuestionnaireData.questions[index].text,
                               index: index, // pass the index
                               onChanged: (answer) {
                                 print("Q${index + 1}: $answer");
@@ -122,7 +113,8 @@ class _ProductQuestionAnswerScreenState extends State<ProductQuestionAnswerScree
                     child: AnimatedButton(
                       disableButton: false,
                       isLoading: false,
-                      onPressed: () => context.push('/product-condition-screen'),
+                      onPressed: () =>
+                          context.push('/product-condition-screen'),
                       label: AppTexts.continueTitle,
                       fontSize: 12.sp,
                       isSmallButton: false,
@@ -170,7 +162,11 @@ class _ProductQuestionAnswerScreenState extends State<ProductQuestionAnswerScree
     );
   }
 
-  Widget answerButtonWidget(int index, String value, ValueChanged<String> onChanged) {
+  Widget answerButtonWidget(
+    int index,
+    String value,
+    ValueChanged<String> onChanged,
+  ) {
     final isSelected = selectedAnswers[index] == value; // check per question
     return GestureDetector(
       onTap: () {
@@ -186,7 +182,9 @@ class _ProductQuestionAnswerScreenState extends State<ProductQuestionAnswerScree
           color: isSelected ? AppColors.introSliderCircleColor : Colors.white,
           border: Border.all(
             width: 1.w,
-            color: isSelected ? AppColors.introSliderCircleColor : AppColors.greyBorderColor,
+            color: isSelected
+                ? AppColors.introSliderCircleColor
+                : AppColors.greyBorderColor,
           ),
           borderRadius: BorderRadius.circular(4.r),
         ),
@@ -207,3 +205,99 @@ class _ProductQuestionAnswerScreenState extends State<ProductQuestionAnswerScree
   }
 }
 
+
+class QuestionAnswerWidget extends StatelessWidget {
+  const QuestionAnswerWidget({super.key, required this.question, required this.onChanged});
+
+  final AssessmentQuestion question;
+
+  final ValueChanged<bool> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        RegularText(
+          textAlign: TextAlign.start,
+          textSize: 12.sp,
+          maxLines: 2,
+          fontWeight: FontWeight.w700,
+          textColor: AppColors.borderBlack,
+          textOverflow: TextOverflow.ellipsis,
+          text: question.text,
+        ),
+        SizedBox(height: 10.h),
+        Padding(
+          padding: EdgeInsets.only(left: 10.w),
+          child: Row(
+            children: [
+              AnswerButton.yes(
+                isSelected: false,
+                onPressed: () => onChanged(true),
+              ),
+              SizedBox(width: 10.w),
+              AnswerButton.no(
+                isSelected: false,
+                onPressed: () => onChanged(false),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class AnswerButton extends StatelessWidget {
+  const AnswerButton.yes({
+    super.key,
+    required this.isSelected,
+    required this.onPressed,
+  }) : value = true;
+
+  const AnswerButton.no({
+    super.key,
+    required this.isSelected,
+    required this.onPressed,
+  }) : value = false;
+
+  final bool isSelected;
+
+  final VoidCallback onPressed;
+
+  final bool value; // true for Yes, false for No
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onPressed,
+      child: Container(
+        width: 140.w,
+        height: 40.h,
+        decoration: BoxDecoration(
+          color: isSelected ? AppColors.introSliderCircleColor : Colors.white,
+          border: Border.all(
+            width: 1.w,
+            color: isSelected
+                ? AppColors.introSliderCircleColor
+                : AppColors.greyBorderColor,
+          ),
+          borderRadius: BorderRadius.circular(4.r),
+        ),
+        child: Align(
+          alignment: Alignment.center,
+          child: RegularText(
+            textAlign: TextAlign.center,
+            textSize: 12.sp,
+            maxLines: 1,
+            fontWeight: FontWeight.w700,
+            textColor: isSelected ? AppColors.black : AppColors.black,
+            textOverflow: TextOverflow.ellipsis,
+            text: value ? "Yes" : "No",
+          ),
+        ),
+      ),
+    );
+  }
+}
