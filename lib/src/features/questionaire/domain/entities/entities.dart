@@ -31,6 +31,8 @@ class DeviceFunctionality {
       hasGstBill = json['hasGstBill'],
       esimSupported = json['esimSupported'];
 
+
+
   Map<String, dynamic> toJson() => {
     'canMakeReceiveCalls': canMakeReceiveCalls,
     'touchWorking': touchWorking,

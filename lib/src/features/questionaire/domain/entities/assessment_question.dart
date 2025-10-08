@@ -30,3 +30,35 @@ class AssessmentQuestion {
   int get hashCode => Object.hash(id, text);
 }
 
+class AssessmentQuestionResponse {
+  const AssessmentQuestionResponse({
+    required this.questionId,
+    required this.response,
+  });
+
+  factory AssessmentQuestionResponse.fromJson(Map<String, dynamic> json) =>
+      AssessmentQuestionResponse(
+        questionId: json['questionId'] as String,
+        response: json['response'] as String,
+      );
+
+  final String questionId;
+
+  final String response;
+
+  Map<String, dynamic> toJson() => {
+    'questionId': questionId,
+    'response': response,
+  };
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is AssessmentQuestionResponse &&
+          runtimeType == other.runtimeType &&
+          questionId == other.questionId &&
+          response == other.response;
+
+  @override
+  int get hashCode => Object.hash(questionId, response);
+}

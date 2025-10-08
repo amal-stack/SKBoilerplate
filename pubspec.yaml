@@ -149,7 +149,7 @@ flutter:
     - assets/images/question/panel_1.png
     - assets/images/question/original_box.png
     - assets/images/selected_checkbox.png
-
+    - assets/images/icons/
 
 
   fonts:
