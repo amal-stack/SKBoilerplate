@@ -113,52 +113,24 @@ class _PhoneDetailsBody extends StatefulWidget {
 
 class _PhoneDetailsBodyState extends State<_PhoneDetailsBody> {
   final PageController _controller = PageController();
-  int? _currentIndex;
-  int? selectedIndex;
+  int get _selectedIndex => _page ?? 0;
+  int? _page;
   int? _expandedIndex;
 
   @override
   void initState() {
     super.initState();
+    _controller.addListener(_onPageChanged);
   }
 
-  List<String> brandNameList = [
-    "Apple",
-    "Huawei",
-    "Samsung",
-    "Oneplus",
-    "Realme",
-    "Oppo",
-    "Vivo",
-    "MI",
-    "Pixel",
-    "IQOO",
-    "Infinix",
-    "Motorola",
-  ];
-
-  List<String> ramTypeList = ["64GB", "128GB", "256GB", "512GB"];
-
-  final List<String> imageList = [
-    "assets/images/iphone.png",
-    "assets/images/huawei.png",
-    "assets/images/samsung.png",
-  ];
-
-  List<String> brandImageList = [
-    "assets/images/brands/iphone_brand.png",
-    "assets/images/brands/huawel.png",
-    "assets/images/brands/samsung_brand.png",
-    "assets/images/brands/oneplus.png",
-    "assets/images/brands/realme.png",
-    "assets/images/brands/oppo.png",
-    "assets/images/brands/vivo.png",
-    "assets/images/brands/mi.png",
-    "assets/images/brands/google_pixel.png",
-    "assets/images/brands/iqoo.png",
-    "assets/images/brands/infinix.png",
-    "assets/images/brands/motorola.png",
-  ];
+  void _onPageChanged() {
+    final newIndex = _controller.page?.round();
+    if (newIndex != null && newIndex != _selectedIndex) {
+      setState(() {
+        _page = newIndex;
+      });
+    }
+  }
 
   void toggleExpansion(int index) {
     setState(() {
@@ -185,9 +157,7 @@ class _PhoneDetailsBodyState extends State<_PhoneDetailsBody> {
                 height: 230.h,
                 child: PageView.builder(
                   controller: _controller,
-                  onPageChanged: (index) {
-                    setState(() => _currentIndex = index);
-                  },
+
                   itemCount: widget.variants.length,
                   itemBuilder: (_, index) {
                     return Padding(
@@ -212,7 +182,7 @@ class _PhoneDetailsBodyState extends State<_PhoneDetailsBody> {
                 length: widget.variants.length,
               ),
               SizedBox(height: 20.h),
-              if (_currentIndex != null)
+              if (widget.variants.isNotEmpty)
                 RegularText(
                   textAlign: TextAlign.start,
                   textSize: 20.sp,
@@ -220,7 +190,7 @@ class _PhoneDetailsBodyState extends State<_PhoneDetailsBody> {
                   fontWeight: FontWeight.w700,
                   textColor: AppColors.black,
                   textOverflow: TextOverflow.ellipsis,
-                  text: widget.variants[_currentIndex!].modelName,
+                  text: widget.variants[_selectedIndex].modelName,
                 ),
               SizedBox(height: 20.h),
               Wrap(
@@ -229,29 +199,25 @@ class _PhoneDetailsBodyState extends State<_PhoneDetailsBody> {
                 children: List.generate(widget.variants.length, (index) {
                   return GestureDetector(
                     onTap: () {
-                      setState(() {
-                        selectedIndex = index; // deselect old + select new
-                        _currentIndex = index;
-                        _controller.animateToPage(
-                          index,
-                          duration: Duration(milliseconds: 300),
-                          curve: Curves.easeInOut,
-                        );
-                      });
+                      _controller.animateToPage(
+                        index,
+                        duration: Duration(milliseconds: 300),
+                        curve: Curves.easeInOut,
+                      );
                     },
                     child: Container(
                       width: 69.w,
                       height: 39.h,
                       decoration: BoxDecoration(
-                        color: selectedIndex == index
+                        color: _selectedIndex == index
                             ? AppColors.lightBorderColor
                             : AppColors.white,
                         borderRadius: BorderRadius.circular(4.r),
                         border: Border.all(
                           width: 1.w,
-                          color: selectedIndex == index
+                          color: _selectedIndex == index
                               ? AppColors.lightBorderColor
-                              : AppColors.borderBlack.withOpacity(0.10),
+                              : AppColors.borderBlack.withValues(alpha: 0.10),
                         ),
                       ),
                       child: Center(
@@ -259,7 +225,7 @@ class _PhoneDetailsBodyState extends State<_PhoneDetailsBody> {
                           textAlign: TextAlign.start,
                           textSize: 12.sp,
                           maxLines: 1,
-                          fontWeight: selectedIndex == index
+                          fontWeight: _selectedIndex == index
                               ? FontWeight.w600
                               : FontWeight.w500,
                           textColor: AppColors.borderBlack,
@@ -294,7 +260,7 @@ class _PhoneDetailsBodyState extends State<_PhoneDetailsBody> {
                 height: 45.h,
                 width: double.infinity,
                 child: AnimatedButton(
-                  disableButton: selectedIndex == null ? true : false,
+                  disableButton: widget.variants.isEmpty,
                   isLoading: false,
                   onPressed: () {
                     context.push('/imei-screen');
@@ -518,12 +484,12 @@ class _PhoneDetailsBodyState extends State<_PhoneDetailsBody> {
                 height: 90.h, // Constrains the ListView's height
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  itemCount: imageList.length, // Dynamic item count
+                  itemCount: widget.variants.length, // Dynamic item count
                   itemBuilder: (BuildContext context, int index) => Padding(
                     padding: EdgeInsets.only(right: 5.w),
                     // Spacing between items
-                    child: Image.asset(
-                      imageList[index],
+                    child: Image.network(
+                      widget.variants[index].imageUrl,
                       width: 104.w,
                       height: 89.h,
                       fit: BoxFit.contain,

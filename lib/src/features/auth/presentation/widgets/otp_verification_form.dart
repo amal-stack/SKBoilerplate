@@ -1,5 +1,4 @@
 import 'package:boilerplate/src/features/auth/presentation/cubit/otp_cubit.dart';
-import 'package:boilerplate/src/features/auth/presentation/cubit/reset_password_cubit.dart';
 import 'package:boilerplate/src/features/auth/presentation/cubit/state.dart';
 import 'package:boilerplate/src/features/auth/presentation/widgets/reset_password_form.dart';
 import 'package:boilerplate/src/shared/countdown_timer.dart';

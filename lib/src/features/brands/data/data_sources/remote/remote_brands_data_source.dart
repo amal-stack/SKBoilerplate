@@ -12,13 +12,14 @@ class RemoteBrandsDataSource implements BrandsDataSource {
   final ApiClient _client;
 
   @override
-  Future<BrandsResponse> brands({int? page, int? limit}) async {
+  Future<BrandsResponse> brands({int? page, int? limit, String? search}) async {
     final response = await _client.get(
       ApiRequest(
         path: _baseUrl,
         queryParameters: {
           if (page != null) 'page': page,
           if (limit != null) 'limit': limit,
+          if (search != null) 'search': search,
         },
       ),
     );

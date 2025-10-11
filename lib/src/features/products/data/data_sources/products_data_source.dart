@@ -6,6 +6,7 @@ abstract interface class ProductsDataSource {
     required String brandId,
     int? page,
     int? limit,
+    String? search,
   });
 
   Future<ProductVariantsResponse> variants({

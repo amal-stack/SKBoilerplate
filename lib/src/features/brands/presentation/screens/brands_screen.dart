@@ -5,11 +5,11 @@ import 'package:boilerplate/src/shared/themes/text.dart';
 import 'package:boilerplate/src/shared/utils/app_colors.dart';
 import 'package:boilerplate/src/shared/utils/app_texts.dart';
 import 'package:boilerplate/src/shared/utils/app_assets.dart';
+import 'package:boilerplate/src/shared/widgets/search_input_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:boilerplate/src/shared/widgets/custom_text_field.dart';
 
 class BrandsScreen extends StatelessWidget {
   const BrandsScreen({super.key});
@@ -20,6 +20,7 @@ class BrandsScreen extends StatelessWidget {
     create: (context) =>
         BrandsCubit(context.read<BrandsRepository>())..fetchBrands(),
     child: Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: AppColors.white,
       appBar: AppBar(
         elevation: 0,
@@ -91,21 +92,7 @@ class BrandsScreen extends StatelessWidget {
                 text: AppTexts.topSellingBrandsSubTitle,
               ),
               SizedBox(height: 24.h),
-              InputTextField(
-                label: "Search for Brand",
-                hintMessage: "Search for Brand",
-                prefixIcon: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      "assets/images/search.png",
-                      width: 20.w,
-                      height: 20.h,
-                    ),
-                  ],
-                ),
-              ),
+              BrandsSearchInput(),
               SizedBox(height: 22.h),
               Expanded(child: const BrandsGrid()),
             ],
@@ -114,4 +101,20 @@ class BrandsScreen extends StatelessWidget {
       ),
     ),
   );
+}
+
+class BrandsSearchInput extends StatelessWidget {
+  const BrandsSearchInput({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SearchInputField(
+      label: "Search for Brand",
+      onChanged: (value) {
+        context.read<BrandsCubit>().searchBrandsWithDebounce(value);
+      },
+    );
+  }
 }

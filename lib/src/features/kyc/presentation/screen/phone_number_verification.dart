@@ -42,11 +42,6 @@ class _PhoneNumberVerificationState extends State<PhoneNumberVerification> {
   int _secondsRemaining = 120;
   Timer? _timer;
 
-  void _onResendOtp(BuildContext context) {
-    // context.read<OtpCubit>().resendOtp(widget.email);
-    _startTimer();
-  }
-
   @override
   void initState() {
     super.initState();
@@ -54,11 +49,6 @@ class _PhoneNumberVerificationState extends State<PhoneNumberVerification> {
     //_otpController.addListener(_validateForm);
   }
 
-  String get _timerText {
-    final minutes = (_secondsRemaining ~/ 60).toString().padLeft(2, '0');
-    final seconds = (_secondsRemaining % 60).toString().padLeft(2, '0');
-    return "$minutes:$seconds";
-  }
 
   @override
   void dispose() {

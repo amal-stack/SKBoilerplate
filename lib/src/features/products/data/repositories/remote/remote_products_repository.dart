@@ -10,7 +10,7 @@ class RemoteProductsRepository implements ProductsRepository {
   final ProductsDataSource dataSource;
 
   @override
-  Future<Paginated<Product>> products({
+  Future<Paginated<Product>> allProducts({
     required String brandId,
     int? page,
     int? limit,
@@ -19,9 +19,16 @@ class RemoteProductsRepository implements ProductsRepository {
       .then((response) => response.toPaginated());
 
   @override
-  Future<List<ProductVariant>> variants({
-    required String modelId,
+  Future<Paginated<Product>> searchProducts(
+    String query, {
+    required String brandId,
+    int? page,
+    int? limit,
   }) => dataSource
-      .variants(modelId: modelId,)
-      .then((response) => response.data!);
+      .products(brandId: brandId, page: page, limit: limit, search: query)
+      .then((response) => response.toPaginated());
+
+  @override
+  Future<List<ProductVariant>> variants({required String modelId}) =>
+      dataSource.variants(modelId: modelId).then((response) => response.data!);
 }

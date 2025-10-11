@@ -20,6 +20,7 @@ class RemoteProductsDataSource implements ProductsDataSource {
     required String brandId,
     int? page,
     int? limit,
+    String? search,
   }) async {
     final response = await _client.get(
       ApiRequest(
@@ -27,6 +28,7 @@ class RemoteProductsDataSource implements ProductsDataSource {
         queryParameters: {
           if (page != null) 'page': page,
           if (limit != null) 'limit': limit,
+          if (search != null) 'search': search,
         },
       ),
     );

@@ -1,46 +1,47 @@
+import 'dart:async';
+
 import 'package:boilerplate/src/features/brands/domain/entities/brand.dart';
 import 'package:boilerplate/src/features/brands/domain/repositories/brands_repository.dart';
+import 'package:boilerplate/src/shared/cubits/state.dart';
 import 'package:boilerplate/src/shared/paginated.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:meta/meta.dart';
 
-@immutable
-sealed class BrandsState {
-  const BrandsState();
-}
+typedef BrandsState = ViewState<Paginated<Brand>>;
+typedef BrandsInitial = ViewInitial<Paginated<Brand>>;
+typedef BrandsFetched = ViewSuccess<Paginated<Brand>>;
+typedef BrandsError = ViewError<Paginated<Brand>>;
 
-class BrandsInitial extends BrandsState {
-  const BrandsInitial();
-}
-
-class BrandsLoading extends BrandsState {
-  const BrandsLoading();
-}
-
-class BrandsFetched extends BrandsState {
-  const BrandsFetched(this.brands);
-
-  final Paginated<Brand> brands;
-}
-
-class BrandsError extends BrandsState {
-  const BrandsError(this.message);
-
-  final String message;
-}
-
-class BrandsCubit extends Cubit<BrandsState> {
+class BrandsCubit extends Cubit<BrandsState>
+    with DebounceCubitMixin<BrandsState>, RetryCubitMixin<BrandsState> {
   BrandsCubit(this._repository) : super(const BrandsInitial());
+
+  static const Duration debounceDuration = Duration(milliseconds: 500);
 
   final BrandsRepository _repository;
 
-  Future<void> fetchBrands({int? page, int? limit}) async {
-    emit(const BrandsLoading());
-    try {
-      final result = await _repository.brands(page: page, limit: limit);
-      emit(BrandsFetched(result));
-    } catch (e) {
-      emit(BrandsError(e.toString()));
-    }
+  Future<void> fetchBrands({int? page, int? limit}) =>
+      _performFetch(() => _repository.allBrands(page: page, limit: limit));
+
+  Future<void> searchBrands(String query, {int? page, int? limit}) =>
+      _performFetch(() => _repository.search(query, page: page, limit: limit));
+
+  void searchBrandsWithDebounce(String query, {int? page, int? limit}) {
+    withDebouncing(debounceDuration, () {
+      searchBrands(query, page: page, limit: limit);
+    });
+  }
+
+  Future<void> _performFetch(
+    Future<Paginated<Brand>> Function() function,
+  ) async {
+    withRetry(() async {
+      emit(const BrandsInitial());
+      try {
+        final result = await function();
+        emit(BrandsFetched(result));
+      } catch (e) {
+        emit(BrandsError(e.toString()));
+      }
+    });
   }
 }
