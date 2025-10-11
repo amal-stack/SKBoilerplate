@@ -29,7 +29,7 @@ class Validators {
     if (_hasLeadingSpace(value)) {
       return 'Password cannot start with a space';
     }
-    if (value.length <= 6) {
+    if (value.length < 6) {
 
       return 'Password must be at least 6 characters';
     }
