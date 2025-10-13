@@ -24,7 +24,7 @@ sealed class DeviceAssessmentState {
 
   const factory DeviceAssessmentState.completed(
     DeviceAssessmentFlowState flow, {
-    required DeviceGrade grade,
+    required DeviceAssessmentResult result,
   }) = DeviceAssessmentCompleted;
 
   final DeviceAssessmentFlowState flow;
@@ -67,9 +67,9 @@ class DeviceAssessmentError extends DeviceAssessmentState {
 }
 
 class DeviceAssessmentCompleted extends DeviceAssessmentState {
-  const DeviceAssessmentCompleted(super.flow, {required this.grade});
+  const DeviceAssessmentCompleted(super.flow, {required this.result});
 
-  final DeviceGrade grade;
+  final DeviceAssessmentResult result;
 }
 
 class DeviceAssessmentFlowState {
@@ -85,7 +85,6 @@ class DeviceAssessmentFlowState {
     currentStep: DeviceAssessmentStep.first,
     input: DeviceAssessmentInput(),
   );
-
 
   DeviceAssessmentStep? get nextStep =>
       currentStep.stepsAfter.where(input.defects.filterStep).firstOrNull;

@@ -189,3 +189,52 @@ class DeviceBrand {
 
   Map<String, dynamic> toJson() => {'id': id, 'name': name};
 }
+
+
+class QuoteDeviceImages {
+  const QuoteDeviceImages({
+    required this.id,
+    required this.frontImageUrl,
+    required this.backImageUrl,
+    required this.leftImageUrl,
+    required this.rightImageUrl,
+    required this.topImageUrl,
+    required this.bottomImageUrl,
+  });
+
+  factory QuoteDeviceImages.fromJson(Map<String, dynamic> json) =>
+      QuoteDeviceImages(
+        id: json['id'] as String,
+        frontImageUrl: json['frontImageUrl'] as String,
+        backImageUrl: json['backImageUrl'] as String,
+        leftImageUrl: json['leftImageUrl'] as String,
+        rightImageUrl: json['rightImageUrl'] as String,
+        topImageUrl: json['topImageUrl'] as String,
+        bottomImageUrl: json['bottomImageUrl'] as String,
+      );
+
+  final String id;
+
+  final String frontImageUrl;
+
+  final String backImageUrl;
+
+  final String leftImageUrl;
+
+  final String rightImageUrl;
+
+  final String topImageUrl;
+
+  final String bottomImageUrl;
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'frontImageUrl': frontImageUrl,
+        'backImageUrl': backImageUrl,
+        'leftImageUrl': leftImageUrl,
+        'rightImageUrl': rightImageUrl,
+        'topImageUrl': topImageUrl,
+        'bottomImageUrl': bottomImageUrl,
+      };
+
+}

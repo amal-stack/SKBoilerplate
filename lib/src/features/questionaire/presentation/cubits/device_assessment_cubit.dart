@@ -86,17 +86,15 @@ class DeviceAssessmentCubit extends Cubit<DeviceAssessmentState> {
     emit(state.withPreviousStep());
   }
 
-  
-
   Future<void> calculateGrade({required String quoteId}) async {
     emit(DeviceAssessmentState.submitting(state.flow));
     try {
       final assessment = input.toAssessment();
-      final grade = await _repository.grade(
+      final result = await _repository.grade(
         quoteId: quoteId,
         assessment: assessment,
       );
-      emit(DeviceAssessmentState.completed(state.flow, grade: grade));
+      emit(DeviceAssessmentState.completed(state.flow, result: result));
     } catch (e) {
       emit(DeviceAssessmentState.error(state.flow, message: e.toString()));
     }

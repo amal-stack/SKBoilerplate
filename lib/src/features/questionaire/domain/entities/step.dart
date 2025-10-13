@@ -1,5 +1,4 @@
 enum DeviceAssessmentStep {
-  imei,
   functionality,
   defectsSelection,
   screenDefects,
@@ -13,12 +12,12 @@ enum DeviceAssessmentStep {
   complete;
 
 
-  static const first = DeviceAssessmentStep.imei;
+  static const first = DeviceAssessmentStep.functionality;
 
   static const last = DeviceAssessmentStep.complete;
 
   DeviceAssessmentStep? get next => switch (this) {
-    DeviceAssessmentStep.imei => DeviceAssessmentStep.functionality,
+    
     DeviceAssessmentStep.functionality => DeviceAssessmentStep.defectsSelection,
     DeviceAssessmentStep.defectsSelection => DeviceAssessmentStep.screenDefects,
     DeviceAssessmentStep.screenDefects => DeviceAssessmentStep.displayDefects,
@@ -33,8 +32,7 @@ enum DeviceAssessmentStep {
   };
 
   DeviceAssessmentStep? get previous => switch (this) {
-    DeviceAssessmentStep.imei => null,
-    DeviceAssessmentStep.functionality => DeviceAssessmentStep.imei,
+    DeviceAssessmentStep.functionality => null,
     DeviceAssessmentStep.defectsSelection => DeviceAssessmentStep.functionality,
     DeviceAssessmentStep.screenDefects => DeviceAssessmentStep.defectsSelection,
     DeviceAssessmentStep.displayDefects => DeviceAssessmentStep.screenDefects,

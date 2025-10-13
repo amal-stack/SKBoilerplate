@@ -38,7 +38,6 @@ class DeviceAssessmentInput {
       DeviceAssessmentInputException.checkStepNotNull(value, step);
 
   DeviceAssessment toAssessment() {
-    final imeiValue = _checkNotNull(imei, DeviceAssessmentStep.imei);
     final functionalityValue = _checkNotNull(
       functionality,
       DeviceAssessmentStep.functionality,
@@ -88,7 +87,7 @@ class DeviceAssessmentInput {
     //    final imagesValue = _checkNotNull(images, DeviceAssessmentStep.imageUpload);
 
     return DeviceAssessment(
-      imei: imeiValue,
+      imei: imei ?? Imei(''),
       functionality: functionalityValue,
       defects: defectsValue,
       screenDefects: screenDefectsValue,

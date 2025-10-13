@@ -11,7 +11,7 @@ class RemoteGradesDataSource implements GradesDataSource {
   RemoteGradesDataSource(this._client);
 
   @override
-  Future<DataResponse<DeviceGrade>> grade({
+  Future<DataResponse<DeviceAssessmentResult>> grade({
     required String quoteId,
     required AssessmentResponse response,
   }) => _client
@@ -24,8 +24,8 @@ class RemoteGradesDataSource implements GradesDataSource {
       .then(
         (response) => DataResponse.fromJsonWithConverter(
           response.data as Map<String, dynamic>,
-          dataFromJson: (data) => DeviceGrade(data['grade'] as String),
-          dataToJson: (data) => {'grade': data.value},
+          dataFromJson: (data) => DeviceAssessmentResult.fromJson(data),
+          dataToJson: (data) => data.toJson(),
         ),
       );
 }

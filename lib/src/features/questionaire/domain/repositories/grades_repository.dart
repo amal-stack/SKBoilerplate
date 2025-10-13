@@ -2,7 +2,7 @@ import 'package:boilerplate/src/features/questionaire/domain/entities/device_gra
 import 'package:boilerplate/src/features/questionaire/domain/entities/entities.dart';
 
 abstract interface class GradesRepository {
-  Future<DeviceGrade> grade({
+  Future<DeviceAssessmentResult> grade({
     required String quoteId,
     required DeviceAssessment assessment,
   });

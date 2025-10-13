@@ -72,7 +72,7 @@ class BodyDefectsPage extends StatelessWidget {
               IssueData(
                 title: QuestionnaireStore.noBodyScratches.text,
                 image: "assets/images/question/dent_sub_3.png",
-                isSelected: bodyDefects?.scratches.hasScratches ?? false,
+                isSelected: bodyDefects?.scratches == ScratchSeverity.none,
                 onTap: () {
                   final bodyDefects = cubit.input.bodyDefects ?? BodyDefects.none;
                   cubit.bodyDefectsChanged(
@@ -116,7 +116,7 @@ class BodyDefectsPage extends StatelessWidget {
               IssueData(
                 title: QuestionnaireStore.noDents.text,
                 image: "assets/images/question/dent_sub_6.png",
-                isSelected: bodyDefects?.dents.hasDents ?? false,
+                isSelected: bodyDefects?.dents == DentSeverity.none,
                 onTap: () {
                   final bodyDefects = cubit.input.bodyDefects ?? BodyDefects.none;
                   cubit.bodyDefectsChanged(
@@ -132,3 +132,4 @@ class BodyDefectsPage extends StatelessWidget {
     },
   );
 }
+

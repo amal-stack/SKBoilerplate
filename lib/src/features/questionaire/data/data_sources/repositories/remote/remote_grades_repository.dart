@@ -10,7 +10,7 @@ class RemoteGradesRepository implements GradesRepository {
   RemoteGradesRepository(this.dataSource);
 
   @override
-  Future<DeviceGrade> grade({
+  Future<DeviceAssessmentResult> grade({
     required String quoteId,
     required DeviceAssessment assessment,
   }) => dataSource

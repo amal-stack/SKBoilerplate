@@ -250,8 +250,6 @@ enum DisplaySpots {
   threeOrMoreSmall,
   oneOrTwoSmall,
   none;
-
-  bool get hasSpots => this != DisplaySpots.none;
 }
 
 enum DisplayLines {
@@ -259,15 +257,12 @@ enum DisplayLines {
   fadedEdges,
   none;
 
-  bool get hasLines => this != DisplayLines.none;
 }
 
 enum Discoloration {
   severe,
   minor,
   none;
-
-  bool get hasDiscoloration => this != Discoloration.none;
 }
 
 @immutable
@@ -311,16 +306,12 @@ enum ScratchSeverity {
   moreThanTwo,
   oneOrTwo,
   none;
-
-  bool get hasScratches => this != ScratchSeverity.none;
 }
 
 enum DentSeverity {
   multiple,
   oneOrTwoMinor,
   none;
-
-  bool get hasDents => this != DentSeverity.none;
 }
 
 @immutable
@@ -572,7 +563,7 @@ class DeviceInvoice {
   @override
   bool operator ==(Object other) =>
       other is DeviceInvoice && other.path == path;
-      
+
   @override
   int get hashCode => path.hashCode;
 }

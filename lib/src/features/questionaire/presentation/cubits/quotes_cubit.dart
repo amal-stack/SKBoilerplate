@@ -1,8 +1,5 @@
-import 'package:boilerplate/src/features/questionaire/domain/entities/assessment_question.dart';
 import 'package:boilerplate/src/features/questionaire/domain/entities/entities.dart';
 import 'package:boilerplate/src/features/questionaire/domain/entities/quote.dart';
-import 'package:boilerplate/src/features/questionaire/domain/entities/step.dart';
-import 'package:boilerplate/src/features/questionaire/domain/repositories/questionnaire_repository.dart';
 import 'package:boilerplate/src/features/questionaire/domain/repositories/quotes_repository.dart';
 import 'package:boilerplate/src/shared/cubits/state.dart';
 import 'package:flutter/material.dart';
@@ -31,13 +28,11 @@ class QuotesState {
     Imei? imei,
     String? deviceId,
     ViewState<Quote>? viewState,
-  }) {
-    return QuotesState(
-      imei: imei ?? this.imei,
-      deviceId: deviceId ?? this.deviceId,
-      viewState: viewState ?? this.viewState,
-    );
-  }
+  }) => QuotesState(
+    imei: imei ?? this.imei,
+    deviceId: deviceId ?? this.deviceId,
+    viewState: viewState ?? this.viewState,
+  );
 }
 
 class QuotesCubit extends Cubit<QuotesState> {
@@ -58,6 +53,15 @@ class QuotesCubit extends Cubit<QuotesState> {
       emit(
         state.copyWith(
           viewState: const ViewState.error('IMEI cannot be empty'),
+        ),
+      );
+      return;
+    }
+
+    if (state.deviceId.isEmpty) {
+      emit(
+        state.copyWith(
+          viewState: const ViewState.error('Device ID cannot be empty'),
         ),
       );
       return;

@@ -1,6 +1,7 @@
 import 'package:boilerplate/src/features/questionaire/domain/entities/step.dart';
-import 'package:boilerplate/src/features/questionaire/presentation/cubits/quotes_cubit.dart';
 import 'package:boilerplate/src/features/questionaire/presentation/cubits/device_assessment_cubit.dart';
+import 'package:boilerplate/src/features/questionaire/presentation/cubits/device_images_upload_cubit.dart';
+import 'package:boilerplate/src/features/questionaire/presentation/cubits/device_invoice_upload_cubit.dart';
 import 'package:boilerplate/src/features/questionaire/presentation/cubits/questionnaire_cubit.dart';
 import 'package:boilerplate/src/features/questionaire/presentation/models/flow_state.dart';
 import 'package:boilerplate/src/features/questionaire/presentation/screen/additional_issues_page.dart';
@@ -11,7 +12,10 @@ import 'package:boilerplate/src/features/questionaire/presentation/screen/displa
 import 'package:boilerplate/src/features/questionaire/presentation/screen/panel_defects_page.dart';
 import 'package:boilerplate/src/features/questionaire/presentation/screen/product_condition_screen.dart';
 import 'package:boilerplate/src/features/questionaire/presentation/screen/scratch_selection_page.dart';
+import 'package:boilerplate/src/features/questionaire/presentation/screen/upload_device_image_page.dart';
+import 'package:boilerplate/src/features/questionaire/presentation/screen/warranty_selection_page.dart';
 import 'package:boilerplate/src/features/questionaire/presentation/widgets/continue_button.dart';
+import 'package:boilerplate/src/shared/cubits/state.dart';
 import 'package:boilerplate/src/shared/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -43,10 +47,72 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
     providers: [
       BlocProvider(create: (context) => DeviceAssessmentCubit(context.read())),
       BlocProvider(create: (context) => QuestionnaireCubit(context.read())),
+      BlocProvider(
+        create: (context) => DeviceImagesUploadCubit(context.read()),
+      ),
+      BlocProvider(
+        create: (context) => DeviceInvoiceUploadCubit(context.read()),
+      ),
     ],
-    child: BlocListener<DeviceAssessmentCubit, DeviceAssessmentState>(
-      listenWhen: (previous, current) => previous.step != current.step,
-      listener: (context, state) {},
+    child: MultiBlocListener(
+      listeners: [
+        BlocListener<DeviceAssessmentCubit, DeviceAssessmentState>(
+          listenWhen: (previous, current) => previous.step != current.step,
+          listener: (context, state) {
+            switch (state) {
+              case DeviceAssessmentCompleted completed:
+                context.go('/device-value', extra: completed.result);
+              case DeviceAssessmentError error:
+                ScaffoldMessenger.of(
+                  context,
+                ).showSnackBar(SnackBar(content: Text(error.message)));
+              default:
+            }
+          },
+        ),
+        BlocListener<DeviceImagesUploadCubit, DeviceImagesUploadState>(
+          listener: (context, state) {
+            switch (state.viewState) {
+              case ViewError():
+                final message = (state.viewState as ViewError).message;
+                ScaffoldMessenger.of(
+                  context,
+                ).showSnackBar(SnackBar(content: Text(message)));
+              case ViewSuccess():
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text("Images uploaded successfully")),
+                );
+              default:
+                break;
+            }
+          },
+        ),
+        BlocListener<DeviceInvoiceUploadCubit, DeviceInvoiceState>(
+          listener: (context, state) {
+            switch (state.viewState) {
+              case ViewError():
+                final message = (state.viewState as ViewError).message;
+                ScaffoldMessenger.of(
+                  context,
+                ).showSnackBar(SnackBar(content: Text(message)));
+              case ViewSuccess(:final data):
+                if (!data) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text("Failed to upload invoice")),
+                  );
+                  return;
+                }
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text("Invoice uploaded successfully"),
+                  ),
+                );
+              default:
+                break;
+            }
+          },
+        ),
+      ],
       child: Scaffold(
         backgroundColor: AppColors.white,
         appBar: AppBar(
@@ -76,7 +142,7 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(child: CurrentStepPage()),
-                ContinueButton(),
+                ContinueButton(quoteId: widget.quoteId),
               ],
             ),
           ),
@@ -98,6 +164,8 @@ class CurrentStepPage extends StatelessWidget {
     DeviceAssessmentStep.panelDefects: PanelDefectsPage(),
     DeviceAssessmentStep.additionalDefects: AdditionalIssuesPage(),
     DeviceAssessmentStep.accessories: AvailableAccessoriesPage(),
+    DeviceAssessmentStep.warranty: WarrantySelectionPage(),
+    DeviceAssessmentStep.imageUpload: UploadDeviceImagePage(),
   };
 
   @override

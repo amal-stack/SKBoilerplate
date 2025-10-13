@@ -106,7 +106,7 @@ class PanelDefectsPage extends StatelessWidget {
                     IssueData(
                       title: QuestionnaireStore.frameIsStraight.text,
                       image: "assets/images/question/scratch_1.png",
-                      isSelected: state?.frameCondition.isDefective ?? false,
+                      isSelected: state?.frameCondition == FrameCondition.straight,
                       onTap: () {
                         final panelDefects =
                             cubit.input.panelDefects ?? PanelDefects.none;

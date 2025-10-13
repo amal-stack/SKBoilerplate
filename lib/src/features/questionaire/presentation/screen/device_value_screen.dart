@@ -1,3 +1,4 @@
+import 'package:boilerplate/src/features/questionaire/domain/entities/device_grade.dart';
 import 'package:boilerplate/src/shared/themes/text.dart' as custom;
 import 'package:boilerplate/src/shared/themes/text.dart';
 import 'package:boilerplate/src/shared/utils/app_colors.dart';
@@ -8,7 +9,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
 class DeviceValueScreen extends StatefulWidget {
-  const DeviceValueScreen({super.key});
+  const DeviceValueScreen({super.key, required this.result});
+
+  final DeviceAssessmentResult result;
 
   @override
   State<DeviceValueScreen> createState() => _DeviceValueScreenState();
@@ -200,7 +203,7 @@ class _DeviceValueScreenState extends State<DeviceValueScreen> {
                                   color: AppColors.borderBlack,
                                 ),
                                 TextModel(
-                                  "B+",
+                                  widget.result.grade.value,
                                   size: 12.sp,
                                   fontWeight: FontWeight.w700,
                                   color: AppColors.darkGreenColor,
@@ -230,7 +233,7 @@ class _DeviceValueScreenState extends State<DeviceValueScreen> {
                               fontWeight: FontWeight.w700,
                               textColor: AppColors.darkGreenColor,
                               textOverflow: TextOverflow.ellipsis,
-                              text: "₹ 48,000",
+                              text: "₹ ${widget.result.price}"
                             ),
                           ],
                         ),

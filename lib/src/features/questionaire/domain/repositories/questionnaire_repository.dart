@@ -36,7 +36,6 @@ extension QuestionnaireRepositoryStepExtension on QuestionnaireRepository {
     DeviceAssessmentStep.additionalDefects => additionalIssuesQuestions(),
     DeviceAssessmentStep.accessories => accessoriesQuestions(),
     DeviceAssessmentStep.warranty => warrantyQuestions(),
-    DeviceAssessmentStep.imei ||
     DeviceAssessmentStep.imageUpload ||
     DeviceAssessmentStep.complete => Future.value(const []),
   };
