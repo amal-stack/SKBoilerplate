@@ -1,7 +1,6 @@
 import 'package:meta/meta.dart';
 
-extension type const Imei(String value) {
-}
+extension type const Imei(String value) {}
 
 @immutable
 class DeviceFunctionality {
@@ -21,7 +20,14 @@ class DeviceFunctionality {
     required this.esimSupported,
   });
 
-
+  static const functional = DeviceFunctionality(
+    canMakeReceiveCalls: true,
+    touchWorking: true,
+    screenOriginal: true,
+    underWarranty: true,
+    hasGstBill: true,
+    esimSupported: true,
+  );
 
   DeviceFunctionality.fromJson(Map<String, dynamic> json)
     : canMakeReceiveCalls = json['canMakeReceiveCalls'],
@@ -30,8 +36,6 @@ class DeviceFunctionality {
       underWarranty = json['underWarranty'],
       hasGstBill = json['hasGstBill'],
       esimSupported = json['esimSupported'];
-
-
 
   Map<String, dynamic> toJson() => {
     'canMakeReceiveCalls': canMakeReceiveCalls,
@@ -76,6 +80,55 @@ class DeviceFunctionality {
     underWarranty,
     hasGstBill,
     esimSupported,
+  );
+}
+
+class DeviceDefectsSelection {
+  const DeviceDefectsSelection({
+    required this.screen,
+    required this.display,
+    required this.body,
+    required this.panel,
+  });
+
+  DeviceDefectsSelection.fromJson(Map<String, dynamic> json)
+    : screen = json['screen'],
+      display = json['display'],
+      body = json['body'],
+      panel = json['panel'];
+
+  static const none = DeviceDefectsSelection(
+    screen: false,
+    display: false,
+    body: false,
+    panel: false,
+  );
+
+  final bool screen;
+
+  final bool display;
+
+  final bool body;
+
+  final bool panel;
+
+  Map<String, dynamic> toJson() => {
+    'screen': screen,
+    'display': display,
+    'body': body,
+    'panel': panel,
+  };
+
+  DeviceDefectsSelection copyWith({
+    bool? screen,
+    bool? display,
+    bool? body,
+    bool? panel,
+  }) => DeviceDefectsSelection(
+    screen: screen ?? this.screen,
+    display: display ?? this.display,
+    body: body ?? this.body,
+    panel: panel ?? this.panel,
   );
 }
 
@@ -192,11 +245,30 @@ class DisplayDefects {
   int get hashCode => Object.hash(spots, lines, discoloration);
 }
 
-enum DisplaySpots { largeHeavy, threeOrMoreSmall, oneOrTwoSmall, none }
+enum DisplaySpots {
+  largeHeavy,
+  threeOrMoreSmall,
+  oneOrTwoSmall,
+  none;
 
-enum DisplayLines { hasVisible, fadedEdges, none }
+  bool get hasSpots => this != DisplaySpots.none;
+}
 
-enum Discoloration { severe, minor, none }
+enum DisplayLines {
+  hasVisible,
+  fadedEdges,
+  none;
+
+  bool get hasLines => this != DisplayLines.none;
+}
+
+enum Discoloration {
+  severe,
+  minor,
+  none;
+
+  bool get hasDiscoloration => this != Discoloration.none;
+}
 
 @immutable
 class BodyDefects {
@@ -235,25 +307,33 @@ class BodyDefects {
   int get hashCode => Object.hash(scratches, dents);
 }
 
-enum ScratchSeverity { moreThanTwo, oneOrTwo, none }
+enum ScratchSeverity {
+  moreThanTwo,
+  oneOrTwo,
+  none;
 
-enum DentSeverity { multiple, oneOrTwoMinor, none }
+  bool get hasScratches => this != ScratchSeverity.none;
+}
+
+enum DentSeverity {
+  multiple,
+  oneOrTwoMinor,
+  none;
+
+  bool get hasDents => this != DentSeverity.none;
+}
 
 @immutable
 class PanelDefects {
   final PanelDamage panelDamage;
   final FrameCondition frameCondition;
 
-  const PanelDefects({
-    required this.panelDamage,
-    required this.frameCondition,
-  });
+  const PanelDefects({required this.panelDamage, required this.frameCondition});
 
   static const none = PanelDefects(
     panelDamage: PanelDamage.none,
     frameCondition: FrameCondition.straight,
   );
-
 
   PanelDefects.fromJson(Map<String, dynamic> json)
     : panelDamage = PanelDamage.values.byName(json['panelDamage']),
@@ -282,38 +362,69 @@ class PanelDefects {
   int get hashCode => Object.hash(panelDamage, frameCondition);
 }
 
-enum PanelDamage { cracked, missing, none }
+enum PanelDamage {
+  cracked,
+  missing,
+  none;
 
-enum FrameCondition { bent, loose, straight }
+  bool get hasDamage => this != PanelDamage.none;
+}
+
+enum FrameCondition {
+  bent,
+  loose,
+  straight;
+
+  bool get isDefective => this != FrameCondition.straight;
+}
 
 @immutable
 class AdditionalIssues {
   final Set<AdditionalIssue> issues;
 
-  const AdditionalIssues(this.issues);
+  final BatteryHealth batteryHealth;
 
-  static const none = AdditionalIssues({});
+  const AdditionalIssues(this.issues, {required this.batteryHealth});
+
+  static const none = AdditionalIssues(
+    {},
+    batteryHealth: BatteryHealth.healthy,
+  );
 
   AdditionalIssues.fromJson(Map<String, dynamic> json)
     : issues = (json['issues'] as List)
           .map((e) => AdditionalIssue.values.byName(e))
-          .toSet();
+          .toSet(),
+      batteryHealth = BatteryHealth.values.byName(json['batteryHealth']);
+
+  bool hasIssue(AdditionalIssue issue) => issues.contains(issue);
 
   Map<String, dynamic> toJson() => {
     'issues': issues.map((e) => e.name).toList(),
+    'batteryHealth': batteryHealth.name,
   };
 
-  AdditionalIssues copyWith({Set<AdditionalIssue>? issues}) =>
-      AdditionalIssues(issues ?? this.issues);
+  AdditionalIssues withIssueToggled(AdditionalIssue issue) => hasIssue(issue)
+      ? copyWith(issues: Set.of(issues)..remove(issue))
+      : copyWith(issues: {...issues, issue});
+
+  AdditionalIssues copyWith({
+    Set<AdditionalIssue>? issues,
+    BatteryHealth? batteryHealth,
+  }) => AdditionalIssues(
+    issues ?? this.issues,
+    batteryHealth: batteryHealth ?? this.batteryHealth,
+  );
 
   @override
   bool operator ==(Object other) =>
       other is AdditionalIssues &&
       other.issues.length == issues.length &&
-      other.issues.containsAll(issues);
+      other.issues.containsAll(issues) &&
+      other.batteryHealth == batteryHealth;
 
   @override
-  int get hashCode => Object.hashAll(issues);
+  int get hashCode => Object.hash(Object.hashAll(issues), batteryHealth);
 }
 
 enum AdditionalIssue {
@@ -335,12 +446,16 @@ enum AdditionalIssue {
   proximitySensor,
 }
 
+enum BatteryHealth { below80, from80to85, healthy }
+
 @immutable
 class Accessories {
   final bool originalCharger;
   final bool originalBox;
 
   const Accessories({required this.originalCharger, required this.originalBox});
+
+  static const none = Accessories(originalCharger: false, originalBox: false);
 
   Accessories.fromJson(Map<String, dynamic> json)
     : originalCharger = json['originalCharger'],
@@ -372,10 +487,10 @@ enum WarrantyPeriod {
   from3to6,
   from6to11,
   above11,
-  outOfWarranty,
+  outOfWarranty;
+
+  bool get isInWarranty => this != WarrantyPeriod.outOfWarranty;
 }
-
-
 
 @immutable
 class DeviceImages {
@@ -442,114 +557,138 @@ class DeviceImages {
   int get hashCode => Object.hash(front, back, left, right, top, bottom);
 }
 
+class DeviceInvoice {
+  final String path;
+
+  const DeviceInvoice({required this.path});
+
+  DeviceInvoice.fromJson(Map<String, dynamic> json) : path = json['path'];
+
+  Map<String, dynamic> toJson() => {'path': path};
+
+  DeviceInvoice copyWith({String? path}) =>
+      DeviceInvoice(path: path ?? this.path);
+
+  @override
+  bool operator ==(Object other) =>
+      other is DeviceInvoice && other.path == path;
+      
+  @override
+  int get hashCode => path.hashCode;
+}
+
 @immutable
 class DeviceAssessment {
   final Imei imei;
-  final DeviceFunctionality condition;
-  final bool hasNoDefects;
+  final DeviceFunctionality functionality;
+  final DeviceDefectsSelection defects;
   final ScreenDefects screenDefects;
   final DisplayDefects displayDefects;
   final BodyDefects bodyDefects;
-  final PanelDefects panelCondition;
+  final PanelDefects panelDefects;
   final AdditionalIssues additionalIssues;
   final Accessories accessories;
   final WarrantyPeriod warrantyPeriod;
-  final DeviceImages images;
 
   const DeviceAssessment({
     required this.imei,
-    required this.condition,
-    required this.hasNoDefects,
+    required this.functionality,
+    required this.defects,
     required this.screenDefects,
     required this.displayDefects,
     required this.bodyDefects,
-    required this.panelCondition,
+    required this.panelDefects,
     required this.additionalIssues,
     required this.accessories,
     required this.warrantyPeriod,
-    required this.images,
   });
+
+  const DeviceAssessment.defectless({
+    required this.imei,
+    required this.functionality,
+    required this.accessories,
+    required this.warrantyPeriod,
+  }) : defects = DeviceDefectsSelection.none,
+       screenDefects = ScreenDefects.none,
+       displayDefects = DisplayDefects.none,
+       bodyDefects = BodyDefects.none,
+       panelDefects = PanelDefects.none,
+       additionalIssues = AdditionalIssues.none;
 
   DeviceAssessment.fromJson(Map<String, dynamic> json)
     : imei = Imei(json['imei']),
-      condition = DeviceFunctionality.fromJson(json['condition']),
-      hasNoDefects = json['hasNoDefects'],
+      functionality = DeviceFunctionality.fromJson(json['functionality']),
+      defects = DeviceDefectsSelection.fromJson(json['defects']),
       screenDefects = ScreenDefects.fromJson(json['screenDefects']),
       displayDefects = DisplayDefects.fromJson(json['displayDefects']),
       bodyDefects = BodyDefects.fromJson(json['bodyDefects']),
-      panelCondition = PanelDefects.fromJson(json['panelCondition']),
+      panelDefects = PanelDefects.fromJson(json['panelDefects']),
       additionalIssues = AdditionalIssues.fromJson(json['additionalIssues']),
       accessories = Accessories.fromJson(json['accessories']),
-      warrantyPeriod = WarrantyPeriod.values.byName(json['warrantyPeriod']),
-      images = DeviceImages.fromJson(json['images']);
+      warrantyPeriod = WarrantyPeriod.values.byName(json['warrantyPeriod']);
 
   Map<String, dynamic> toJson() => {
     'imei': imei,
-    'condition': condition.toJson(),
-    'hasNoDefects': hasNoDefects,
+    'functionality': functionality.toJson(),
     'screenDefects': screenDefects.toJson(),
     'displayDefects': displayDefects.toJson(),
     'bodyDefects': bodyDefects.toJson(),
-    'panelCondition': panelCondition.toJson(),
+    'panelDefects': panelDefects.toJson(),
     'additionalIssues': additionalIssues.toJson(),
     'accessories': accessories.toJson(),
     'warrantyPeriod': warrantyPeriod.name,
-    'images': images.toJson(),
   };
 
   DeviceAssessment copyWith({
     Imei? imei,
-    DeviceFunctionality? condition,
+    DeviceFunctionality? functionality,
+    DeviceDefectsSelection? defects,
     bool? hasNoDefects,
     ScreenDefects? screenDefects,
     DisplayDefects? displayDefects,
     BodyDefects? bodyDefects,
-    PanelDefects? panelCondition,
+    PanelDefects? panelDefects,
     AdditionalIssues? additionalIssues,
     Accessories? accessories,
     WarrantyPeriod? warrantyPeriod,
-    DeviceImages? images,
   }) => DeviceAssessment(
     imei: imei ?? this.imei,
-    condition: condition ?? this.condition,
-    hasNoDefects: hasNoDefects ?? this.hasNoDefects,
+    functionality: functionality ?? this.functionality,
+    defects: defects ?? this.defects,
+
     screenDefects: screenDefects ?? this.screenDefects,
     displayDefects: displayDefects ?? this.displayDefects,
     bodyDefects: bodyDefects ?? this.bodyDefects,
-    panelCondition: panelCondition ?? this.panelCondition,
+    panelDefects: panelDefects ?? this.panelDefects,
     additionalIssues: additionalIssues ?? this.additionalIssues,
     accessories: accessories ?? this.accessories,
     warrantyPeriod: warrantyPeriod ?? this.warrantyPeriod,
-    images: images ?? this.images,
   );
 
   @override
   bool operator ==(Object other) =>
       other is DeviceAssessment &&
       other.imei == imei &&
-      other.condition == condition &&
-      other.hasNoDefects == hasNoDefects &&
+      other.functionality == functionality &&
       other.screenDefects == screenDefects &&
       other.displayDefects == displayDefects &&
       other.bodyDefects == bodyDefects &&
-      other.panelCondition == panelCondition &&
+      other.panelDefects == panelDefects &&
       other.additionalIssues == additionalIssues &&
       other.accessories == accessories &&
-      other.warrantyPeriod == warrantyPeriod &&
-      other.images == images;
+      other.warrantyPeriod == warrantyPeriod;
 
   @override
   int get hashCode => Object.hash(
     imei,
-    condition,
-    hasNoDefects,
+    functionality,
+
     screenDefects,
     displayDefects,
     bodyDefects,
-    panelCondition,
+    panelDefects,
     additionalIssues,
     accessories,
     warrantyPeriod,
-    images,
   );
 }
