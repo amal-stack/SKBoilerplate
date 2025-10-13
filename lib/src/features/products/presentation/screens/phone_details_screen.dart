@@ -263,7 +263,7 @@ class _PhoneDetailsBodyState extends State<_PhoneDetailsBody> {
                   disableButton: widget.variants.isEmpty,
                   isLoading: false,
                   onPressed: () {
-                    context.push('/imei-screen');
+                    context.push('/imei/${widget.variants[_selectedIndex].id}');
                   },
                   label: AppTexts.quickQuote,
                   fontSize: 12.sp,
