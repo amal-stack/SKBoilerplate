@@ -57,8 +57,8 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
     child: MultiBlocListener(
       listeners: [
         BlocListener<DeviceAssessmentCubit, DeviceAssessmentState>(
-          listenWhen: (previous, current) => previous.step != current.step,
           listener: (context, state) {
+
             switch (state) {
               case DeviceAssessmentCompleted completed:
                 context.go('/device-value', extra: completed.result);

@@ -9,6 +9,9 @@ import 'package:boilerplate/src/shared/widgets/animated_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:boilerplate/src/shared/flags.dart' as f;
+
+const disableUploads = f.disableUploads;
 
 class ContinueButton extends StatelessWidget {
   const ContinueButton({super.key, required this.quoteId});
@@ -33,7 +36,10 @@ class ContinueButton extends StatelessWidget {
                         height: 45.h,
                         width: double.infinity,
                         child: AnimatedButton(
-                          disableButton: switch (step) {
+                          disableButton: disableUploads
+                              ? false
+                              :
+                          switch (step) {
                             DeviceAssessmentStep.imageUpload =>
                               !imageUploadState.isComplete,
                             DeviceAssessmentStep.warranty =>
@@ -43,51 +49,60 @@ class ContinueButton extends StatelessWidget {
                           isLoading: imageUploadState.viewState is ViewLoading,
                           onPressed: () {
                             final cubit = context.read<DeviceAssessmentCubit>();
-                            if (cubit.step ==
-                                DeviceAssessmentStep.imageUpload) {
-                              if (imageUploadState.viewState is ViewSuccess) {
-                                debugPrint(
-                                  "Calculating grade for quoteId: $quoteId",
-                                );
-                                cubit.calculateGrade(quoteId: quoteId);
-                                return;
-                              }
-                              context
-                                  .read<DeviceImagesUploadCubit>()
-                                  .uploadImages(quoteId);
 
-                              return;
+                            switch (cubit.step) {
+                              case DeviceAssessmentStep.warranty
+                                  when !disableUploads:
+                                debugPrint(
+                                  "Uploading invoice for quoteId: $quoteId",
+                                );
+                                context
+                                    .read<DeviceInvoiceUploadCubit>()
+                                    .uploadInvoice(quoteId);
+                                return;
+
+                              case DeviceAssessmentStep.imageUpload:
+                                if (disableUploads) {
+                                  cubit.calculateGrade(quoteId: quoteId);
+                                  return;
+                                } else {
+                                  if (imageUploadState.viewState
+                                      is ViewSuccess) {
+                                    cubit.calculateGrade(quoteId: quoteId);
+                                    return;
+                                  }
+                                  context
+                                      .read<DeviceImagesUploadCubit>()
+                                      .uploadImages(quoteId);
+                                }
+                                return;
+
+                              default:
                             }
 
-                            // if (cubit.step == DeviceAssessmentStep.warranty && 
-                            //     invoiceUploadState.viewState is! ViewSuccess) {
-                            //       debugPrint(
-                            //       "Uploading invoice for quoteId: $quoteId");
-                            //   context
-                            //       .read<DeviceInvoiceUploadCubit>()
-                            //       .uploadInvoice(quoteId);
-                            //   return;
-                            // }
-
+                           
                             cubit.nextStep();
+
                           },
-                          label: switch (step) {
-                            DeviceAssessmentStep.imageUpload =>
-                              switch (imageUploadState.viewState) {
-                                ViewError() => 'Retry Upload',
-                                ViewLoading() => 'Uploading...',
-                                ViewSuccess() => AppTexts.continueTitle,
-                                _ => 'Upload',
-                              },
-                            DeviceAssessmentStep.warranty =>
-                              switch (invoiceUploadState.viewState) {
-                                ViewError() => 'Retry Upload',
-                                ViewLoading() => 'Uploading...',
-                                ViewSuccess() => AppTexts.continueTitle,
-                                _ => 'Upload',
-                              },
-                            _ => AppTexts.continueTitle,
-                          },
+                          label: disableUploads
+                              ? AppTexts.continueTitle
+                              : switch (step) {
+                                  DeviceAssessmentStep.imageUpload =>
+                                    switch (imageUploadState.viewState) {
+                                      ViewError() => 'Retry Upload',
+                                      ViewLoading() => 'Uploading...',
+                                      ViewSuccess() => AppTexts.continueTitle,
+                                      _ => 'Upload',
+                                    },
+                                  DeviceAssessmentStep.warranty =>
+                                    switch (invoiceUploadState.viewState) {
+                                      ViewError() => 'Retry Upload',
+                                      ViewLoading() => 'Uploading...',
+                                      ViewSuccess() => AppTexts.continueTitle,
+                                      _ => 'Upload',
+                                    },
+                                  _ => AppTexts.continueTitle,
+                                },
                           fontSize: 12.sp,
                           isSmallButton: false,
                         ),

@@ -1,6 +1,7 @@
 import 'package:boilerplate/src/features/auth/presentation/screens/verify_otp_screen.dart';
 import 'package:boilerplate/src/features/dashboard/presentation/screens/faq_screen.dart';
 import 'package:boilerplate/src/features/products/presentation/screens/phone_details_screen.dart';
+import 'package:boilerplate/src/features/questionaire/domain/entities/device_grade.dart';
 import 'package:boilerplate/src/features/questionaire/presentation/screen/questionnaire_screen.dart';
 
 import 'package:go_router/go_router.dart';
@@ -30,8 +31,6 @@ import '../features/questionaire/presentation/screen/device_value_screen.dart';
 
 import '../features/questionaire/presentation/screen/imei_screen.dart';
 
-import '../features/questionaire/presentation/screen/warranty_selection_screen.dart';
-import '../features/questionaire/presentation/screen/upload_device_image_screen.dart';
 import '../features/orders/presentations/screen/order_history_screen.dart';
 import '../features/splash/screens/splash_screen.dart';
 
@@ -140,21 +139,23 @@ final GoRouter appRouter = GoRouter(
     //   path: '/available-accessories-screen',
     //   builder: (context, state) => AvailableAccessoriesPage(),
     // ),
-    GoRoute(
-      path: '/warranty-selection-screen',
-      builder: (context, state) => WarrantySelectionScreen(),
-    ),
-    GoRoute(
-      path: '/upload-device-image-screen',
-      builder: (context, state) => UploadDeviceImageScreen(),
-    ),
+    // GoRoute(
+    //   path: '/warranty-selection-screen',
+    //   builder: (context, state) => WarrantySelectionPage(),
+    // ),
+    // GoRoute(
+    //   path: '/upload-device-image-screen',
+    //   builder: (context, state) => UploadDeviceImagePage(),
+    // ),
     GoRoute(
       path: '/order-history-screen',
       builder: (context, state) => OrderHistoryScreen(),
     ),
     GoRoute(
-      path: '/device-value-screen',
-      builder: (context, state) => DeviceValueScreen(),
+      path: '/device-value',
+      builder: (context, state) => DeviceValueScreen(
+        result: AppRouter.extra<DeviceAssessmentResult>(state),
+      ),
     ),
     GoRoute(
       path: '/phone-number-verification-screen',

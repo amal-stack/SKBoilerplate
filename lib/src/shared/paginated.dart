@@ -33,6 +33,8 @@ class Paginated<T> with Iterable<T> {
 
   bool get hasPreviousPage => page > 1;
 
+  int get nextPage => hasNextPage ? page + 1 : totalPages;
+
   Paginated<T> copyWith({
     List<T>? items,
     int? page,

@@ -47,7 +47,7 @@ class AssessmentResponse {
   final List<AssessmentQuestionResponse> questions;
 
   Map<String, dynamic> toJson() => {
-    'questions': [for (var q in questions) q.toJson()],
+    'responses': [for (var q in questions) q.toJson()],
   };
 
   @override

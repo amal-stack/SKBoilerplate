@@ -4,6 +4,7 @@ import 'package:boilerplate/src/features/questionaire/domain/entities/step.dart'
 import 'package:boilerplate/src/features/questionaire/domain/repositories/grades_repository.dart';
 import 'package:boilerplate/src/features/questionaire/presentation/models/flow_state.dart';
 import 'package:boilerplate/src/features/questionaire/presentation/models/input.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DeviceAssessmentCubit extends Cubit<DeviceAssessmentState> {
@@ -89,14 +90,17 @@ class DeviceAssessmentCubit extends Cubit<DeviceAssessmentState> {
   Future<void> calculateGrade({required String quoteId}) async {
     emit(DeviceAssessmentState.submitting(state.flow));
     try {
+      debugPrint("Calculating grade for quoteId: $quoteId");
       final assessment = input.toAssessment();
       final result = await _repository.grade(
         quoteId: quoteId,
         assessment: assessment,
       );
+      debugPrint("Grade calculated: ${result.grade} for quoteId: $quoteId");
       emit(DeviceAssessmentState.completed(state.flow, result: result));
     } catch (e) {
       emit(DeviceAssessmentState.error(state.flow, message: e.toString()));
+      debugPrint("Error calculating grade: $e for quoteId: $quoteId");
     }
   }
 }

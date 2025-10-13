@@ -58,26 +58,31 @@ mixin DebounceCubitMixin<T> on Cubit<T> {
 }
 
 
-mixin RetryCubitMixin<T> on Cubit<T> {
-  void Function()? _onRetry;
+mixin RetryCubitMixin<T> on Cubit<ViewState<T>> {
+  FutureOr<void> Function()? _onRetry;
 
-  set onRetry(void Function()? callback) {
+  set onRetry(FutureOr<void> Function()? callback) {
     _onRetry = callback;
   }
 
-  void retry() {
-    if (_onRetry != null) {
-      _onRetry!();
+  Future<void> retry() async {
+    final action = _onRetry;
+    emit(ViewState<T>.initial());
+    if (action != null) {
+      await Future.delayed(const Duration(seconds: 5), action);
     }
   }
 
-  void withRetry(void Function() action) {
+  Future<void> withRetry(FutureOr<T> Function() action) async {
+    emit(ViewState<T>.initial());
     try {
-      action();
-      _onRetry = null;
-    } catch (_) {
-      _onRetry = action;
-      rethrow;
+      final result = await action();
+      emit(ViewState<T>.success(result));
+      onRetry = null;
+    } catch (e) {
+      emit(ViewState<T>.error(e.toString()));
+      onRetry = () => withRetry(action);
     }
   }
+      
 }

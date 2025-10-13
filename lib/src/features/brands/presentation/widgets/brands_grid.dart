@@ -5,8 +5,35 @@ import 'package:boilerplate/src/shared/paginated.dart';
 import 'package:boilerplate/src/shared/widgets/view_bloc_builder.dart';
 import 'package:flutter/material.dart';
 
-class BrandsGrid extends StatelessWidget {
+class BrandsGrid extends StatefulWidget {
   const BrandsGrid({super.key});
+
+  @override
+  State<BrandsGrid> createState() => _BrandsGridState();
+}
+
+class _BrandsGridState extends State<BrandsGrid> {
+
+  final ScrollController _scrollController = ScrollController();
+
+  bool get _isAtEnd => _scrollController.hasClients &&
+      _scrollController.offset >=
+          (_scrollController.position.maxScrollExtent * 0.9);
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+  }
+
+  void _onScroll() {
+    if (_isAtEnd) {
+      // context.read<BrandsCubit>().fetchMoreBrands();
+      // TODO: implement fetchMoreBrands in BrandsCubit and call here
+    }
+  }
+
+
 
   @override
   Widget build(BuildContext context) =>

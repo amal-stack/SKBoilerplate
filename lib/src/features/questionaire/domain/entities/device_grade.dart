@@ -34,7 +34,7 @@ class DeviceAssessmentResult {
       trueCount = json['trueCount'] as int,
       totalQuestions = json['totalQuestions'] as int,
       price = (json['price'] as num).toDouble(),
-      quoteUpated = json['quoteUpated'] as bool;
+      quoteUpated = json['quoteUpdated'] as bool;
 
   final DeviceGrade grade;
 

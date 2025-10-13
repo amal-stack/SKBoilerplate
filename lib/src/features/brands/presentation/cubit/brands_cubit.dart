@@ -12,7 +12,7 @@ typedef BrandsFetched = ViewSuccess<Paginated<Brand>>;
 typedef BrandsError = ViewError<Paginated<Brand>>;
 
 class BrandsCubit extends Cubit<BrandsState>
-    with DebounceCubitMixin<BrandsState>, RetryCubitMixin<BrandsState> {
+    with DebounceCubitMixin<BrandsState>, RetryCubitMixin<Paginated<Brand>> {
   BrandsCubit(this._repository) : super(const BrandsInitial());
 
   static const Duration debounceDuration = Duration(milliseconds: 500);
@@ -20,28 +20,14 @@ class BrandsCubit extends Cubit<BrandsState>
   final BrandsRepository _repository;
 
   Future<void> fetchBrands({int? page, int? limit}) =>
-      _performFetch(() => _repository.allBrands(page: page, limit: limit));
+      withRetry(() => _repository.allBrands(page: page, limit: limit));
 
   Future<void> searchBrands(String query, {int? page, int? limit}) =>
-      _performFetch(() => _repository.search(query, page: page, limit: limit));
+      withRetry(() => _repository.search(query, page: page, limit: limit));
 
   void searchBrandsWithDebounce(String query, {int? page, int? limit}) {
     withDebouncing(debounceDuration, () {
       searchBrands(query, page: page, limit: limit);
-    });
-  }
-
-  Future<void> _performFetch(
-    Future<Paginated<Brand>> Function() function,
-  ) async {
-    withRetry(() async {
-      emit(const BrandsInitial());
-      try {
-        final result = await function();
-        emit(BrandsFetched(result));
-      } catch (e) {
-        emit(BrandsError(e.toString()));
-      }
     });
   }
 }

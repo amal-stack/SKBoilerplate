@@ -14,7 +14,7 @@ enum DeviceAssessmentStep {
 
   static const first = DeviceAssessmentStep.functionality;
 
-  static const last = DeviceAssessmentStep.complete;
+  static const last = DeviceAssessmentStep.imageUpload;
 
   DeviceAssessmentStep? get next => switch (this) {
     

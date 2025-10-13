@@ -104,17 +104,13 @@ class BrandsScreen extends StatelessWidget {
 }
 
 class BrandsSearchInput extends StatelessWidget {
-  const BrandsSearchInput({
-    super.key,
-  });
+  const BrandsSearchInput({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return SearchInputField(
-      label: "Search for Brand",
-      onChanged: (value) {
-        context.read<BrandsCubit>().searchBrandsWithDebounce(value);
-      },
-    );
-  }
+  Widget build(BuildContext context) => SearchInputField(
+    label: "Search for Brand",
+    onChanged: (value) {
+      context.read<BrandsCubit>().searchBrandsWithDebounce(value);
+    },
+  );
 }

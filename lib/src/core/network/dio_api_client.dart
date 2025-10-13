@@ -24,10 +24,15 @@ class DioApiClient implements ApiClient {
     final token = await tokenStore.token();
     final options = _createOptions(method, token, request.headers);
 
+    final data = switch (request.data) {
+      ApiFormData formData => await _createFormData(formData),
+      _ => request.data,
+    };
+
     try {
       final response = await _dio.request<dynamic>(
         request.path,
-        data: request.data,
+        data: data,
         queryParameters: request.queryParameters,
         options: options,
       );
@@ -37,7 +42,19 @@ class DioApiClient implements ApiClient {
       final response = ApiResponse.error(
         failureType: _failureTypeFromDioException(e),
         error: e,
-        message: e.response?.data?['message'] as String?,
+        message: switch (e.response?.data) {
+          Map<String, dynamic> map => switch (map['message']) {
+            String msg => msg,
+            List<dynamic> msgs => msgs.join(', '),
+            Map<String, dynamic> map => map.values.join(', '),
+            final other? => other.toString(),
+            null => 'An unknown error occurred while making the request.',
+          },
+          String msg => msg,
+          List<dynamic> msgs => msgs.join(', '),
+          final other? => other.toString(),
+          null => 'An unknown error occurred while making the request.',
+        },
         statusCode: e.response?.statusCode,
       );
 
@@ -84,6 +101,23 @@ class DioApiClient implements ApiClient {
           }
         : headers,
   );
+
+  Future<FormData> _createFormData(ApiFormData formData) async {
+    return FormData.fromMap({
+      ...formData.fields,
+      for (final file in formData.files)
+        file.key: switch (file.files) {
+          [final singleFile] => await _createMultipartFile(singleFile),
+          final multipleFiles => await Future.wait([
+            for (final f in multipleFiles) _createMultipartFile(f),
+          ]),
+        },
+    });
+  }
+
+  Future<MultipartFile> _createMultipartFile(ApiFile file) {
+    return MultipartFile.fromFile(file.path, filename: file.filename);
+  }
 }
 
 ApiFailureType _failureTypeFromDioException(DioException exception) =>
