@@ -14,6 +14,12 @@ import 'package:boilerplate/src/features/dashboard/domain/repositories/dashboard
 
 import 'package:boilerplate/src/features/products/data/repositories/remote/remote_products_repository.dart';
 import 'package:boilerplate/src/features/products/domain/repositories/products_repository.dart';
+import 'package:boilerplate/src/features/questionaire/data/data_sources/repositories/local/local_questionnaire_repository.dart';
+import 'package:boilerplate/src/features/questionaire/data/data_sources/repositories/remote/remote_grades_repository.dart';
+import 'package:boilerplate/src/features/questionaire/data/data_sources/repositories/remote/remote_quotes_repository.dart';
+import 'package:boilerplate/src/features/questionaire/domain/repositories/grades_repository.dart';
+import 'package:boilerplate/src/features/questionaire/domain/repositories/questionnaire_repository.dart';
+import 'package:boilerplate/src/features/questionaire/domain/repositories/quotes_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -56,6 +62,18 @@ class SwitchKartApp extends StatelessWidget {
       RepositoryProvider<DashboardRepository>(
         create: (context) =>
             RemoteDashboardRepository(dependencies.dashboardDataSource),
+      ),
+      RepositoryProvider<QuotesRepository>(
+        create: (context) =>
+            RemoteQuotesRepository(dependencies.quotesDataSource),
+      ),
+      RepositoryProvider<GradesRepository>(
+        create: (context) =>
+            RemoteGradesRepository(dependencies.gradesDataSource),
+      ),
+      RepositoryProvider<QuestionnaireRepository>(
+        create: (context) =>
+            LocalQuestionnaireRepository(dependencies.questionnaireDataSource),
       ),
     ],
     child: BlocProvider(

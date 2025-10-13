@@ -11,6 +11,12 @@ import 'package:boilerplate/src/features/dashboard/data/data_sources/remote/remo
 
 import 'package:boilerplate/src/features/products/data/data_sources/products_data_source.dart';
 import 'package:boilerplate/src/features/products/data/data_sources/remote/remote_products_data_source.dart';
+import 'package:boilerplate/src/features/questionaire/data/data_sources/grades_data_source.dart';
+import 'package:boilerplate/src/features/questionaire/data/data_sources/local/local_questionnaire_data_source.dart';
+import 'package:boilerplate/src/features/questionaire/data/data_sources/questionnaire_data_source.dart';
+import 'package:boilerplate/src/features/questionaire/data/data_sources/quotes_data_source.dart';
+import 'package:boilerplate/src/features/questionaire/data/data_sources/remote/remote_grades_data_source.dart';
+import 'package:boilerplate/src/features/questionaire/data/data_sources/remote/remote_quotes_data_source.dart';
 import 'package:dio/dio.dart';
 
 final class Dependencies {
@@ -20,12 +26,19 @@ final class Dependencies {
     BrandsDataSource? brandsDataSource,
     ProductsDataSource? productsDataSource,
     DashboardDataSource? dashboardDataSource,
+    QuestionnaireDataSource? questionnaireDataSource,
+    GradesDataSource? gradesDataSource,
+    QuotesDataSource? quotesDataSource,
   }) : authSource = authClient ?? RemoteAuthSource(apiClient),
        brandsDataSource = brandsDataSource ?? RemoteBrandsDataSource(apiClient),
        productsDataSource =
            productsDataSource ?? RemoteProductsDataSource(apiClient),
        dashboardDataSource =
-           dashboardDataSource ?? RemoteDashboardDataSource(apiClient);
+           dashboardDataSource ?? RemoteDashboardDataSource(apiClient),
+       questionnaireDataSource =
+           questionnaireDataSource ?? const LocalQuestionnaireDataSource(),
+       gradesDataSource = gradesDataSource ?? RemoteGradesDataSource(apiClient),
+       quotesDataSource = quotesDataSource ?? RemoteQuotesDataSource(apiClient);
 
   factory Dependencies.defaults() => Dependencies(
     apiClient: DioApiClient.fromOptions(
@@ -42,4 +55,10 @@ final class Dependencies {
   final ProductsDataSource productsDataSource;
 
   final DashboardDataSource dashboardDataSource;
+
+  final QuestionnaireDataSource questionnaireDataSource;
+
+  final QuotesDataSource quotesDataSource;
+
+  final GradesDataSource gradesDataSource;
 }

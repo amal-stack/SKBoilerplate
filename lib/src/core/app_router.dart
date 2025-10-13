@@ -1,6 +1,7 @@
 import 'package:boilerplate/src/features/auth/presentation/screens/verify_otp_screen.dart';
 import 'package:boilerplate/src/features/dashboard/presentation/screens/faq_screen.dart';
 import 'package:boilerplate/src/features/products/presentation/screens/phone_details_screen.dart';
+import 'package:boilerplate/src/features/questionaire/presentation/screen/questionnaire_screen.dart';
 
 import 'package:go_router/go_router.dart';
 import 'package:meta/meta.dart';
@@ -24,19 +25,11 @@ import '../features/products/presentation/screens/explore_products_screen.dart';
 
 import '../features/dashboard/presentation/screens/top_selling_phone_screen.dart';
 import '../features/introslider/screens/introslider_screen.dart';
-import '../features/questionaire/presentation/screen/defects_selection_screen.dart';
-import '../features/questionaire/presentation/screen/dents_selection_screen.dart';
 
 import '../features/questionaire/presentation/screen/device_value_screen.dart';
 
 import '../features/questionaire/presentation/screen/imei_screen.dart';
 
-import '../features/questionaire/presentation/screen/missing_panel_selection_screen.dart';
-import '../features/questionaire/presentation/screen/product_condition_screen.dart';
-import '../features/questionaire/presentation/screen/product_question_answer_screen.dart';
-import '../features/questionaire/presentation/screen/scratch_selection_screen.dart';
-import '../features/questionaire/presentation/screen/additional_issues_screen.dart';
-import '../features/questionaire/presentation/screen/available_accessories_screen.dart';
 import '../features/questionaire/presentation/screen/warranty_selection_screen.dart';
 import '../features/questionaire/presentation/screen/upload_device_image_screen.dart';
 import '../features/orders/presentations/screen/order_history_screen.dart';
@@ -65,16 +58,15 @@ final GoRouter appRouter = GoRouter(
         ),
         GoRoute(
           path: 'verify-otp',
-          builder: (context, state) => VerifyOtpScreen(
-              email: AppRouter.extra<String>(state),
-            ),
+          builder: (context, state) =>
+              VerifyOtpScreen(email: AppRouter.extra<String>(state)),
         ),
         GoRoute(
           path: 'reset-password',
           builder: (context, state) => ResetPasswordScreen(
-              email: AppRouter.extraMapValue<String>(state, 'email'),
-              code: AppRouter.extraMapValue<String>(state, 'code'),
-            ),
+            email: AppRouter.extraMapValue<String>(state, 'email'),
+            code: AppRouter.extraMapValue<String>(state, 'code'),
+          ),
         ),
         GoRoute(
           path: 'success-screen',
@@ -104,39 +96,50 @@ final GoRouter appRouter = GoRouter(
       path: '/top-selling-phones',
       builder: (context, state) => TopSellingPhoneScreen(),
     ),
-    GoRoute(path: '/imei-screen', builder: (context, state) => ImeiScreen()),
     GoRoute(
-      path: '/product-question-answer',
-      builder: (context, state) => ProductQuestionAnswerScreen(),
+      path: '/imei/:deviceId',
+      builder: (context, state) => ImeiScreen(
+        deviceId: AppRouter.pathParameter<String>(state, 'deviceId'),
+      ),
     ),
     GoRoute(
-      path: '/product-condition-screen',
-      builder: (context, state) => ProductConditionScreen(),
+      path: '/questionnaire/:quoteId',
+      builder: (context, state) => QuestionnaireScreen(
+        quoteId: AppRouter.pathParameter<String>(state, 'quoteId'),
+      ),
     ),
-    GoRoute(
-      path: '/scratch-selection-screen',
-      builder: (context, state) => ScratchSelectionScreen(),
-    ),
-    GoRoute(
-      path: '/defects-selection-screen',
-      builder: (context, state) => DefectsSelectionScreen(),
-    ),
-    GoRoute(
-      path: '/dents-selection-screen',
-      builder: (context, state) => DentsSelectionScreen(),
-    ),
-    GoRoute(
-      path: '/missing-panel-selection-screen',
-      builder: (context, state) => MissingPanelSelectionScreen(),
-    ),
-    GoRoute(
-      path: '/additional-issues-screen',
-      builder: (context, state) => AdditionalIssuesScreen(),
-    ),
-    GoRoute(
-      path: '/available-accessories-screen',
-      builder: (context, state) => AvailableAccessoriesScreen(),
-    ),
+    // GoRoute(
+    //   path: '/product-question-answer',
+    //   builder: (context, state) => DeviceFunctionalityScreen(),
+    // ),
+    // GoRoute(
+    //   path: '/product-condition-screen',
+    //   builder: (context, state) => ProductConditionScreen(),
+    // ),
+    // GoRoute(
+    //   path: '/scratch-selection-screen',
+    //   builder: (context, state) => ScratchSelectionPage(),
+    // ),
+    // GoRoute(
+    //   path: '/defects-selection-screen',
+    //   builder: (context, state) => DisplayDefectsPage(),
+    // ),
+    // GoRoute(
+    //   path: '/dents-selection-screen',
+    //   builder: (context, state) => BodyDefectsPage(),
+    // ),
+    // GoRoute(
+    //   path: '/missing-panel-selection-screen',
+    //   builder: (context, state) => PanelDefectsPage(),
+    // ),
+    // GoRoute(
+    //   path: '/additional-issues-screen',
+    //   builder: (context, state) => AdditionalIssuesPage(),
+    // ),
+    // GoRoute(
+    //   path: '/available-accessories-screen',
+    //   builder: (context, state) => AvailableAccessoriesPage(),
+    // ),
     GoRoute(
       path: '/warranty-selection-screen',
       builder: (context, state) => WarrantySelectionScreen(),
