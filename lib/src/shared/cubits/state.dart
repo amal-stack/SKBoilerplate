@@ -1,4 +1,4 @@
-import 'dart:async' show Timer;
+import 'dart:async' show Timer, FutureOr;
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -7,12 +7,15 @@ sealed class ViewState<T> {
 
   const factory ViewState.initial() = ViewInitial<T>;
 
+  const factory ViewState.loading() = ViewLoading<T>;
+
   const factory ViewState.success(T data) = ViewSuccess<T>;
 
   const factory ViewState.error(String message) = ViewError<T>;
 
   ViewState<U> map<U>(U Function(T data) selector) => switch (this) {
     ViewInitial<T>() => ViewInitial<U>(),
+    ViewLoading<T>() => ViewLoading<U>(),
     ViewSuccess<T>(data: final data) => ViewSuccess<U>(selector(data)),
     ViewError<T>(message: final message) => ViewError<U>(message),
   };
@@ -20,6 +23,10 @@ sealed class ViewState<T> {
 
 final class ViewInitial<T> extends ViewState<T> {
   const ViewInitial();
+}
+
+final class ViewLoading<T> extends ViewState<T> {
+  const ViewLoading();
 }
 
 final class ViewSuccess<T> extends ViewState<T> {

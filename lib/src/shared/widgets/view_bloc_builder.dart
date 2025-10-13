@@ -31,6 +31,7 @@ class ViewBlocBuilder<B extends BlocBase<ViewState<S>>, S>
       child: BlocBuilder<B, ViewState<S>>(
         builder: (context, state) => switch (state) {
           ViewInitial<S>() => buildInitial(context),
+          ViewLoading<S>() => buildLoading(context),
           ViewSuccess<S>(data: final data) => buildSuccess(context, data),
           ViewError<S>(message: final message) => buildError(context, message),
         },
@@ -41,6 +42,10 @@ class ViewBlocBuilder<B extends BlocBase<ViewState<S>>, S>
   Widget buildInitial(BuildContext context) {
     return initialBuilder?.call(context) ??
         Center(child: CircularProgressIndicator());
+  }
+
+  Widget buildLoading(BuildContext context) {
+    return Center(child: CircularProgressIndicator());
   }
 
   Widget buildSuccess(BuildContext context, S data) {
@@ -70,12 +75,12 @@ class _ErrorBox<B extends BlocBase<ViewState<S>>, S> extends StatelessWidget {
           color: Colors.white,
           borderRadius: BorderRadius.circular(16.r),
           border: Border.all(
-            color: AppColors.errorColor.withOpacity(0.3),
+            color: AppColors.errorColor.withValues(alpha: 0.3),
             width: 1.w,
           ),
           boxShadow: [
             BoxShadow(
-              color: AppColors.errorColor.withOpacity(0.1),
+              color: AppColors.errorColor.withValues(alpha: 0.1),
               blurRadius: 12.r,
               offset: Offset(0, 4.h),
             ),
@@ -87,7 +92,7 @@ class _ErrorBox<B extends BlocBase<ViewState<S>>, S> extends StatelessWidget {
             Container(
               padding: EdgeInsets.all(12.w),
               decoration: BoxDecoration(
-                color: AppColors.errorColor.withOpacity(0.1),
+                color: AppColors.errorColor.withValues(alpha: 0.1),
                 shape: BoxShape.circle,
               ),
               child: Icon(
@@ -113,7 +118,7 @@ class _ErrorBox<B extends BlocBase<ViewState<S>>, S> extends StatelessWidget {
               child: RegularText(
                 text: kDebugMode
                     ? message
-                    : 'Please try again later or contact support if the issue persists.',
+                    : 'Please try again later if the issue persists.',
                 maxLines: 5,
                 textAlign: TextAlign.center,
                 textColor: Colors.grey.shade600,
@@ -176,6 +181,7 @@ class ViewBlocSelector<B extends BlocBase<ViewState<S>>, S, T>
         selector: (state) => state.map(selector),
         builder: (context, state) => switch (state) {
           ViewInitial<T>() => buildInitial(context),
+          ViewLoading<T>() => buildLoading(context),
           ViewSuccess<T>(data: final data) => buildSuccess(context, data),
           ViewError<T>(message: final message) => buildError(context, message),
         },
@@ -184,6 +190,10 @@ class ViewBlocSelector<B extends BlocBase<ViewState<S>>, S, T>
   Widget buildInitial(BuildContext context) {
     return initialBuilder?.call(context) ??
         Center(child: CircularProgressIndicator());
+  }
+
+  Widget buildLoading(BuildContext context) {
+    return Center(child: CircularProgressIndicator());
   }
 
   Widget buildSuccess(BuildContext context, T data) {

@@ -3,8 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:boilerplate/src/shared/themes/text.dart';
 import 'package:boilerplate/src/shared/utils/app_colors.dart';
 
-class IssueWidget extends StatefulWidget {
-  const IssueWidget({
+class IssueCard extends StatefulWidget {
+  const IssueCard({
     super.key,
     required this.image,
     required this.title,
@@ -18,10 +18,10 @@ class IssueWidget extends StatefulWidget {
   final VoidCallback? onTap;
 
   @override
-  State<IssueWidget> createState() => _IssueWidgetState();
+  State<IssueCard> createState() => _IssueCardState();
 }
 
-class _IssueWidgetState extends State<IssueWidget> {
+class _IssueCardState extends State<IssueCard> {
   bool _internalSelected = false; // internal state fallback
 
   void _handleTap() {
