@@ -1,4 +1,4 @@
-import 'package:boilerplate/src/features/questionaire/presentation/models/step.dart';
+import 'package:boilerplate/src/features/questionaire/domain/entities/step.dart';
 
 class DeviceDefectsSelection {
   const DeviceDefectsSelection({
