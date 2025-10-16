@@ -25,27 +25,27 @@ class AvailableAccessoriesPage extends StatelessWidget {
                 IssueSection(
                   title: "Available Accessories",
                   issues: [
-                    IssueData(
-                      title: "Original charger of device",
-                      image: "assets/images/question/charger.png",
-                      isSelected: state?.originalCharger ?? false,
-                      onTap: () {
-                        final accessories =
-                            cubit.input.accessories ?? Accessories.none;
-                        cubit.accessoriesChanged(
-                          accessories.copyWith(
-                            originalCharger: !accessories.originalCharger,
-                          ),
-                        );
-                      },
-                    ),
+                    // IssueData(
+                    //   title: "Original charger of device",
+                    //   image: "assets/images/question/charger.png",
+                    //   isSelected: state?.originalCharger ?? false,
+                    //   onTap: () {
+                    //     final accessories =
+                    //         cubit.input.accessories;
+                    //     cubit.accessoriesChanged(
+                    //       accessories.copyWith(
+                    //         originalCharger: !accessories.originalCharger,
+                    //       ),
+                    //     );
+                    //   },
+                    // ),
                     IssueData(
                       title: "Original box of the phone",
                       image: "assets/images/question/original_box.png",
                       isSelected: state?.originalBox ?? false,
                       onTap: () {
                         final accessories =
-                            cubit.input.accessories ?? Accessories.none;
+                            cubit.input.accessories;
                         cubit.accessoriesChanged(
                           accessories.copyWith(
                             originalBox: !accessories.originalBox,

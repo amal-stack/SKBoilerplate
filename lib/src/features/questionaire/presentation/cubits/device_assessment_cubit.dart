@@ -1,3 +1,4 @@
+import 'package:boilerplate/src/features/products/domain/product_variant.dart';
 import 'package:boilerplate/src/features/questionaire/domain/entities/assessment_question.dart';
 import 'package:boilerplate/src/features/questionaire/domain/entities/entities.dart';
 import 'package:boilerplate/src/features/questionaire/domain/entities/step.dart';
@@ -8,10 +9,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DeviceAssessmentCubit extends Cubit<DeviceAssessmentState> {
-  DeviceAssessmentCubit(this._repository)
+  DeviceAssessmentCubit(this._repository, {required this.deviceCategory})
     : super(DeviceAssessmentState.initial(DeviceAssessmentFlowState.initial));
 
   final GradesRepository _repository;
+
+  final DeviceCategory deviceCategory;
 
   DeviceAssessmentInput get input => state.flow.input;
 
@@ -25,15 +28,23 @@ class DeviceAssessmentCubit extends Cubit<DeviceAssessmentState> {
     required AssessmentQuestion question,
     required bool answer,
   }) {
-    final currentFunctionality =
-        input.functionality ?? DeviceFunctionalityInput();
     emit(
       state.withInput(
         input.copyWith(
-          functionality: currentFunctionality.answered(
+          functionality: input.functionality.answered(
             question: question,
             answer: answer,
           ),
+        ),
+      ),
+    );
+  }
+
+  void eSimCountChanged(int count) {
+    emit(
+      state.withInput(
+        input.copyWith(
+          functionality: input.functionality.copyWith(eSimCount: count),
         ),
       ),
     );
@@ -97,10 +108,12 @@ class DeviceAssessmentCubit extends Cubit<DeviceAssessmentState> {
         assessment: assessment,
       );
       debugPrint("Grade calculated: ${result.grade} for quoteId: $quoteId");
+      debugPrint("\n Details: ${result.toJson()}");
       emit(DeviceAssessmentState.completed(state.flow, result: result));
-    } catch (e) {
+    } catch (e, s) {
       emit(DeviceAssessmentState.error(state.flow, message: e.toString()));
       debugPrint("Error calculating grade: $e for quoteId: $quoteId");
+      debugPrint('\n Stack trace: $s');
     }
   }
 }

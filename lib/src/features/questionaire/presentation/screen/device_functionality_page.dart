@@ -1,3 +1,4 @@
+import 'package:boilerplate/src/features/products/domain/product_variant.dart';
 import 'package:boilerplate/src/features/questionaire/data/data_sources/local/questionnaire_store.dart';
 import 'package:boilerplate/src/features/questionaire/domain/entities/assessment_question.dart';
 import 'package:boilerplate/src/features/questionaire/presentation/cubits/device_assessment_cubit.dart';
@@ -32,7 +33,9 @@ class DeviceFunctionalityPage extends StatelessWidget {
         DeviceFunctionalityQuestionsList(
           questions: QuestionnaireStore.functionalityQuestions,
         ),
-        SizedBox(height: 20.h),
+        if (context.read<DeviceAssessmentCubit>().deviceCategory == DeviceCategory.ios)
+        ESimQuestions(),
+        SizedBox(height: 100.h),
       ],
     ),
   );
@@ -47,17 +50,18 @@ class DeviceFunctionalityQuestionsList extends StatelessWidget {
   Widget build(BuildContext context) =>
       BlocBuilder<DeviceAssessmentCubit, DeviceAssessmentState>(
         builder: (context, state) => ListView.builder(
+          physics: const NeverScrollableScrollPhysics(),
           itemCount: questions.length,
           shrinkWrap: true,
-          physics: const ScrollPhysics(),
-          itemBuilder: (context, index) {
-            return Padding(
+          itemBuilder: (context, index) => Padding(
               padding: EdgeInsets.symmetric(vertical: 10.h),
               child: QuestionAnswerWidget(
                 question: questions[index],
-                selection: state.input.functionality?.answerForQuestion(
+                selection: state.input.functionality.answerForQuestion(
                   questions[index],
                 ),
+                validator: (value) =>
+                    value == null ? 'This question is required' : null,
                 onChanged: (answer) {
                   context
                       .read<DeviceAssessmentCubit>()
@@ -67,8 +71,7 @@ class DeviceFunctionalityQuestionsList extends StatelessWidget {
                       );
                 },
               ),
-            );
-          },
+            ),
         ),
       );
 }
@@ -79,6 +82,7 @@ class QuestionAnswerWidget extends StatelessWidget {
     required this.question,
     required this.onChanged,
     required this.selection,
+    this.validator,
   });
 
   final AssessmentQuestion question;
@@ -87,38 +91,65 @@ class QuestionAnswerWidget extends StatelessWidget {
 
   final bool? selection;
 
+  final FormFieldValidator<bool>? validator;
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        RegularText(
-          textAlign: TextAlign.start,
-          textSize: 12.sp,
-          maxLines: 2,
-          fontWeight: FontWeight.w700,
-          textColor: AppColors.borderBlack,
-          textOverflow: TextOverflow.ellipsis,
-          text: question.text,
-        ),
-        SizedBox(height: 10.h),
-        Padding(
-          padding: EdgeInsets.only(left: 10.w),
-          child: Row(
-            children: [
-              AnswerButton.yes(
-                isSelected: selection == true,
-                onPressed: () => onChanged(true),
+    return FormField<bool>(
+      initialValue: selection,
+      validator: validator,
+      builder: (state) {
+        void handleChanged(bool value) {
+          onChanged(value);
+
+          state.didChange(value);
+        }
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            RegularText(
+              textAlign: TextAlign.start,
+              textSize: 12.sp,
+              maxLines: 2,
+              fontWeight: FontWeight.w700,
+              textColor: AppColors.borderBlack,
+              textOverflow: TextOverflow.ellipsis,
+              text: question.text,
+            ),
+            SizedBox(height: 10.h),
+            Padding(
+              padding: EdgeInsets.only(left: 10.w),
+              child: Row(
+                children: [
+                  AnswerButton.yes(
+                    isSelected: selection == true,
+                    onPressed: () => handleChanged(true),
+                  ),
+                  SizedBox(width: 10.w),
+                  AnswerButton.no(
+                    isSelected: selection == false,
+                    onPressed: () => handleChanged(false),
+                  ),
+                ],
               ),
-              SizedBox(width: 10.w),
-              AnswerButton.no(
-                isSelected: selection == false,
-                onPressed: () => onChanged(false),
+            ),
+            if (state.hasError)
+              Padding(
+                padding: EdgeInsets.only(top: 5.h, left: 10.w),
+                child: RegularText(
+                  textAlign: TextAlign.start,
+                  textSize: 10.sp,
+                  maxLines: 2,
+                  fontWeight: FontWeight.w500,
+                  textColor: Colors.red,
+                  textOverflow: TextOverflow.ellipsis,
+                  text: state.errorText ?? '',
+                ),
               ),
-            ],
-          ),
-        ),
-      ],
+          ],
+        );
+      },
     );
   }
 }
@@ -174,4 +205,142 @@ class AnswerButton extends StatelessWidget {
       ),
     );
   }
+}
+
+class SingleSelectQuestionWidget<T> extends StatelessWidget {
+  const SingleSelectQuestionWidget({
+    super.key,
+    required this.question,
+    required this.options,
+    required this.onChanged,
+    required this.selection,
+    this.validator,
+  });
+
+  final String question;
+
+  final List<T> options;
+
+  final ValueChanged<T> onChanged;
+
+  final T? selection;
+
+  final FormFieldValidator<T>? validator;
+
+  @override
+  Widget build(BuildContext context) {
+    return FormField<T>(
+      initialValue: selection,
+      validator: validator,
+      builder: (state) {
+        void handleChanged(T value) {
+          onChanged(value);
+
+          state.didChange(value);
+        }
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            RegularText(
+              textAlign: TextAlign.start,
+              textSize: 12.sp,
+              maxLines: 2,
+              fontWeight: FontWeight.w700,
+              textColor: AppColors.borderBlack,
+              textOverflow: TextOverflow.ellipsis,
+              text: question,
+            ),
+            SizedBox(height: 10.h),
+            Padding(
+              padding: EdgeInsets.only(left: 10.w),
+              child: Wrap(
+                spacing: 10.w,
+                runSpacing: 10.h,
+                children: options
+                    .map(
+                      (option) => GestureDetector(
+                    onTap: () => handleChanged(option),
+                    child: Container(
+                      width: 140.w,
+                      height: 40.h,
+                      decoration: BoxDecoration(
+                        color: selection == option
+                            ? AppColors.introSliderCircleColor
+                            : Colors.white,
+                        border: Border.all(
+                          width: 1.w,
+                          color: selection == option
+                              ? AppColors.introSliderCircleColor
+                              : AppColors.greyBorderColor,
+                        ),
+                        borderRadius: BorderRadius.circular(4.r),
+                      ),
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: RegularText(
+                          textAlign: TextAlign.center,
+                          textSize: 12.sp,
+                          maxLines: 1,
+                          fontWeight: FontWeight.w700,
+                          textColor: selection == option
+                              ? AppColors.black
+                              : AppColors.black,
+                          textOverflow: TextOverflow.ellipsis,
+                          text: option.toString(),
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+                    .toList(),
+              ),
+            ),
+            if (state.hasError)
+              Padding(
+                padding: EdgeInsets.only(top: 5.h, left: 10.w),
+                child: RegularText(
+                  textAlign: TextAlign.start,
+                  textSize: 10.sp,
+                  maxLines: 2,
+                  fontWeight: FontWeight.w500,
+                  textColor: Colors.red,
+                  textOverflow: TextOverflow.ellipsis,
+                  text: state.errorText ?? '',
+                ),
+              ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class ESimQuestions extends StatelessWidget {
+  const ESimQuestions({super.key});
+
+  @override
+  Widget build(BuildContext context) =>
+      BlocBuilder<DeviceAssessmentCubit, DeviceAssessmentState>(
+        builder: (context, state) {
+          final eSimCount = state.input.functionality.eSimCount;
+          final cubit = context.read<DeviceAssessmentCubit>();
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: 30.h),
+              SingleSelectQuestionWidget<int>(
+                question: QuestionnaireStore.numberOfESims.text,
+                options: [0, 1, 2],
+                selection: eSimCount,
+                validator: (value) =>
+                    value == null ? 'This question is required' : null,
+                onChanged: (count) {
+                  cubit.eSimCountChanged(count);
+                },
+              ),             
+            ],
+          );
+        },
+      );
 }

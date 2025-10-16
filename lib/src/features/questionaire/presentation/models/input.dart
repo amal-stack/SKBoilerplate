@@ -5,7 +5,7 @@ import 'package:boilerplate/src/features/questionaire/domain/entities/step.dart'
 
 class DeviceAssessmentInput {
   final Imei? imei;
-  final DeviceFunctionalityInput? functionality;
+  final DeviceFunctionalityInput functionality;
   final bool ignoreDefects;
   final DeviceDefectsSelection defects;
   final ScreenDefects? screenDefects;
@@ -13,13 +13,13 @@ class DeviceAssessmentInput {
   final BodyDefects? bodyDefects;
   final PanelDefects? panelDefects;
   final AdditionalIssues? additionalIssues;
-  final Accessories? accessories;
+  final Accessories accessories;
   final WarrantyPeriod? warrantyPeriod;
   final DeviceImages? images;
 
   const DeviceAssessmentInput({
     this.imei,
-    this.functionality,
+    this.functionality = DeviceFunctionalityInput.empty,
     this.ignoreDefects = false,
     this.defects = DeviceDefectsSelection.none,
     this.screenDefects,
@@ -27,7 +27,7 @@ class DeviceAssessmentInput {
     this.bodyDefects,
     this.panelDefects,
     this.additionalIssues,
-    this.accessories,
+    this.accessories = Accessories.none,
     this.warrantyPeriod,
     this.images,
   });
@@ -101,6 +101,8 @@ class DeviceAssessmentInput {
   }
 
   DeviceAssessmentInput withIgnoreDefects(bool ignore) => DeviceAssessmentInput(
+    imei: imei,
+    functionality: functionality,
     ignoreDefects: ignore,
     defects: ignore ? DeviceDefectsSelection.none : defects,
     screenDefects: ignore ? null : screenDefects,
@@ -182,7 +184,7 @@ class DeviceFunctionalityInput {
   final bool? screenOriginal;
   final bool? underWarranty;
   final bool? hasGstBill;
-  final bool? esimSupported;
+  final int? eSimCount;
 
   const DeviceFunctionalityInput({
     this.canMakeReceiveCalls,
@@ -190,8 +192,10 @@ class DeviceFunctionalityInput {
     this.screenOriginal,
     this.underWarranty,
     this.hasGstBill,
-    this.esimSupported,
+    this.eSimCount,
   });
+
+  static const empty = DeviceFunctionalityInput();
 
   DeviceFunctionality toFunctionality() => DeviceFunctionality(
     canMakeReceiveCalls: _checkNotNull(
@@ -214,10 +218,7 @@ class DeviceFunctionalityInput {
       hasGstBill,
       QuestionnaireStore.gstBillWithImei.text,
     ),
-    esimSupported: _checkNotNull(
-      esimSupported,
-      QuestionnaireStore.esimsSupported.text,
-    ),
+    numberOfESims: eSimCount ?? 0,
   );
 
   DeviceFunctionalityInput answered({
@@ -231,7 +232,9 @@ class DeviceFunctionalityInput {
     QuestionnaireStore.screenOriginal => copyWith(screenOriginal: answer),
     QuestionnaireStore.deviceUnderWarranty => copyWith(underWarranty: answer),
     QuestionnaireStore.gstBillWithImei => copyWith(hasGstBill: answer),
-    QuestionnaireStore.esimsSupported => copyWith(esimSupported: answer),
+    QuestionnaireStore.numberOfESims1 => copyWith(eSimCount: answer ? 1 : null),
+    QuestionnaireStore.numberOfESims2 => copyWith(eSimCount: answer ? 2 : null),
+    // QuestionnaireStore.hasOriginalBox => copyWith(hasOriginalBoxWithImei: answer),
     _ => unrecognizedQuestion(question),
   };
 
@@ -241,7 +244,8 @@ class DeviceFunctionalityInput {
     QuestionnaireStore.screenOriginal => screenOriginal,
     QuestionnaireStore.deviceUnderWarranty => underWarranty,
     QuestionnaireStore.gstBillWithImei => hasGstBill,
-    QuestionnaireStore.esimsSupported => esimSupported,
+    QuestionnaireStore.numberOfESims1 => eSimCount == 1,
+    QuestionnaireStore.numberOfESims2 => eSimCount == 2,
     _ => unrecognizedQuestion(question),
   };
 
@@ -257,14 +261,14 @@ class DeviceFunctionalityInput {
     bool? screenOriginal,
     bool? underWarranty,
     bool? hasGstBill,
-    bool? esimSupported,
+    int? eSimCount,
   }) => DeviceFunctionalityInput(
     canMakeReceiveCalls: canMakeReceiveCalls ?? this.canMakeReceiveCalls,
     touchWorking: touchWorking ?? this.touchWorking,
     screenOriginal: screenOriginal ?? this.screenOriginal,
     underWarranty: underWarranty ?? this.underWarranty,
     hasGstBill: hasGstBill ?? this.hasGstBill,
-    esimSupported: esimSupported ?? this.esimSupported,
+    eSimCount: eSimCount ?? this.eSimCount,
   );
 
   static bool _checkNotNull(bool? value, String field) =>
@@ -284,7 +288,7 @@ class DeviceFunctionalityInput {
           screenOriginal == other.screenOriginal &&
           underWarranty == other.underWarranty &&
           hasGstBill == other.hasGstBill &&
-          esimSupported == other.esimSupported;
+          eSimCount == other.eSimCount;
 
   @override
   int get hashCode => Object.hash(
@@ -293,7 +297,7 @@ class DeviceFunctionalityInput {
     screenOriginal,
     underWarranty,
     hasGstBill,
-    esimSupported,
+    eSimCount,
   );
 }
 

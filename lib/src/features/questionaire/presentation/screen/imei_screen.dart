@@ -1,4 +1,5 @@
 import 'package:boilerplate/src/features/dashboard/presentation/screens/faq_screen.dart';
+import 'package:boilerplate/src/features/products/domain/product_variant.dart';
 import 'package:boilerplate/src/features/questionaire/presentation/cubits/quotes_cubit.dart';
 import 'package:boilerplate/src/shared/cubits/state.dart';
 import 'package:boilerplate/src/shared/models/faq.dart';
@@ -15,9 +16,15 @@ import 'package:go_router/go_router.dart';
 import '../../../../shared/widgets/animated_button.dart';
 
 class ImeiScreen extends StatelessWidget {
-  const ImeiScreen({super.key, required this.deviceId});
+  const ImeiScreen({
+    super.key,
+    required this.deviceId,
+    required this.deviceCategory,
+  });
 
   final String deviceId;
+
+  final DeviceCategory deviceCategory;
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +44,9 @@ class ImeiScreen extends StatelessWidget {
                     ),
                   ),
                 );
-                context.go('/questionnaire/$quoteId');
+                context.push(
+                  '/questionnaire/$quoteId?deviceCategory=${deviceCategory.name}',
+                );
               }(data.id);
             case ViewError(:final message):
               ScaffoldMessenger.of(

@@ -10,6 +10,7 @@ class ProductVariant {
     required this.brandName,
     required this.storage,
     required this.ram,
+    required this.deviceCategory,
     required this.imageUrl,
   });
 
@@ -21,6 +22,14 @@ class ProductVariant {
       brandName = json['brandName'] as String,
       storage = json['storage'] as String,
       ram = json['ram'] as String,
+      deviceCategory = switch (json['deviceCategory'] as String) {
+        'android' => DeviceCategory.android,
+        'ios' => DeviceCategory.ios,
+        'fold' => DeviceCategory.fold,
+        _ => throw ArgumentError(
+          'Unknown device category: ${json['deviceCategory']}',
+        ),
+      },
       imageUrl = json['image'] as String;
 
   final String id;
@@ -37,6 +46,8 @@ class ProductVariant {
 
   final String ram;
 
+  final DeviceCategory deviceCategory;
+
   final String imageUrl;
 
   Map<String, dynamic> toJson() => {
@@ -50,3 +61,24 @@ class ProductVariant {
     'image': imageUrl,
   };
 } 
+
+enum DeviceCategory {
+  android,
+  ios,
+  fold;
+
+  factory DeviceCategory.fromName(String name) => switch (name) {
+    'android' => DeviceCategory.android,
+    'ios' => DeviceCategory.ios,
+    'fold' => DeviceCategory.fold,
+    _ => throw ArgumentError('Unknown device category: $name'),
+  };
+
+  String get name => switch (this) {
+    DeviceCategory.android => 'android',
+    DeviceCategory.ios => 'ios',
+    DeviceCategory.fold => 'fold',
+  };
+
+
+}

@@ -21,7 +21,7 @@ class QuotesState {
   final Imei imei;
 
   final String deviceId;
-
+  
   final ViewState<Quote> viewState;
 
   QuotesState copyWith({
@@ -41,11 +41,15 @@ class QuotesCubit extends Cubit<QuotesState> {
   final QuotesRepository repository;
 
   void imeiChanged(String imei) {
-    emit(state.copyWith(imei: Imei(imei)));
+    emit(
+      state.copyWith(imei: Imei(imei), viewState: const ViewState.initial()),
+    );
   }
 
   void deviceIdChanged(String deviceId) {
-    emit(state.copyWith(deviceId: deviceId));
+    emit(
+      state.copyWith(deviceId: deviceId, viewState: const ViewState.initial()),
+    );
   }
 
   Future<void> submitImei() async {

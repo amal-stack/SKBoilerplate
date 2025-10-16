@@ -1,3 +1,4 @@
+import 'package:boilerplate/src/features/products/domain/product_variant.dart';
 import 'package:boilerplate/src/features/questionaire/data/data_sources/local/questionnaire_store.dart';
 import 'package:boilerplate/src/features/questionaire/domain/entities/assessment_question.dart';
 import 'package:boilerplate/src/features/questionaire/domain/entities/entities.dart';
@@ -63,6 +64,7 @@ class AdditionalIssuesPage extends StatelessWidget {
                 ],
               ),
               SizedBox(height: 24.h),
+              if (cubit.deviceCategory == DeviceCategory.ios)
               IssueSection(
                 title: "Battery Health",
                 issues: [
@@ -132,10 +134,10 @@ const additionalIssueData = {
     question: QuestionnaireStore.powerButtonUnresponsive,
     image: "assets/images/question/scratch_1.png",
   ),
-  AdditionalIssue.chargingPort: (
-    question: QuestionnaireStore.chargingPortNotWorking,
-    image: "assets/images/question/scratch_1.png",
-  ),
+  // AdditionalIssue.chargingPort: (
+  //   question: QuestionnaireStore.charg,
+  //   image: "assets/images/question/scratch_1.png",
+  // ),
   AdditionalIssue.audioReceiver: (
     question: QuestionnaireStore.audioReceiverFaulty,
     image: "assets/images/question/additional_11.png",

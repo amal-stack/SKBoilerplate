@@ -1,3 +1,4 @@
+import 'package:boilerplate/src/features/products/domain/product_variant.dart';
 import 'package:boilerplate/src/features/questionaire/domain/entities/step.dart';
 import 'package:boilerplate/src/features/questionaire/presentation/cubits/device_assessment_cubit.dart';
 import 'package:boilerplate/src/features/questionaire/presentation/cubits/device_images_upload_cubit.dart';
@@ -25,27 +26,32 @@ import 'package:go_router/go_router.dart';
 import '../../../../shared/themes/text.dart';
 
 class QuestionnaireScreen extends StatefulWidget {
-  const QuestionnaireScreen({super.key, required this.quoteId});
+  const QuestionnaireScreen({
+    super.key,
+    required this.quoteId,
+    required this.deviceCategory,
+  });
 
   final String quoteId;
+
+  final DeviceCategory deviceCategory;
 
   @override
   State<QuestionnaireScreen> createState() => _QuestionnaireScreenState();
 }
 
 class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
-  final PageController _pageController = PageController();
-
-  @override
-  void dispose() {
-    _pageController.dispose();
-    super.dispose();
-  }
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) => MultiBlocProvider(
     providers: [
-      BlocProvider(create: (context) => DeviceAssessmentCubit(context.read())),
+      BlocProvider(
+        create: (context) => DeviceAssessmentCubit(
+          context.read(),
+          deviceCategory: widget.deviceCategory,
+        ),
+      ),
       BlocProvider(create: (context) => QuestionnaireCubit(context.read())),
       BlocProvider(
         create: (context) => DeviceImagesUploadCubit(context.read()),
@@ -58,10 +64,9 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
       listeners: [
         BlocListener<DeviceAssessmentCubit, DeviceAssessmentState>(
           listener: (context, state) {
-
             switch (state) {
               case DeviceAssessmentCompleted completed:
-                context.go('/device-value', extra: completed.result);
+                context.go('/device-value/${widget.quoteId}', extra: completed.result);
               case DeviceAssessmentError error:
                 ScaffoldMessenger.of(
                   context,
@@ -137,13 +142,16 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
         body: SafeArea(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 24.w),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(child: CurrentStepPage()),
-                ContinueButton(quoteId: widget.quoteId),
-              ],
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(child: CurrentStepPage()),
+                  ContinueButton(quoteId: widget.quoteId),
+                ],
+              ),
             ),
           ),
         ),

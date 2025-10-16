@@ -9,7 +9,7 @@ class DeviceFunctionality {
   final bool screenOriginal;
   final bool underWarranty;
   final bool hasGstBill;
-  final bool esimSupported;
+  final int numberOfESims;
 
   const DeviceFunctionality({
     required this.canMakeReceiveCalls,
@@ -17,7 +17,7 @@ class DeviceFunctionality {
     required this.screenOriginal,
     required this.underWarranty,
     required this.hasGstBill,
-    required this.esimSupported,
+    required this.numberOfESims,
   });
 
   static const functional = DeviceFunctionality(
@@ -26,7 +26,7 @@ class DeviceFunctionality {
     screenOriginal: true,
     underWarranty: true,
     hasGstBill: true,
-    esimSupported: true,
+    numberOfESims: 0,
   );
 
   DeviceFunctionality.fromJson(Map<String, dynamic> json)
@@ -35,7 +35,7 @@ class DeviceFunctionality {
       screenOriginal = json['screenOriginal'],
       underWarranty = json['underWarranty'],
       hasGstBill = json['hasGstBill'],
-      esimSupported = json['esimSupported'];
+      numberOfESims = json['numberOfESims'];
 
   Map<String, dynamic> toJson() => {
     'canMakeReceiveCalls': canMakeReceiveCalls,
@@ -43,7 +43,7 @@ class DeviceFunctionality {
     'screenOriginal': screenOriginal,
     'underWarranty': underWarranty,
     'hasGstBill': hasGstBill,
-    'esimSupported': esimSupported,
+    'numberOfESims': numberOfESims,
   };
 
   DeviceFunctionality copyWith({
@@ -52,14 +52,14 @@ class DeviceFunctionality {
     bool? screenOriginal,
     bool? underWarranty,
     bool? hasGstBill,
-    bool? esimSupported,
+    int? numberOfESims,
   }) => DeviceFunctionality(
     canMakeReceiveCalls: canMakeReceiveCalls ?? this.canMakeReceiveCalls,
     touchWorking: touchWorking ?? this.touchWorking,
     screenOriginal: screenOriginal ?? this.screenOriginal,
     underWarranty: underWarranty ?? this.underWarranty,
     hasGstBill: hasGstBill ?? this.hasGstBill,
-    esimSupported: esimSupported ?? this.esimSupported,
+    numberOfESims: numberOfESims ?? this.numberOfESims,
   );
 
   @override
@@ -70,7 +70,7 @@ class DeviceFunctionality {
       other.screenOriginal == screenOriginal &&
       other.underWarranty == underWarranty &&
       other.hasGstBill == hasGstBill &&
-      other.esimSupported == esimSupported;
+      other.numberOfESims == numberOfESims;
 
   @override
   int get hashCode => Object.hash(
@@ -79,7 +79,7 @@ class DeviceFunctionality {
     screenOriginal,
     underWarranty,
     hasGstBill,
-    esimSupported,
+    numberOfESims,
   );
 }
 
@@ -312,6 +312,7 @@ enum DentSeverity {
   multiple,
   oneOrTwoMinor,
   none;
+
 }
 
 @immutable

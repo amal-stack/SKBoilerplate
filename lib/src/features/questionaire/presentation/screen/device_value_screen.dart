@@ -9,9 +9,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
 class DeviceValueScreen extends StatefulWidget {
-  const DeviceValueScreen({super.key, required this.result});
+  const DeviceValueScreen({super.key, required this.result, required this.quoteId});
 
   final DeviceAssessmentResult result;
+
+  final String quoteId;
 
   @override
   State<DeviceValueScreen> createState() => _DeviceValueScreenState();
@@ -172,7 +174,7 @@ class _DeviceValueScreenState extends State<DeviceValueScreen> {
                           fontWeight: FontWeight.w700,
                           textColor: AppColors.black,
                           textOverflow: TextOverflow.ellipsis,
-                          text: "Apple iPhone 16 plus",
+                          text: widget.result.device.model.name,
                         ),
                         SizedBox(height: 16.w),
                         Row(
@@ -186,7 +188,7 @@ class _DeviceValueScreenState extends State<DeviceValueScreen> {
                                   color: AppColors.borderBlack,
                                 ),
                                 TextModel(
-                                  " 64GB  |",
+                                  " ${widget.result.device.storage}  |",
                                   size: 12.sp,
                                   fontWeight: FontWeight.w700,
                                   color: AppColors.borderBlack,
@@ -270,7 +272,7 @@ class _DeviceValueScreenState extends State<DeviceValueScreen> {
                     ),
                     GestureDetector(
                       onTap: (){
-                        context.push('/phone-number-verification-screen');
+                        context.push('/phone-number-verification-screen/${widget.quoteId}');
                       },
                       child:  Container(
                           width: 155.w,

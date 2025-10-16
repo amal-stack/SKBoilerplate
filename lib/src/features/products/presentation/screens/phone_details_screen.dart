@@ -157,7 +157,6 @@ class _PhoneDetailsBodyState extends State<_PhoneDetailsBody> {
                 height: 230.h,
                 child: PageView.builder(
                   controller: _controller,
-
                   itemCount: widget.variants.length,
                   itemBuilder: (_, index) {
                     return Padding(
@@ -196,8 +195,9 @@ class _PhoneDetailsBodyState extends State<_PhoneDetailsBody> {
               Wrap(
                 spacing: 12,
                 runSpacing: 12,
-                children: List.generate(widget.variants.length, (index) {
-                  return GestureDetector(
+                children: List.generate(
+                  widget.variants.length,
+                  (index) => GestureDetector(
                     onTap: () {
                       _controller.animateToPage(
                         index,
@@ -234,8 +234,8 @@ class _PhoneDetailsBodyState extends State<_PhoneDetailsBody> {
                         ),
                       ),
                     ),
-                  );
-                }),
+                  ),
+                ),
               ),
               SizedBox(height: 20.h),
               custom.RichText(
@@ -263,7 +263,11 @@ class _PhoneDetailsBodyState extends State<_PhoneDetailsBody> {
                   disableButton: widget.variants.isEmpty,
                   isLoading: false,
                   onPressed: () {
-                    context.push('/imei/${widget.variants[_selectedIndex].id}');
+                    context.push(
+                      '/imei'
+                      '/${widget.variants[_selectedIndex].id}'
+                      '?deviceCategory=${widget.variants[_selectedIndex].deviceCategory.name}',
+                    );
                   },
                   label: AppTexts.quickQuote,
                   fontSize: 12.sp,

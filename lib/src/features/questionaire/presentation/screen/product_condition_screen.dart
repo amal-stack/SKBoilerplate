@@ -23,7 +23,7 @@ class DefectsSelectionPage extends StatelessWidget {
           Expanded(
             child: IssueGrid([
               IssueData(
-                title: QuestionnaireStore.cracksOrScratchOnScreen.text,
+                title: QuestionnaireStore.brokenScratchOnScreen.text,
                 image: "assets/images/question/scratch_1.png",
                 isSelected: state.input.defects.screen,
                 onTap: () {

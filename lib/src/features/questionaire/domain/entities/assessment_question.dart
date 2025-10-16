@@ -1,16 +1,30 @@
 class AssessmentQuestion {
   final String id;
   final String text;
+  final QuestionCategory category;
 
-  const AssessmentQuestion({required this.id, required this.text});
+  const AssessmentQuestion({
+    required this.id,
+    required this.text,
+    this.category = QuestionCategory.shared,
+  });
 
   factory AssessmentQuestion.fromJson(Map<String, dynamic> json) =>
       AssessmentQuestion(
         id: json['id'] as String,
         text: json['question'] as String,
+        category: switch (json['category'] as String) {
+          'android' => QuestionCategory.android,
+          'ios' => QuestionCategory.ios,
+          _ => QuestionCategory.shared,
+        },
       );
 
-  Map<String, dynamic> toJson() => {'id': id, 'question': text};
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'question': text,
+    'category': category.name,
+  };
 
   @override
   bool operator ==(Object other) =>
@@ -18,10 +32,11 @@ class AssessmentQuestion {
       other is AssessmentQuestion &&
           runtimeType == other.runtimeType &&
           id == other.id &&
-          text == other.text;
+          text == other.text &&
+          category == other.category;
 
   @override
-  int get hashCode => Object.hash(id, text);
+  int get hashCode => Object.hash(id, text, category);
 }
 
 class AssessmentQuestionResponse {
@@ -56,3 +71,5 @@ class AssessmentQuestionResponse {
   @override
   int get hashCode => Object.hash(questionId, response);
 }
+
+enum QuestionCategory { android, ios, shared }

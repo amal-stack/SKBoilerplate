@@ -26,17 +26,45 @@ abstract final class DomainToAssessmentResponseMapper {
       questionId: QuestionnaireStore.gstBillWithImei.id,
       response: functionality.hasGstBill,
     ),
-    AssessmentQuestionResponse(
-      questionId: QuestionnaireStore.esimsSupported.id,
-      response: functionality.esimSupported,
-    ),
+    ...switch (functionality.numberOfESims) {
+      2 => [
+        AssessmentQuestionResponse(
+          questionId: QuestionnaireStore.numberOfESims1.id,
+          response: false,
+        ),
+        AssessmentQuestionResponse(
+          questionId: QuestionnaireStore.numberOfESims2.id,
+          response: true,
+        ),
+      ],
+      1 => [
+        AssessmentQuestionResponse(
+          questionId: QuestionnaireStore.numberOfESims1.id,
+          response: true,
+        ),
+        AssessmentQuestionResponse(
+          questionId: QuestionnaireStore.numberOfESims2.id,
+          response: false,
+        ),
+      ],
+      _ => [
+        AssessmentQuestionResponse(
+          questionId: QuestionnaireStore.numberOfESims1.id,
+          response: false,
+        ),
+        AssessmentQuestionResponse(
+          questionId: QuestionnaireStore.numberOfESims2.id,
+          response: false,
+        ),
+      ],
+    },
   ];
 
   static List<AssessmentQuestionResponse> defects(
     DeviceDefectsSelection defects,
   ) => [
     AssessmentQuestionResponse(
-      questionId: QuestionnaireStore.cracksOrScratchOnScreen.id,
+      questionId: QuestionnaireStore.brokenScratchOnScreen.id,
       response: defects.screen,
     ),
     AssessmentQuestionResponse(
@@ -213,10 +241,10 @@ abstract final class DomainToAssessmentResponseMapper {
       questionId: QuestionnaireStore.powerButtonUnresponsive.id,
       response: issues.hasIssue(AdditionalIssue.powerButton),
     ),
-    AssessmentQuestionResponse(
-      questionId: QuestionnaireStore.chargingPortNotWorking.id,
-      response: issues.hasIssue(AdditionalIssue.chargingPort),
-    ),
+    // AssessmentQuestionResponse(
+    //   questionId: QuestionnaireStore.chargingPortNotWorking.id,
+    //   response: issues.hasIssue(AdditionalIssue.chargingPort),
+    // ),
     AssessmentQuestionResponse(
       questionId: QuestionnaireStore.audioReceiverFaulty.id,
       response: issues.hasIssue(AdditionalIssue.audioReceiver),
@@ -254,20 +282,28 @@ abstract final class DomainToAssessmentResponseMapper {
   static List<AssessmentQuestionResponse> accessories(
     Accessories accessories,
   ) => [
+    // AssessmentQuestionResponse(
+    //   questionId: QuestionnaireStore.originalCharger.id,
+    //   response: accessories.originalCharger,
+    // ),
     AssessmentQuestionResponse(
-      questionId: QuestionnaireStore.originalCharger.id,
-      response: accessories.originalCharger,
-    ),
-    AssessmentQuestionResponse(
-      questionId: QuestionnaireStore.originalBox.id,
+      questionId: QuestionnaireStore.hasOriginalBox.id,
       response: accessories.originalBox,
     ),
   ];
 
   static List<AssessmentQuestionResponse> warranty(WarrantyPeriod warranty) => [
     AssessmentQuestionResponse(
-      questionId: QuestionnaireStore.deviceUnderWarrantyDuplicate.id,
-      response: warranty.isInWarranty,
+      questionId: QuestionnaireStore.warranty0To3Months.id,
+      response: warranty == WarrantyPeriod.below3Months,
+    ),
+    AssessmentQuestionResponse(
+      questionId: QuestionnaireStore.warranty3To6Months.id,
+      response: warranty == WarrantyPeriod.from3to6,
+    ),
+    AssessmentQuestionResponse(
+      questionId: QuestionnaireStore.warranty6To11Months.id,
+      response: warranty == WarrantyPeriod.from6to11,
     ),
   ];
 
