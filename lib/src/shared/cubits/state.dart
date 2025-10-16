@@ -41,6 +41,8 @@ final class ViewError<T> extends ViewState<T> {
   final String message;
 }
 
+
+
 mixin DebounceCubitMixin<T> on Cubit<T> {
   Timer? _debounce;
 
@@ -56,7 +58,6 @@ mixin DebounceCubitMixin<T> on Cubit<T> {
     return super.close();
   }
 }
-
 
 mixin RetryCubitMixin<T> on Cubit<ViewState<T>> {
   FutureOr<void> Function()? _onRetry;
@@ -84,5 +85,4 @@ mixin RetryCubitMixin<T> on Cubit<ViewState<T>> {
       onRetry = () => withRetry(action);
     }
   }
-      
 }
