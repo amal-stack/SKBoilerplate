@@ -8,6 +8,8 @@ import 'package:boilerplate/src/features/brands/data/data_sources/brands_data_so
 import 'package:boilerplate/src/features/brands/data/data_sources/remote/remote_brands_data_source.dart';
 import 'package:boilerplate/src/features/dashboard/data/data_sources/dashboard_data_source.dart';
 import 'package:boilerplate/src/features/dashboard/data/data_sources/remote/remote_dashboard_data_source.dart';
+import 'package:boilerplate/src/features/kyc/domain/data/data_sources/kyc_data_source.dart';
+import 'package:boilerplate/src/features/kyc/domain/data/data_sources/remote/remote_kyc_data_source.dart';
 
 import 'package:boilerplate/src/features/products/data/data_sources/products_data_source.dart';
 import 'package:boilerplate/src/features/products/data/data_sources/remote/remote_products_data_source.dart';
@@ -29,6 +31,7 @@ final class Dependencies {
     QuestionnaireDataSource? questionnaireDataSource,
     GradesDataSource? gradesDataSource,
     QuotesDataSource? quotesDataSource,
+    KycDataSource? kycDataSource,
   }) : authSource = authClient ?? RemoteAuthSource(apiClient),
        brandsDataSource = brandsDataSource ?? RemoteBrandsDataSource(apiClient),
        productsDataSource =
@@ -38,11 +41,16 @@ final class Dependencies {
        questionnaireDataSource =
            questionnaireDataSource ?? const LocalQuestionnaireDataSource(),
        gradesDataSource = gradesDataSource ?? RemoteGradesDataSource(apiClient),
-       quotesDataSource = quotesDataSource ?? RemoteQuotesDataSource(apiClient);
+       quotesDataSource = quotesDataSource ?? RemoteQuotesDataSource(apiClient),
+        kycDataSource = kycDataSource ?? RemoteKycDataSource(apiClient);
 
   factory Dependencies.defaults() => Dependencies(
     apiClient: DioApiClient.fromOptions(
-      BaseOptions(baseUrl: ApiOptions.baseUrl),
+      BaseOptions(baseUrl: ApiOptions.baseUrl,
+      connectTimeout: ApiOptions.connectTimeout,
+      sendTimeout: ApiOptions.sendTimeout,
+      receiveTimeout: ApiOptions.receiveTimeout
+      ),
       InMemoryTokenStore(),
     ),
   );
@@ -61,4 +69,6 @@ final class Dependencies {
   final QuotesDataSource quotesDataSource;
 
   final GradesDataSource gradesDataSource;
+
+  final KycDataSource kycDataSource;
 }

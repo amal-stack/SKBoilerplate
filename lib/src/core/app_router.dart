@@ -1,5 +1,6 @@
 import 'package:boilerplate/src/features/auth/presentation/screens/verify_otp_screen.dart';
 import 'package:boilerplate/src/features/dashboard/presentation/screens/faq_screen.dart';
+import 'package:boilerplate/src/features/products/domain/product_variant.dart';
 import 'package:boilerplate/src/features/products/presentation/screens/phone_details_screen.dart';
 import 'package:boilerplate/src/features/questionaire/domain/entities/device_grade.dart';
 import 'package:boilerplate/src/features/questionaire/presentation/screen/questionnaire_screen.dart';
@@ -14,12 +15,12 @@ import '../features/auth/presentation/screens/success_screen.dart';
 import '../features/brands/presentation/screens/brands_screen.dart';
 import '../features/dashboard/presentation/screens/dashboard_screen.dart';
 
-import '../features/kyc/presentation/screen/kyc_details_screen.dart';
-import '../features/kyc/presentation/screen/order_success_screen.dart';
-import '../features/kyc/presentation/screen/phone_number_verification.dart';
-import '../features/kyc/presentation/screen/phone_verification_success_screen.dart';
-import '../features/kyc/presentation/screen/upload_document_screen.dart';
-import '../features/kyc/presentation/screen/upload_invoice_screen.dart';
+import '../features/kyc/presentation/screens/kyc_details_screen.dart';
+import '../features/kyc/presentation/screens/order_success_screen.dart';
+import '../features/kyc/presentation/screens/phone_number_verification.dart';
+import '../features/kyc/presentation/screens/phone_verification_success_screen.dart';
+import '../features/kyc/presentation/screens/upload_document_screen.dart';
+import '../features/kyc/presentation/screens/upload_invoice_screen.dart';
 import '../features/orders/presentations/screen/completed_order_details_screen.dart';
 import '../features/orders/presentations/screen/pending_order_details_screen.dart';
 import '../features/products/presentation/screens/explore_products_screen.dart';
@@ -99,67 +100,36 @@ final GoRouter appRouter = GoRouter(
       path: '/imei/:deviceId',
       builder: (context, state) => ImeiScreen(
         deviceId: AppRouter.pathParameter<String>(state, 'deviceId'),
+        deviceCategory: DeviceCategory.fromName(
+          AppRouter.queryParameter<String>(state, 'deviceCategory'),
+        ),
       ),
     ),
     GoRoute(
       path: '/questionnaire/:quoteId',
       builder: (context, state) => QuestionnaireScreen(
         quoteId: AppRouter.pathParameter<String>(state, 'quoteId'),
+        deviceCategory: DeviceCategory.fromName(
+          AppRouter.queryParameter<String>(state, 'deviceCategory'),
+        ),
       ),
     ),
-    // GoRoute(
-    //   path: '/product-question-answer',
-    //   builder: (context, state) => DeviceFunctionalityScreen(),
-    // ),
-    // GoRoute(
-    //   path: '/product-condition-screen',
-    //   builder: (context, state) => ProductConditionScreen(),
-    // ),
-    // GoRoute(
-    //   path: '/scratch-selection-screen',
-    //   builder: (context, state) => ScratchSelectionPage(),
-    // ),
-    // GoRoute(
-    //   path: '/defects-selection-screen',
-    //   builder: (context, state) => DisplayDefectsPage(),
-    // ),
-    // GoRoute(
-    //   path: '/dents-selection-screen',
-    //   builder: (context, state) => BodyDefectsPage(),
-    // ),
-    // GoRoute(
-    //   path: '/missing-panel-selection-screen',
-    //   builder: (context, state) => PanelDefectsPage(),
-    // ),
-    // GoRoute(
-    //   path: '/additional-issues-screen',
-    //   builder: (context, state) => AdditionalIssuesPage(),
-    // ),
-    // GoRoute(
-    //   path: '/available-accessories-screen',
-    //   builder: (context, state) => AvailableAccessoriesPage(),
-    // ),
-    // GoRoute(
-    //   path: '/warranty-selection-screen',
-    //   builder: (context, state) => WarrantySelectionPage(),
-    // ),
-    // GoRoute(
-    //   path: '/upload-device-image-screen',
-    //   builder: (context, state) => UploadDeviceImagePage(),
-    // ),
     GoRoute(
       path: '/order-history-screen',
       builder: (context, state) => OrderHistoryScreen(),
     ),
     GoRoute(
-      path: '/device-value',
+      path: '/device-value/:quoteId',
       builder: (context, state) => DeviceValueScreen(
         result: AppRouter.extra<DeviceAssessmentResult>(state),
+        quoteId: AppRouter.pathParameter<String>(state, 'quoteId'),
       ),
     ),
     GoRoute(
-      path: '/phone-number-verification-screen',
-      builder: (context, state) => PhoneNumberVerification(),
+      path: '/phone-number-verification-screen/:quoteId',
+      builder: (context, state) => PhoneNumberVerification(
+        quoteId: AppRouter.pathParameter<String>(state, 'quoteId'),
+      ),
     ),
     GoRoute(
       path: '/kyc-details-screen',
