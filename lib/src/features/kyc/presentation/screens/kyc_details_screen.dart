@@ -273,7 +273,6 @@ class _KycDetailsScreenState extends State<KycDetailsScreen> {
                               ],
                             ),
                           ),
-
                         ],
                       ),
                       SizedBox(height: 8.h),
