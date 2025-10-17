@@ -34,6 +34,11 @@ class ApiFileEntry {
   final String key;
 
   final List<ApiFile> files;
+
+  Map<String, dynamic> toJson() => {
+    'key': key,
+    'files': files.map((f) => f.toJson()).toList(),
+  };
 }
 
 class ApiFile {
@@ -42,6 +47,11 @@ class ApiFile {
   final String path;
 
   final String filename;
+
+  Map<String, dynamic> toJson() => {
+    'path': path,
+    'filename': filename,
+  };
 }
 
 class ApiFormData {
@@ -50,4 +60,9 @@ class ApiFormData {
   final Map<String, dynamic> fields;
 
   final List<ApiFileEntry> files;
+
+  Map<String, dynamic> toJson() => {
+    'fields': fields,
+    'files': files.map((f) => f.toJson()).toList(),
+  };
 }

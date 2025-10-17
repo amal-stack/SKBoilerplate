@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:boilerplate/src/core/network/models/api_exception.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 
 import 'api_client.dart';
 import 'models/api_request.dart';
@@ -24,10 +27,20 @@ class DioApiClient implements ApiClient {
     final token = await tokenStore.token();
     final options = _createOptions(method, token, request.headers);
 
+    debugPrint('Making ${options.method} request to ${request.path}');
+
+    debugPrint('Request data: ${switch (request.data) {
+      ApiFormData formData => JsonEncoder.withIndent('  ').convert(formData.toJson()),
+      Map<String, dynamic> map => JsonEncoder.withIndent('  ').convert(map),
+      _ => request.data,
+    }}');
+
     final data = switch (request.data) {
       ApiFormData formData => await _createFormData(formData),
       _ => request.data,
     };
+
+
 
     try {
       final response = await _dio.request<dynamic>(
@@ -36,9 +49,10 @@ class DioApiClient implements ApiClient {
         queryParameters: request.queryParameters,
         options: options,
       );
-
+      debugPrint('Response data: ${response.data}');
       return ApiResponse(data: response.data, statusCode: response.statusCode);
     } on DioException catch (e) {
+      debugPrint('Error. Response data: ${e.response?.data}');
       final response = ApiResponse.error(
         failureType: _failureTypeFromDioException(e),
         error: e,
