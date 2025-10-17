@@ -1,0 +1,249 @@
+@baseUrl = https://api.sk.andaihub.ai/api
+
+@testUserId = 8ac51d9e-bcc0-4940-a400-2979bbef9d87
+@testUserName = Test User
+@testUserEmail = x@example.com
+
+
+
+# Login
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+    "email": "{{testUserEmail}}",
+    "password": "Abc123"
+}
+
+###
+@token = {{login.response.body.data.token}}
+@tokenHeader = Bearer {{token}}
+
+###
+
+POST {{baseUrl}}/auth/signup
+Content-Type: application/json
+
+{
+    "name": "{{testUserName}}",
+    "email": "{{testUserEmail}}",
+    "password": "Abc123"
+}
+
+###
+# Test
+GET {{baseUrl}}
+
+
+###
+
+GET {{baseUrl}}/health
+
+
+###
+
+# User
+
+GET {{baseUrl}}/auth/profile
+Authorization: {{tokenHeader}}
+
+###
+
+POST {{baseUrl}}/auth/forgot-password
+Content-Type: application/json
+
+{
+"email": "{{testUserEmail}}"
+}
+
+###
+
+POST {{baseUrl}}/auth/reset-password
+Content-Type: application/json
+
+{
+    "email": "{{testUserEmail}}",
+    "otp": "123456",
+    "password": "Test@123"
+}
+
+
+###
+
+
+# Brands
+GET {{baseUrl}}/devices/brands
+Authorization: {{tokenHeader}}
+
+###
+# Apple
+@brandId1 = 323066e9-37e8-4b36-b93e-7e5f3cfdd9ad  
+# Google
+@brandId2 = d40bc27e-f4a0-4fd5-9c2e-044b834fddd3
+@brandId = {{brandId2}}
+
+# Models by Brand ID
+# @name modelsByBrand
+GET {{baseUrl}}/devices/brands/{{brandId}}/models
+Authorization: Bearer {{token}}
+
+###
+
+@modelId1 = {{modelsByBrand.response.body.data.models[0].id}}
+@modelId2 = {{modelsByBrand.response.body.data.models[1].id}}
+
+@modelId = {{modelId2}}
+
+# Variants by Model ID
+# @name variantsByModel
+GET {{baseUrl}}/devices/models/{{modelId}}/variants
+Authorization: {{tokenHeader}}
+
+
+###
+
+@variantId1 = {{variantsByModel.response.body.data.variantOptions[0].id}}
+@variantId2 = {{variantsByModel.response.body.data.variantOptions[1].id}}
+
+@variantId = {{variantId1}}
+
+# Prices by Variant ID
+GET {{baseUrl}}/devices/{{variantId}}/pricing
+Authorization: {{tokenHeader}}
+
+###
+
+# Dashboard
+GET {{baseUrl}}/dashboard
+Authorization: {{tokenHeader}}
+
+###
+
+# Top selling brands
+GET {{baseUrl}}/dashboard/top-selling-brands
+Authorization: {{tokenHeader}}
+
+###
+
+# Load more FAQs
+GET {{baseUrl}}/dashboard/load-more-faq
+Authorization: {{tokenHeader}}
+
+###
+# Questionaire
+@questionnaireBaseUrl = {{baseUrl}}/questionnaires
+
+
+GET {{questionnaireBaseUrl}}/get-questions?deviceCategory=android
+Authorization: {{tokenHeader}}
+
+###
+POST {{questionnaireBaseUrl}}/{{quoteId}}/get-grades
+Authorization: {{tokenHeader}}
+Content-Type: application/json
+
+{
+    "responses": [
+        {
+            "questionId": "Q1",
+            "response": true
+        }
+     
+    ]
+}
+
+###
+
+POST {{questionnaireBaseUrl}}/upload
+Authorization: {{tokenHeader}}
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="vendorId"
+
+vendor_123
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="file"; filename="sub_background.png"
+
+< ../assets/images/sub_background.png
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+
+###
+
+# Quotes
+@quotesBaseUrl = {{baseUrl}}/quotes
+
+POST {{quotesBaseUrl}}/create
+Authorization: {{tokenHeader}}
+Content-Type: application/json
+
+{
+
+}
+
+###
+
+POST {{quotesBaseUrl}}/create
+Authorization: {{tokenHeader}}
+Content-Type: application/json
+
+{
+   "imei": "12345678907",
+   "deviceId": "{{variantId}}"
+}
+
+###
+@quoteId = 468e6d85-867c-4858-88af-b0fdae442951
+
+GET {{quotesBaseUrl}}/{{quoteId}}
+Authorization: {{tokenHeader}}
+
+###
+
+GET {{quotesBaseUrl}}/user/{{testUserId}}
+Authorization: {{tokenHeader}}
+
+###
+POST {{quotesBaseUrl}}/{{quoteId}}/upload-invoice
+Authorization: {{tokenHeader}}
+Content-Type: multipart/form-data; boundary=myboundary
+
+--myboundary
+Content-Disposition: form-data; name="quoteId"
+
+{{quoteId}}
+--myboundary
+Content-Disposition: form-data; name="invoice"; filename="invoice.png"
+
+< Z:\projects\src\flutter\SwitchKart\fourth\Boilerplate\assets\images\warning.png
+--myboundary--
+
+###
+# Orders
+@ordersBaseUrl = {{baseUrl}}/orders
+@kycBaseUrl = {{ordersBaseUrl}}/kyc
+
+POST {{kycBaseUrl}}/send-otp
+Authorization: {{tokenHeader}}
+Content-Type: application/json
+
+{
+    "quoteId": "807adf24-5d5a-4a15-8a14-8e6d96724528",
+    "phoneNumber": "+31651727021"
+}
+###
+
+POST {{kycBaseUrl}}/verify-otp
+Authorization: {{tokenHeader}}
+Content-Type: application/json
+
+{
+    "quoteId": "807adf24-5d5a-4a15-8a14-8e6d96724528",
+    "otp": "796197"
+}
+###
+
+GET {{kycBaseUrl}}/807adf24-5d5a-4a15-8a14-8e6d96724528/status
+Authorization: {{tokenHeader}}

@@ -11,6 +11,8 @@ import 'package:boilerplate/src/features/brands/domain/repositories/brands_repos
 
 import 'package:boilerplate/src/features/dashboard/data/repositories/remote/remote_dashboard_repository.dart';
 import 'package:boilerplate/src/features/dashboard/domain/repositories/dashboard_repository.dart';
+import 'package:boilerplate/src/features/kyc/domain/data/data_sources/repositories/remote/remote_kyc_repository.dart';
+import 'package:boilerplate/src/features/kyc/domain/repositories/kyc_repository.dart';
 
 import 'package:boilerplate/src/features/products/data/repositories/remote/remote_products_repository.dart';
 import 'package:boilerplate/src/features/products/domain/repositories/products_repository.dart';
@@ -28,11 +30,11 @@ import 'src/core/app_router.dart';
 import 'src/core/network/connectivity_service.dart';
 import 'src/shared/themes/app_theme.dart';
 
+final dependencies = Dependencies.defaults();
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await ConnectivityService.initialize();
-
-  final dependencies = Dependencies.defaults();
 
   runApp(SwitchKartApp(dependencies: dependencies));
 }
@@ -74,6 +76,9 @@ class SwitchKartApp extends StatelessWidget {
       RepositoryProvider<QuestionnaireRepository>(
         create: (context) =>
             LocalQuestionnaireRepository(dependencies.questionnaireDataSource),
+      ),
+      RepositoryProvider<KycRepository>(
+        create: (context) => RemoteKycRepository(dependencies.kycDataSource),
       ),
     ],
     child: BlocProvider(
