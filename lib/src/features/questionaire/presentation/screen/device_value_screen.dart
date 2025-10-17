@@ -9,7 +9,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
 class DeviceValueScreen extends StatefulWidget {
-  const DeviceValueScreen({super.key, required this.result, required this.quoteId});
+  const DeviceValueScreen({
+    super.key,
+    required this.result,
+    required this.quoteId,
+  });
 
   final DeviceAssessmentResult result;
 
@@ -32,69 +36,66 @@ class _DeviceValueScreenState extends State<DeviceValueScreen> {
 
   int? _expandedIndex;
 
-  Future<void> showTermsDialog(BuildContext context) async {
+  static Future<void> showTermsDialog(BuildContext context) async {
     showDialog(
       context: context,
       barrierDismissible: true, // close when tapping outside
-      builder: (context) {
-        return Dialog(
-          backgroundColor: AppColors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12.r),
-          ),
-          child: Padding(
-            padding: EdgeInsets.all(16.w),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    RegularText(
-                      textAlign: TextAlign.right,
-                      textSize: 16.sp,
-                      maxLines: 3,
-                      fontWeight: FontWeight.w700,
-                      textColor: AppColors.black,
-                      textOverflow: TextOverflow.ellipsis,
-                      text: "Terms & Conditions",
-                    ),
-
-                    GestureDetector(
-                      onTap: () => Navigator.pop(context),
-                      child: Icon(Icons.close, size: 20.sp),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 12.h),
-                Flexible(
-                  child: SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: List.generate(5, (index) {
-                        return Padding(
-                          padding: EdgeInsets.only(bottom: 8.h),
-                          child: RegularText(
-                            textAlign: TextAlign.left,
-                            textSize: 13.sp,
-                            maxLines: 3,
-                            fontWeight: FontWeight.w400,
-                            textColor: AppColors.borderBlack,
-                            textOverflow: TextOverflow.ellipsis,
-                            text:
-                                "${index + 1}. How does this mobile exchange process work. How does this mobile exchange process work.",
-                          ),
-                        );
-                      }),
-                    ),
+      builder: (context) => Dialog(
+        backgroundColor: AppColors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12.r),
+        ),
+        child: Padding(
+          padding: EdgeInsets.all(16.w),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  RegularText(
+                    textAlign: TextAlign.right,
+                    textSize: 16.sp,
+                    maxLines: 3,
+                    fontWeight: FontWeight.w700,
+                    textColor: AppColors.black,
+                    textOverflow: TextOverflow.ellipsis,
+                    text: "Terms & Conditions",
+                  ),
+                  GestureDetector(
+                    onTap: () => Navigator.pop(context),
+                    child: Icon(Icons.close, size: 20.sp),
+                  ),
+                ],
+              ),
+              SizedBox(height: 12.h),
+              Flexible(
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: List.generate(5, (index) {
+                      return Padding(
+                        padding: EdgeInsets.only(bottom: 8.h),
+                        child: RegularText(
+                          textAlign: TextAlign.left,
+                          textSize: 13.sp,
+                          maxLines: 3,
+                          fontWeight: FontWeight.w400,
+                          textColor: AppColors.borderBlack,
+                          textOverflow: TextOverflow.ellipsis,
+                          text:
+                              "${index + 1}. How does this mobile exchange process work. How does this mobile exchange process work.",
+                        ),
+                      );
+                    }),
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 
@@ -235,7 +236,7 @@ class _DeviceValueScreenState extends State<DeviceValueScreen> {
                               fontWeight: FontWeight.w700,
                               textColor: AppColors.darkGreenColor,
                               textOverflow: TextOverflow.ellipsis,
-                              text: "₹ ${widget.result.price}"
+                              text: "₹ ${widget.result.price}",
                             ),
                           ],
                         ),
@@ -244,59 +245,69 @@ class _DeviceValueScreenState extends State<DeviceValueScreen> {
                   ],
                 ),
                 SizedBox(height: 16.h),
-
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Container(
-                      width: 155.w,
-                      height: 48.h,
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          width: 1.w,
-                          color: AppColors.greyBorderColor,
+                    GestureDetector(
+                      onTap: () {
+                        context.push(
+                          '/questionnaire'
+                          '/${widget.quoteId}'
+                          '?deviceCategory=${widget.result.device.category}',
+                        );
+                      },
+                      child: Container(
+                        width: 155.w,
+                        height: 48.h,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            width: 1.w,
+                            color: AppColors.greyBorderColor,
+                          ),
+                          borderRadius: BorderRadius.circular(8.r),
                         ),
-                        borderRadius: BorderRadius.circular(8.r),
+                        child: Center(
+                          child: RegularText(
+                            textAlign: TextAlign.start,
+                            textSize: 14.sp,
+                            maxLines: 1,
+                            fontWeight: FontWeight.w700,
+                            textColor: AppColors.borderBlack,
+                            textOverflow: TextOverflow.ellipsis,
+                            text: "Calculate again",
+                          ),
+                        ),
                       ),
-                      child:Center(
-                        child: RegularText(
-                          textAlign: TextAlign.start,
-                          textSize: 14.sp,
-                          maxLines: 1,
-                          fontWeight: FontWeight.w700,
-                          textColor: AppColors.borderBlack,
-                          textOverflow: TextOverflow.ellipsis,
-                          text: "Calculate again",
-                        ),
-                      )
                     ),
                     GestureDetector(
-                      onTap: (){
-                        context.push('/phone-number-verification-screen/${widget.quoteId}');
+                      onTap: () {
+                        context.push(
+                          '/phone-number-verification-screen/${widget.quoteId}',
+                        );
                       },
-                      child:  Container(
-                          width: 155.w,
-                          height: 48.h,
-                          decoration: BoxDecoration(
+                      child: Container(
+                        width: 155.w,
+                        height: 48.h,
+                        decoration: BoxDecoration(
+                          color: AppColors.baseColor,
+                          border: Border.all(
+                            width: 1.w,
                             color: AppColors.baseColor,
-                            border: Border.all(
-                              width: 1.w,
-                              color: AppColors.baseColor,
-                            ),
-                            borderRadius: BorderRadius.circular(8.r),
                           ),
-                          child:Center(
-                            child: RegularText(
-                              textAlign: TextAlign.start,
-                              textSize: 14.sp,
-                              maxLines: 1,
-                              fontWeight: FontWeight.w700,
-                              textColor: AppColors.white,
-                              textOverflow: TextOverflow.ellipsis,
-                              text: "Continue to Sell",
-                            ),
-                          )
-                      )
+                          borderRadius: BorderRadius.circular(8.r),
+                        ),
+                        child: Center(
+                          child: RegularText(
+                            textAlign: TextAlign.start,
+                            textSize: 14.sp,
+                            maxLines: 1,
+                            fontWeight: FontWeight.w700,
+                            textColor: AppColors.white,
+                            textOverflow: TextOverflow.ellipsis,
+                            text: "Continue to Sell",
+                          ),
+                        ),
+                      ),
                     ),
                   ],
                 ),

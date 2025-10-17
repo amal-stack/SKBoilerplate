@@ -12,7 +12,7 @@ class DeviceAssessmentInput {
   final DisplayDefects? displayDefects;
   final BodyDefects? bodyDefects;
   final PanelDefects? panelDefects;
-  final AdditionalIssues? additionalIssues;
+  final AdditionalIssues additionalIssues;
   final Accessories accessories;
   final WarrantyPeriod? warrantyPeriod;
   final DeviceImages? images;
@@ -26,7 +26,7 @@ class DeviceAssessmentInput {
     this.displayDefects,
     this.bodyDefects,
     this.panelDefects,
-    this.additionalIssues,
+    this.additionalIssues = AdditionalIssues.none,
     this.accessories = Accessories.none,
     this.warrantyPeriod,
     this.images,
