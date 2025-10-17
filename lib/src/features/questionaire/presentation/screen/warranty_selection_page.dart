@@ -34,6 +34,9 @@ class WarrantySelectionPage extends StatelessWidget {
             DeviceImageCard(
               image: "assets/images/invoice.png",
               title: "Invoice",
+              selectedImage: context.select<DeviceInvoiceUploadCubit, String?>(
+                (state) => state.state.invoice?.path,
+              ),
               onSelected: (image) {
                 context.read<DeviceInvoiceUploadCubit>().invoiceChanged(
                   DeviceInvoice(path: image),
