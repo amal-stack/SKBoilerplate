@@ -21,4 +21,9 @@ abstract interface class ProductsRepository {
   Future<List<ProductVariant>> variants({
     required String modelId,
   });
+
+  Future<List<DevicePricing>> pricing({
+    required String variantId,
+  });
+
 }

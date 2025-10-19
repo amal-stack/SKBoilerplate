@@ -1,8 +1,10 @@
 import 'package:boilerplate/src/core/config/api_options.dart';
+import 'package:boilerplate/src/core/models/data_response.dart';
 import 'package:boilerplate/src/core/network/api_client.dart';
 import 'package:boilerplate/src/core/network/models/api_request.dart';
 import 'package:boilerplate/src/features/products/data/data_sources/products_data_source.dart';
 import 'package:boilerplate/src/features/products/data/models/response.dart';
+import 'package:boilerplate/src/features/products/domain/product_variant.dart';
 
 String _productsUrl(String brandId) =>
     '${ApiOptions.baseUrl}/devices/brands/$brandId/models';
@@ -37,15 +39,27 @@ class RemoteProductsDataSource implements ProductsDataSource {
   }
 
   @override
-  Future<ProductVariantsResponse> variants({
-    required String modelId
+  Future<ProductVariantsResponse> variants({required String modelId}) async {
+    final response = await _client.get(ApiRequest(path: _variantsUrl(modelId)));
+
+    return ProductVariantsResponse.fromJson(
+      response.data as Map<String, dynamic>,
+    );
+  }
+
+  @override
+  Future<ListDataResponse<DevicePricing>> pricing({
+    required String variantId,
   }) async {
     final response = await _client.get(
-      ApiRequest(
-        path: _variantsUrl(modelId),
-      ),
+      ApiRequest(path: '/devices/$variantId/pricing'),
     );
 
-    return ProductVariantsResponse.fromJson(response.data as Map<String, dynamic>);
+    return ListDataResponse.fromJsonWithConverter(
+      response.dataAsMap(),
+      itemFromJson: (item) => DevicePricing.fromJson(item),
+      itemToJson: (data) => data.toJson(),
+      itemsKey: 'devicePricing',
+    );
   }
 }

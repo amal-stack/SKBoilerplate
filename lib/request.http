@@ -149,7 +149,6 @@ Content-Type: application/json
             "questionId": "Q1",
             "response": true
         }
-     
     ]
 }
 
@@ -230,7 +229,7 @@ Authorization: {{tokenHeader}}
 Content-Type: application/json
 
 {
-    "quoteId": "807adf24-5d5a-4a15-8a14-8e6d96724528",
+    "quoteId": "d342e4be-0415-4d32-a9dd-d1392ceaaa8d",
     "phoneNumber": "+31651727021"
 }
 ###
@@ -240,10 +239,52 @@ Authorization: {{tokenHeader}}
 Content-Type: application/json
 
 {
-    "quoteId": "807adf24-5d5a-4a15-8a14-8e6d96724528",
-    "otp": "796197"
+    "quoteId": "d342e4be-0415-4d32-a9dd-d1392ceaaa8d",
+    "otp": "123456"
+}
+###
+
+PUT {{kycBaseUrl}}/af1ace2c-30a2-49be-a082-eb7d53b6b911/details
+Authorization: {{tokenHeader}}
+
+{
+  "firstName": "John1",
+  "lastName": "Doe",
+  "addressLine1": "123 Main Street",
+  "addressLine2": "Apt 4B",
+  "addressLine3": "Near Central Park",
+  "city": "New York",
+  "pincode": "10001",
+  "state": "NY"
 }
 ###
 
 GET {{kycBaseUrl}}/807adf24-5d5a-4a15-8a14-8e6d96724528/status
 Authorization: {{tokenHeader}}
+###
+
+POST {{baseUrl}}/orders/create
+Authorization: {{tokenHeader}}
+Content-Type: application/json
+
+{
+    "quoteId": "d342e4be-0415-4d32-a9dd-d1392ceaaa8d"
+}
+
+
+###
+GET {{ordersBaseUrl}}/history
+Authorization: {{tokenHeader}}
+
+###
+GET {{ordersBaseUrl}}/b03dc290-ebac-4e16-9f97-7896b8ff23e8
+Authorization: {{tokenHeader}}
+
+###
+PUT {{ordersBaseUrl}}/b03dc290-ebac-4e16-9f97-7896b8ff23e8/status
+Authorization: {{tokenHeader}}
+Content-Type: application/json
+
+{
+    "status": "COMPLETED"
+}

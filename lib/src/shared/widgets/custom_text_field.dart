@@ -17,12 +17,13 @@ class InputTextField extends StatefulWidget {
     this.initialValue,
     this.onChanged,
     this.onTap,
+    this.focusNode,
     this.onSubmitted,
     this.controller,
     this.mixLines,
     this.hintMessage,
 
-    this.enabledTextField,
+    this.enabled,
     this.labelSize = 12,
     this.inputFormatters,
 
@@ -67,8 +68,9 @@ class InputTextField extends StatefulWidget {
   final TextEditingController? controller;
 
   final List<TextInputFormatter>? inputFormatters;
+  final FocusNode? focusNode;
   final String? hintMessage;
-  final bool? enabledTextField;
+  final bool? enabled;
 
   final double labelSize;
   final int? maxLength;
@@ -104,11 +106,12 @@ class _InputTextFieldState extends State<InputTextField> {
     return ClipRRect(
       borderRadius: BorderRadius.circular(8.w),
       child: TextFormField(
+        focusNode: widget.focusNode,
         inputFormatters: widget.inputFormatters,
         initialValue: widget.initialValue,
         onChanged: widget.onChanged,
         controller: widget.controller,
-        enabled: widget.enabledTextField ?? true,
+        enabled: widget.enabled ?? true,
 
         onTap: widget.onTap ?? () {},
         obscuringCharacter: '●',

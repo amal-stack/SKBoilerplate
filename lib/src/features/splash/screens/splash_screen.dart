@@ -16,30 +16,45 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  Timer? _timer;
+  StreamSubscription<AuthOperationState<Authentication>>? _authSubscription;
+
+  Stream<AuthOperationState<Authentication>> _delayedStream(
+    Duration delay,
+  ) async* {
+    await Future<void>.delayed(delay);
+    if (!mounted) {
+      return;
+    }
+    final cubit = context.read<LoginCubit>();
+    yield cubit.state;
+    yield* cubit.stream;
+  }
 
   @override
   void initState() {
     super.initState();
-    // Navigate after 3 seconds
-    _timer = Timer(const Duration(seconds: 3), () {
-      if (mounted) {
-        final auth = context.read<LoginCubit>().state;
-
-        if (auth case AuthOperationSuccess(:final data)) {
-          if (data is Authenticated) {
-            context.go('/dashboard');
-          }
-        }
-
-        context.go('/introslider-screen');
+    _authSubscription = _delayedStream(const Duration(seconds: 3)).listen((
+      state,
+    ) {
+      if (!mounted) {
+        debugPrint('SplashScreen disposed');
+        return;
       }
+      if (state case AuthOperationSuccess(:final data)) {
+        if (data is Authenticated) {
+          debugPrint('Navigating to /dashboard');
+          context.go('/dashboard');
+          return;
+        }
+      }
+      debugPrint('Navigating to /introslider-screen');
+      context.go('/introslider-screen');
     });
   }
 
   @override
   void dispose() {
-    _timer?.cancel();
+    _authSubscription?.cancel();
     super.dispose();
   }
 

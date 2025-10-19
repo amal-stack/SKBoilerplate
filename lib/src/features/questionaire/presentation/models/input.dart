@@ -14,7 +14,7 @@ class DeviceAssessmentInput {
   final PanelDefects? panelDefects;
   final AdditionalIssues additionalIssues;
   final Accessories accessories;
-  final WarrantyPeriod? warrantyPeriod;
+  final WarrantyPeriod warrantyPeriod;
   final DeviceImages? images;
 
   const DeviceAssessmentInput({
@@ -28,7 +28,7 @@ class DeviceAssessmentInput {
     this.panelDefects,
     this.additionalIssues = AdditionalIssues.none,
     this.accessories = Accessories.none,
-    this.warrantyPeriod,
+    this.warrantyPeriod = WarrantyPeriod.outOfWarranty,
     this.images,
   });
 

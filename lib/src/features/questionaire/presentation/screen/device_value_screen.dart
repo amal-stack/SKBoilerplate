@@ -163,84 +163,86 @@ class _DeviceValueScreenState extends State<DeviceValueScreen> {
                       height: 138.h,
                     ),
                     SizedBox(width: 14.w),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(height: 10.h),
-                        RegularText(
-                          textAlign: TextAlign.start,
-                          textSize: 16.sp,
-                          maxLines: 1,
-                          fontWeight: FontWeight.w700,
-                          textColor: AppColors.black,
-                          textOverflow: TextOverflow.ellipsis,
-                          text: widget.result.device.model.name,
-                        ),
-                        SizedBox(height: 16.w),
-                        Row(
-                          children: [
-                            custom.RichText(
-                              texts: [
-                                TextModel(
-                                  "Variant : ",
-                                  size: 12.sp,
-                                  fontWeight: FontWeight.w500,
-                                  color: AppColors.borderBlack,
-                                ),
-                                TextModel(
-                                  " ${widget.result.device.storage}  |",
-                                  size: 12.sp,
-                                  fontWeight: FontWeight.w700,
-                                  color: AppColors.borderBlack,
-                                ),
-                              ],
-                              maxLines: 3,
-                            ),
-                            custom.RichText(
-                              texts: [
-                                TextModel(
-                                  " Grade : ",
-                                  size: 12.sp,
-                                  fontWeight: FontWeight.w500,
-                                  color: AppColors.borderBlack,
-                                ),
-                                TextModel(
-                                  widget.result.grade.value,
-                                  size: 12.sp,
-                                  fontWeight: FontWeight.w700,
-                                  color: AppColors.darkGreenColor,
-                                ),
-                              ],
-                              maxLines: 3,
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 16.w),
-                        Column(
-                          children: [
-                            RegularText(
-                              textAlign: TextAlign.start,
-                              textSize: 12.sp,
-                              maxLines: 1,
-                              fontWeight: FontWeight.w600,
-                              textColor: AppColors.black,
-                              textOverflow: TextOverflow.ellipsis,
-                              text: "Final selling price",
-                            ),
-                            SizedBox(height: 8.w),
-                            RegularText(
-                              textAlign: TextAlign.start,
-                              textSize: 24.sp,
-                              maxLines: 1,
-                              fontWeight: FontWeight.w700,
-                              textColor: AppColors.darkGreenColor,
-                              textOverflow: TextOverflow.ellipsis,
-                              text: "₹ ${widget.result.price}",
-                            ),
-                          ],
-                        ),
-                      ],
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(height: 10.h),
+                          RegularText(
+                            textAlign: TextAlign.start,
+                            textSize: 16.sp,
+                            maxLines: 1,
+                            fontWeight: FontWeight.w700,
+                            textColor: AppColors.black,
+                            textOverflow: TextOverflow.ellipsis,
+                            text: widget.result.device.model.name,
+                          ),
+                          SizedBox(height: 16.w),
+                          Row(
+                            children: [
+                              custom.RichText(
+                                texts: [
+                                  TextModel(
+                                    "Variant : ",
+                                    size: 12.sp,
+                                    fontWeight: FontWeight.w500,
+                                    color: AppColors.borderBlack,
+                                  ),
+                                  TextModel(
+                                    " ${widget.result.device.storage}  |",
+                                    size: 12.sp,
+                                    fontWeight: FontWeight.w700,
+                                    color: AppColors.borderBlack,
+                                  ),
+                                ],
+                                maxLines: 3,
+                              ),
+                              custom.RichText(
+                                texts: [
+                                  TextModel(
+                                    " Grade : ",
+                                    size: 12.sp,
+                                    fontWeight: FontWeight.w500,
+                                    color: AppColors.borderBlack,
+                                  ),
+                                  TextModel(
+                                    widget.result.grade.value,
+                                    size: 12.sp,
+                                    fontWeight: FontWeight.w700,
+                                    color: AppColors.darkGreenColor,
+                                  ),
+                                ],
+                                maxLines: 3,
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 16.w),
+                          Column(
+                            children: [
+                              RegularText(
+                                textAlign: TextAlign.start,
+                                textSize: 12.sp,
+                                maxLines: 1,
+                                fontWeight: FontWeight.w600,
+                                textColor: AppColors.black,
+                                textOverflow: TextOverflow.ellipsis,
+                                text: "Final selling price",
+                              ),
+                              SizedBox(height: 8.w),
+                              RegularText(
+                                textAlign: TextAlign.start,
+                                textSize: 24.sp,
+                                maxLines: 1,
+                                fontWeight: FontWeight.w700,
+                                textColor: AppColors.darkGreenColor,
+                                textOverflow: TextOverflow.ellipsis,
+                                text: "₹ ${widget.result.price}",
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),

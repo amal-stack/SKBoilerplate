@@ -25,7 +25,7 @@ class AdditionalIssuesPage extends StatelessWidget {
 
         void toggleDeviceIssue(AdditionalIssue issue) {
           final additionalIssues =
-              cubit.input.additionalIssues ?? AdditionalIssues.none;
+              cubit.input.additionalIssues;
           cubit.additionalIssuesChanged(
             additionalIssues.withIssueToggled(issue),
           );
@@ -33,7 +33,7 @@ class AdditionalIssuesPage extends StatelessWidget {
 
         void updateBatteryHealth(BatteryHealth newHealth) {
           final additionalIssues =
-              cubit.input.additionalIssues ?? AdditionalIssues.none;
+              cubit.input.additionalIssues;
           final currentHealth = additionalIssues.batteryHealth;
 
           cubit.additionalIssuesChanged(

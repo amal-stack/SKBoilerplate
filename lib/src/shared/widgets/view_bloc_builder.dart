@@ -27,6 +27,15 @@ class ViewBlocBuilder<B extends BlocBase<ViewState<S>>, S>
   @override
   Widget build(BuildContext context) {
     return AnimatedSwitcher(
+      layoutBuilder: (currentChild, previousChildren) {
+        return Stack(
+          alignment: Alignment.topLeft,
+          children: <Widget>[
+            ...previousChildren,
+            if (currentChild != null) currentChild,
+          ],
+        );
+      },
       duration: Durations.long4,
       child: BlocBuilder<B, ViewState<S>>(
         builder: (context, state) => switch (state) {

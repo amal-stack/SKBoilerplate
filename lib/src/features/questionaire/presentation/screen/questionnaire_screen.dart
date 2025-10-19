@@ -1,3 +1,4 @@
+import 'package:boilerplate/src/core/questionnaire_price_store.dart';
 import 'package:boilerplate/src/features/products/domain/product_variant.dart';
 import 'package:boilerplate/src/features/questionaire/domain/entities/step.dart';
 import 'package:boilerplate/src/features/questionaire/presentation/cubits/device_assessment_cubit.dart';
@@ -66,7 +67,14 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
           listener: (context, state) {
             switch (state) {
               case DeviceAssessmentCompleted completed:
-                context.go('/device-value/${widget.quoteId}', extra: completed.result);
+                QuestionnairePriceStore.instance.saveCalculatedDevicePrice(
+                  completed.result.device.id,
+                  completed.result.price,
+                );
+                context.push(
+                  '/device-value/${widget.quoteId}',
+                  extra: completed.result,
+                );
               case DeviceAssessmentError error:
                 ScaffoldMessenger.of(
                   context,

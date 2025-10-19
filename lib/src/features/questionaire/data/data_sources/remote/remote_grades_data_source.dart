@@ -17,7 +17,9 @@ class RemoteGradesDataSource implements GradesDataSource {
   Future<DataResponse<DeviceAssessmentResult>> grade({
     required String quoteId,
     required AssessmentResponse response,
-  }) => _client
+  }) {
+    debugPrint('Grades Request data: ${JsonEncoder.withIndent('  ').convert(response.toJson())}');
+    return _client
       .post(
         ApiRequest(
           path: '/questionnaires/$quoteId/get-grades',
@@ -34,4 +36,5 @@ class RemoteGradesDataSource implements GradesDataSource {
         );
         },
       );
+  }
 }

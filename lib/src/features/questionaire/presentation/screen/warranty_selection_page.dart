@@ -2,9 +2,10 @@ import 'package:boilerplate/src/features/questionaire/domain/entities/entities.d
 import 'package:boilerplate/src/features/questionaire/presentation/cubits/device_assessment_cubit.dart';
 import 'package:boilerplate/src/features/questionaire/presentation/cubits/device_invoice_upload_cubit.dart';
 import 'package:boilerplate/src/features/questionaire/presentation/models/flow_state.dart';
-import 'package:boilerplate/src/features/questionaire/presentation/screen/upload_device_image_page.dart';
+import 'package:boilerplate/src/shared/widgets/app_check_box.dart';
 import 'package:boilerplate/src/shared/themes/text.dart';
 import 'package:boilerplate/src/shared/utils/app_colors.dart';
+import 'package:boilerplate/src/shared/widgets/image_upload.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -15,41 +16,41 @@ class WarrantySelectionPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: 30.h),
-            const WarrantySection(),
-            SizedBox(height: 24.h),
-            RegularText(
-              textAlign: TextAlign.start,
-              textSize: 14.sp,
-              maxLines: 2,
-              fontWeight: FontWeight.w600,
-              textColor: AppColors.black,
-              textOverflow: TextOverflow.ellipsis,
-              text: "Upload Invoice",
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(height: 30.h),
+          const WarrantySection(),
+          SizedBox(height: 24.h),
+          RegularText(
+            textAlign: TextAlign.start,
+            textSize: 14.sp,
+            maxLines: 2,
+            fontWeight: FontWeight.w600,
+            textColor: AppColors.black,
+            textOverflow: TextOverflow.ellipsis,
+            text: "Upload Invoice",
+          ),
+          SizedBox(height: 8.h),
+          ImageUploadCard(
+            image: "assets/images/invoice.png",
+            title: "Invoice",
+            selectedImage: context.select<DeviceInvoiceUploadCubit, String?>(
+              (state) => state.state.invoice?.path,
             ),
-            SizedBox(height: 8.h),
-            DeviceImageCard(
-              image: "assets/images/invoice.png",
-              title: "Invoice",
-              selectedImage: context.select<DeviceInvoiceUploadCubit, String?>(
-                (state) => state.state.invoice?.path,
-              ),
-              onSelected: (image) {
-                context.read<DeviceInvoiceUploadCubit>().invoiceChanged(
-                  DeviceInvoice(path: image),
-                );
-              },
-              disabled: context.select<DeviceInvoiceUploadCubit, bool>(
-                (state) => !state.state.hasInvoice,
-              ),
+            onSelected: (image) {
+              context.read<DeviceInvoiceUploadCubit>().invoiceChanged(
+                DeviceInvoice(path: image),
+              );
+            },
+            disabled: context.select<DeviceInvoiceUploadCubit, bool>(
+              (state) => !state.state.hasInvoice,
             ),
-            SizedBox(height: 50.h),
-          ],
-        ),
-      );
+          ),
+          SizedBox(height: 50.h),
+        ],
+      ),
+    );
   }
 }
 
@@ -113,32 +114,12 @@ class NoInvoiceCheckbox extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocSelector<DeviceInvoiceUploadCubit, DeviceInvoiceState, bool>(
       selector: (state) => !state.hasInvoice,
-      builder: (context, isSelected) => Row(
-        children: [
-          GestureDetector(
-            onTap: () {
-              final cubit = context.read<DeviceInvoiceUploadCubit>();
-              cubit.hasInvoiceChanged(!cubit.state.hasInvoice);
-            },
-            child: Image.asset(
-              isSelected
-                  ? "assets/images/selected_checkbox.png"
-                  : "assets/images/question/unchecked_checkbox.png",
-              width: 24.w,
-              height: 24.h,
-            ),
-          ),
-          SizedBox(width: 8.w),
-          RegularText(
-            textAlign: TextAlign.start,
-            textSize: 12.sp,
-            maxLines: 2,
-            fontWeight: FontWeight.w500,
-            textColor: AppColors.borderBlack,
-            textOverflow: TextOverflow.ellipsis,
-            text: "Do not have invoice",
-          ),
-        ],
+      builder: (context, isSelected) => AppCheckBox(
+        isSelected: isSelected,
+        onTap: () {
+          final cubit = context.read<DeviceInvoiceUploadCubit>();
+          cubit.hasInvoiceChanged(!cubit.state.hasInvoice);
+        },
       ),
     );
   }

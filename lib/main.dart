@@ -13,6 +13,8 @@ import 'package:boilerplate/src/features/dashboard/data/repositories/remote/remo
 import 'package:boilerplate/src/features/dashboard/domain/repositories/dashboard_repository.dart';
 import 'package:boilerplate/src/features/kyc/domain/data/data_sources/repositories/remote/remote_kyc_repository.dart';
 import 'package:boilerplate/src/features/kyc/domain/repositories/kyc_repository.dart';
+import 'package:boilerplate/src/features/orders/data/repositories/remote/remote_orders_repository.dart';
+import 'package:boilerplate/src/features/orders/domain/repositories/orders_repository.dart';
 
 import 'package:boilerplate/src/features/products/data/repositories/remote/remote_products_repository.dart';
 import 'package:boilerplate/src/features/products/domain/repositories/products_repository.dart';
@@ -79,6 +81,9 @@ class SwitchKartApp extends StatelessWidget {
       ),
       RepositoryProvider<KycRepository>(
         create: (context) => RemoteKycRepository(dependencies.kycDataSource),
+      ),
+      RepositoryProvider<OrdersRepository>(
+        create: (context) => RemoteOrdersRepository(dependencies.ordersDataSource),
       ),
     ],
     child: BlocProvider(

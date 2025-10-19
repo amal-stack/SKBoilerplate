@@ -31,4 +31,9 @@ class RemoteProductsRepository implements ProductsRepository {
   @override
   Future<List<ProductVariant>> variants({required String modelId}) =>
       dataSource.variants(modelId: modelId).then((response) => response.data!);
+
+  @override
+  Future<List<DevicePricing>> pricing({required String variantId}) => dataSource
+      .pricing(variantId: variantId)
+      .then((response) => response.requireData);
 }

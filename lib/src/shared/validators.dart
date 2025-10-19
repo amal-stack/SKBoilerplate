@@ -62,4 +62,14 @@ class Validators {
     }
     return null;
   }
+
+  static String? validateNotEmpty(String? value, String fieldName) {
+    if (value == null || value.isEmpty) {
+      return '$fieldName is required';
+    }
+    if (_hasLeadingSpace(value)) {
+      return '$fieldName cannot start with a space';
+    }
+    return null;
+  }
 }

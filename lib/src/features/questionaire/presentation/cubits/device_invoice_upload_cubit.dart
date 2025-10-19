@@ -74,6 +74,7 @@ class DeviceInvoiceUploadCubit extends Cubit<DeviceInvoiceState> {
         quoteId: quoteId,
         invoice: state.invoice!,
       );
+      
       debugPrint('Device invoice uploaded for Quote ID: $quoteId');
       emit(state.copyWith(viewState: ViewState.success(result)));
     } catch (e, s) {

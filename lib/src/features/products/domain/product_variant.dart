@@ -60,7 +60,7 @@ class ProductVariant {
     'ram': ram,
     'image': imageUrl,
   };
-} 
+}
 
 enum DeviceCategory {
   android,
@@ -79,6 +79,76 @@ enum DeviceCategory {
     DeviceCategory.ios => 'ios',
     DeviceCategory.fold => 'fold',
   };
+}
 
+@immutable
+class DevicePricing {
+  final String? id;
+  final String? deviceId;
+  final String? vendorId;
+  final String? vendorName;
+  final String? grade;
+  final int? price;
+  final bool? available;
+  final String? createdAt;
+  final String? updatedAt;
 
+  const DevicePricing({
+    this.id,
+    this.deviceId,
+    this.vendorId,
+    this.vendorName,
+    this.grade,
+    this.price,
+    this.available,
+    this.createdAt,
+    this.updatedAt,
+  });
+
+  DevicePricing.fromJson(Map<String, dynamic> json)
+    : id = json['id'],
+      deviceId = json['deviceId'],
+      vendorId = json['vendorId'],
+      vendorName = json['vendorName'],
+      grade = json['grade'],
+      price = json['price'],
+      available = json['available'],
+      createdAt = json['createdAt'],
+      updatedAt = json['updatedAt'];
+
+  DevicePricing copyWith({
+    String? id,
+    String? deviceId,
+    String? vendorId,
+    String? vendorName,
+    String? grade,
+    int? price,
+    bool? available,
+    String? createdAt,
+    String? updatedAt,
+  }) {
+    return DevicePricing(
+      id: id ?? this.id,
+      deviceId: deviceId ?? this.deviceId,
+      vendorId: vendorId ?? this.vendorId,
+      vendorName: vendorName ?? this.vendorName,
+      grade: grade ?? this.grade,
+      price: price ?? this.price,
+      available: available ?? this.available,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'deviceId': deviceId,
+    'vendorId': vendorId,
+    'vendorName': vendorName,
+    'grade': grade,
+    'price': price,
+    'available': available,
+    'createdAt': createdAt,
+    'updatedAt': updatedAt,
+  };
 }

@@ -113,7 +113,7 @@ class DeviceAssessmentCubit extends Cubit<DeviceAssessmentState> {
     } catch (e, s) {
       emit(DeviceAssessmentState.error(state.flow, message: e.toString()));
       debugPrint("Error calculating grade: $e for quoteId: $quoteId");
-      debugPrint('\n Stack trace: $s');
+      debugPrintStack(stackTrace: s);
     }
   }
 }

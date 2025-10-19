@@ -3,35 +3,52 @@ import 'dart:async';
 class CountdownTimer {
   CountdownTimer({
     required this.duration,
+    this.interval = const Duration(seconds: 1),
     required this.onTick,
     required this.onComplete,
-  }) : _secondsRemaining = duration.inSeconds;
+  }) : _remaining = duration;
 
   final Duration duration;
-  final void Function(int secondsRemaining) onTick;
+  final Duration interval;
+  final void Function(Duration remaining) onTick;
   final void Function() onComplete;
 
   Timer? _timer;
 
-  int _secondsRemaining;
+  Duration _remaining;
 
-  int get secondsRemaining => _secondsRemaining;
+  Duration get remaining => _remaining;
 
-  bool get isRunning => _secondsRemaining > 0 && (_timer?.isActive ?? false);
+  bool get isRunning =>
+      _remaining > Duration.zero && (_timer?.isActive ?? false);
 
-  bool get isCompleted => _secondsRemaining <= 0;
+  bool get isCompleted => _remaining <= Duration.zero;
 
   String get displayString {
-    final minutes = (_secondsRemaining ~/ 60).toString().padLeft(2, '0');
-    final seconds = (_secondsRemaining % 60).toString().padLeft(2, '0');
-    return '$minutes:$seconds';
+    var microseconds = _remaining.inMicroseconds;
+    final hours = microseconds ~/ Duration.microsecondsPerHour;
+    microseconds = microseconds.remainder(Duration.microsecondsPerHour);
+
+    final minutes = microseconds ~/ Duration.microsecondsPerMinute;
+    microseconds = microseconds.remainder(Duration.microsecondsPerMinute);
+
+    final seconds = microseconds ~/ Duration.microsecondsPerSecond;
+    microseconds = microseconds.remainder(Duration.microsecondsPerSecond);
+
+    final hoursText = hours > 0 ? '${hours.toString().padLeft(2, '0')}:' : '';
+
+    final minutesText = '${minutes.toString().padLeft(2, '0')}:';
+
+    final secondsText = seconds.toString().padLeft(2, '0');
+
+    return '$hoursText$minutesText$secondsText';
   }
 
   void start() {
-    _secondsRemaining = duration.inSeconds;
+    _remaining = duration;
     _timer?.cancel();
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      _secondsRemaining--;
+      _remaining -= interval;
       if (isCompleted) {
         _complete(timer);
         return;
@@ -54,14 +71,15 @@ class CountdownTimer {
     stop();
   }
 
+  void _tick(Timer timer) {
+    onTick(_remaining);
+  }
+
   void _complete(Timer timer) {
     timer.cancel();
-    _secondsRemaining = 0;
+    _remaining = Duration.zero;
     _timer = null;
     onComplete();
   }
-  
-  void _tick(Timer timer) {
-    onTick(_secondsRemaining);
-  }
 }
+
