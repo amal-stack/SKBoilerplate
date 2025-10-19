@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:boilerplate/src/core/network/models/api_exception.dart';
@@ -11,16 +12,29 @@ import 'token_store.dart';
 
 /// An implementation of [ApiClient] using the Dio HTTP client.
 class DioApiClient implements ApiClient {
-  DioApiClient(this._dio, this.tokenStore);
+  DioApiClient(this._dio, this.tokenStore) {
+    tokenStore.token().then((t) {
+      if (t != null) {
+        _authenticate(null);
+      }
+    });
+  }
 
-  DioApiClient.fromOptions(BaseOptions options, this.tokenStore)
-    : _dio = Dio(options);
+  DioApiClient.fromOptions(BaseOptions options, TokenStore tokenStore)
+    : this(Dio(options), tokenStore);
 
   final Dio _dio;
 
   final TokenStore tokenStore;
 
+  final StreamController<ApiAuthenticationStatus> _authController =
+      StreamController<ApiAuthenticationStatus>.broadcast()
+        ..add(ApiAuthenticationStatus.unknown());
+
   final List<ApiErrorHandler> _errorHandlers = [];
+
+  @override
+  Stream<ApiAuthenticationStatus> get authentication => _authController.stream;
 
   @override
   Future<ApiResponse> fetch(String method, ApiRequest request) async {
@@ -29,18 +43,18 @@ class DioApiClient implements ApiClient {
 
     debugPrint('Making ${options.method} request to ${request.path}');
 
-    debugPrint('Request data: ${switch (request.data) {
-      ApiFormData formData => JsonEncoder.withIndent('  ').convert(formData.toJson()),
-      Map<String, dynamic> map => JsonEncoder.withIndent('  ').convert(map),
-      _ => request.data,
-    }}');
+    debugPrint(
+      'Request data: ${switch (request.data) {
+        ApiFormData formData => JsonEncoder.withIndent('  ').convert(formData.toJson()),
+        Map<String, dynamic> map => JsonEncoder.withIndent('  ').convert(map),
+        _ => request.data,
+      }}',
+    );
 
     final data = switch (request.data) {
       ApiFormData formData => await _createFormData(formData),
       _ => request.data,
     };
-
-
 
     try {
       final response = await _dio.request<dynamic>(
@@ -72,6 +86,10 @@ class DioApiClient implements ApiClient {
         statusCode: e.response?.statusCode,
       );
 
+      if (response.error?.failureType == ApiFailureType.unauthorized) {
+        _unauthenticate(response.error?.message);
+      }
+
       for (final handler in _errorHandlers) {
         handler(response.error!);
       }
@@ -80,14 +98,28 @@ class DioApiClient implements ApiClient {
     }
   }
 
+  void _unauthenticate([String? message]) {
+    debugPrint('User unauthenticated: $message');
+    _authController.add(ApiAuthenticationStatus.unauthenticated(message));
+  }
+
+  void _authenticate(Object? userData) {
+    debugPrint('User authenticated');
+    _authController.add(ApiAuthenticationStatus.authenticated(userData));
+  }
+
   @override
-  Future<void> saveToken(String token) {
-    return tokenStore.saveToken(token);
+  Future<void> saveToken(String token, [Object? userData]) {
+    return tokenStore.saveToken(token).then((_) {
+      _authenticate(userData);
+    });
   }
 
   @override
   Future<void> clearToken() {
-    return tokenStore.clearToken();
+    return tokenStore.clearToken().then((_) {
+      _unauthenticate('Requested logout');
+    });
   }
 
   @override

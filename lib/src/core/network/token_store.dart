@@ -26,7 +26,7 @@ class InMemoryTokenStore implements TokenStore {
 }
 
 class SecureTokenStore implements TokenStore {
-  const SecureTokenStore(this.key, FlutterSecureStorage? storage)
+  const SecureTokenStore(this.key, [FlutterSecureStorage? storage])
     : _storage = storage ?? const FlutterSecureStorage();
 
   final String key;

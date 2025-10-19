@@ -28,7 +28,7 @@ class BrandsScreen extends StatelessWidget {
         scrolledUnderElevation: 0.0,
         leading: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             GestureDetector(
               onTap: () {

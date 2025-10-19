@@ -161,7 +161,7 @@ class ResendOtpLink extends StatelessWidget {
               text: 'Resend OTP',
               textAlign: TextAlign.center,
               textSize: 12.sp,
-              fontWeight: FontWeight.w500,
+              fontWeight: FontWeight.w800,
               textColor: AppColors.baseColor,
             ),
           ),

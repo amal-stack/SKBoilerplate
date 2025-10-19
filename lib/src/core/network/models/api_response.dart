@@ -64,3 +64,30 @@ class ApiResponse {
   @override
   String toString() => 'ApiResponse(data: $data, statusCode: $statusCode)';
 }
+
+
+sealed class ApiAuthenticationStatus {
+  const ApiAuthenticationStatus();
+
+  const factory ApiAuthenticationStatus.authenticated([Object? user]) = ApiAuthenticated;
+
+  const factory ApiAuthenticationStatus.unauthenticated([String? error]) = ApiUnauthenticated;
+
+  const factory ApiAuthenticationStatus.unknown() = ApiUnknownAuthentication;
+
+}
+
+class ApiAuthenticated extends ApiAuthenticationStatus {
+  const ApiAuthenticated([this.user]);
+
+  final Object? user;
+}
+
+class ApiUnauthenticated extends ApiAuthenticationStatus {
+  const ApiUnauthenticated([this.error]);
+  final String? error;
+}
+
+class ApiUnknownAuthentication extends ApiAuthenticationStatus {
+  const ApiUnknownAuthentication();
+}

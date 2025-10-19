@@ -1,3 +1,7 @@
+import 'package:boilerplate/src/core/network/models/api_response.dart';
+import 'package:boilerplate/src/features/auth/domain/entities/authentication.dart';
+import 'package:boilerplate/src/features/auth/domain/entities/user.dart';
+
 import '../../../../../core/network/api_client.dart';
 import '../../../../../core/network/models/api_request.dart';
 import '../../models/response.dart';
@@ -6,6 +10,17 @@ import '../auth_source.dart';
 class RemoteAuthSource implements AuthSource {
   RemoteAuthSource(this._client);
   final ApiClient _client;
+
+  @override
+  Stream<Authentication> get authentication => _client.authentication.map(
+    (status) => switch (status) {
+      ApiAuthenticated(:final user) => Authentication.authenticated(
+        user is AppUser ? user : null,
+      ),
+      ApiUnauthenticated(:final error) => Authentication.unauthenticated(error),
+      ApiUnknownAuthentication() => Authentication.initial(),
+    },
+  );
 
   @override
   Future<AuthResponse> login(String email, String password) async {
@@ -22,7 +37,7 @@ class RemoteAuthSource implements AuthSource {
     final token = authResponse.data?.token;
 
     if (response.isSuccessStatusCode && token != null) {
-      _client.saveToken(token);
+      _client.saveToken(token, authResponse.data?.user);
     }
 
     return authResponse;

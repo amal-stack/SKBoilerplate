@@ -6,43 +6,39 @@ import '../../../domain/entities/authentication_result.dart';
 import '../../../domain/repositories/auth_repository.dart';
 import '../../data_sources/auth_source.dart';
 import '../../models/response.dart';
-import '../../models/response_data.dart';
 
 class RemoteAuthRepository implements AuthRepository {
   RemoteAuthRepository(this._auth);
 
   final AuthSource _auth;
 
-  final _controller = StreamController<Authentication>.broadcast()
-    ..add(const Authentication.initial());
-
   @override
-  Stream<Authentication> get state => _controller.stream;
+  Stream<Authentication> get state => _auth.authentication;
 
   @override
   Future<void> login(String email, String password) async {
+    _runWithErrorHandling(() => _auth.login(email, password));
 
-    try {
-      final response = await _auth.login(email, password);
-      switch (response) {
-        case AuthResponse(success: true, data: final UserResponseData? data):
-          _controller.add(Authentication.authenticated(data?.user));
-        case AuthResponse(success: false, message: final message):
-          _controller.add(Authentication.unauthenticated(message));
-        default:
-          _controller.add(
-            const Authentication.unauthenticated('Unknown error'),
-          );
-      }
-    } on ApiException catch (e) {
-      _controller.add(Authentication.unauthenticated(e.message, e));
-    }
+    // try {
+    //   final response = await _auth.login(email, password);
+    //   switch (response) {
+    //     case AuthResponse(success: true, data: final UserResponseData? data):
+    //       _controller.add(Authentication.authenticated(data?.user));
+    //     case AuthResponse(success: false, message: final message):
+    //       _controller.add(Authentication.unauthenticated(message));
+    //     default:
+    //       _controller.add(
+    //         const Authentication.unauthenticated('Unknown error'),
+    //       );
+    //   }
+    // } on ApiException catch (e) {
+    //   _controller.add(Authentication.unauthenticated(e.message, e));
+    // }
   }
 
   @override
   Future<void> logout() async {
-    await _auth.logout();
-    _controller.add(const Authentication.unauthenticated('Logged out'));
+    _auth.logout();
   }
 
   @override
@@ -82,7 +78,5 @@ class RemoteAuthRepository implements AuthRepository {
   }
 
   @override
-  void dispose() {
-    _controller.close();
-  }
+  void dispose() {}
 }
