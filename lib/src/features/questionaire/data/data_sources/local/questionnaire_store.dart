@@ -549,7 +549,11 @@ import 'package:boilerplate/src/features/questionaire/domain/entities/assessment
 // }
 
 
-
+// yes/no update
+// kyc 
+// image upload
+// ba and calculate again  
+// 
 
 /// Maps backend question IDs to domain model [AssessmentQuestion] objects.
 /// The backend returns questions as a flat array, but they are organized
@@ -632,6 +636,7 @@ abstract final class QuestionnaireStore {
     text: '1',
     category: QuestionCategory.ios,
   );
+  
 
   static const AssessmentQuestion numberOfESims2 = AssessmentQuestion(
     id: 'Q8O2',
@@ -868,6 +873,7 @@ abstract final class QuestionnaireStore {
   static const AssessmentQuestion batteryRequiresService = AssessmentQuestion(
     id: 'Q22',
     text: 'battery service',
+  
     category: QuestionCategory.ios,
   );
 

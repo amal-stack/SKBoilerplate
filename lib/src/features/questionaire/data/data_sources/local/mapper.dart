@@ -29,6 +29,10 @@ abstract final class DomainToAssessmentResponseMapper {
     ...switch (functionality.numberOfESims) {
       2 => [
         AssessmentQuestionResponse(
+          questionId: QuestionnaireStore.numberOfESims.id,
+          response: true,
+        ),
+        AssessmentQuestionResponse(
           questionId: QuestionnaireStore.numberOfESims1.id,
           response: false,
         ),
@@ -39,6 +43,10 @@ abstract final class DomainToAssessmentResponseMapper {
       ],
       1 => [
         AssessmentQuestionResponse(
+          questionId: QuestionnaireStore.numberOfESims.id,
+          response: true,
+        ),
+        AssessmentQuestionResponse(
           questionId: QuestionnaireStore.numberOfESims1.id,
           response: true,
         ),
@@ -48,6 +56,10 @@ abstract final class DomainToAssessmentResponseMapper {
         ),
       ],
       _ => [
+        AssessmentQuestionResponse(
+          questionId: QuestionnaireStore.numberOfESims.id,
+          response: false,
+        ),
         AssessmentQuestionResponse(
           questionId: QuestionnaireStore.numberOfESims1.id,
           response: false,
@@ -69,15 +81,15 @@ abstract final class DomainToAssessmentResponseMapper {
     ),
     AssessmentQuestionResponse(
       questionId: QuestionnaireStore.displayDefects.id,
-      response: defects.display,
+      response: true,
     ),
     AssessmentQuestionResponse(
       questionId: QuestionnaireStore.scratchOrDentOnBody.id,
-      response: defects.body,
+      response: true,
     ),
     AssessmentQuestionResponse(
       questionId: QuestionnaireStore.devicePanelMissingOrBroken.id,
-      response: defects.panel,
+      response: true,
     ),
   ];
 
