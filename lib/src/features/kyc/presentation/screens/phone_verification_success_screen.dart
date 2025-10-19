@@ -8,14 +8,11 @@ import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
 
 
-class PhoneVerificationSuccessScreen extends StatefulWidget {
-  const PhoneVerificationSuccessScreen({super.key});
+class PhoneVerificationSuccessScreen extends StatelessWidget {
+  const PhoneVerificationSuccessScreen({super.key, required this.quoteId});
 
-  @override
-  State<PhoneVerificationSuccessScreen> createState() => _PhoneVerificationSuccessScreenState();
-}
+  final String quoteId;
 
-class _PhoneVerificationSuccessScreenState extends State<PhoneVerificationSuccessScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -108,7 +105,7 @@ class _PhoneVerificationSuccessScreenState extends State<PhoneVerificationSucces
                       isLoading: false,
                       onPressed:
                           () => context.push(
-                        '/kyc-details-screen',
+                        '/kyc-details-screen/$quoteId',
                       ),
                       label: AppTexts.continueTitle,
                       fontSize: 12.sp,

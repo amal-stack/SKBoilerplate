@@ -65,7 +65,7 @@ class RemoteKycDataSource implements KycDataSource {
   }) => apiClient
       .post(
         ApiRequest(
-          path: '$baseUrl/$quoteId/documents/upload',
+          path: '$baseUrl/$quoteId/upload/documents',
           data: ApiFormData(
             fields: const {},
             files: [

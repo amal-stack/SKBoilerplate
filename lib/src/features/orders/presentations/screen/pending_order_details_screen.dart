@@ -14,6 +14,7 @@ class PendingOrderDetailsScreen extends StatefulWidget {
 }
 
 class _PendingOrderDetailsScreenState extends State<PendingOrderDetailsScreen> {
+  @override
   Widget build(BuildContext context) => Scaffold(
     backgroundColor: AppColors.white,
     appBar: AppBar(

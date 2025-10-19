@@ -91,6 +91,31 @@ class KycAddress {
     this.state,
     this.pincode,
   });
+
+  KycAddress copyWith({
+    String? addressLine1,
+    String? addressLine2,
+    String? addressLine3,
+    String? city,
+    String? state,
+    String? pincode,
+  }) => KycAddress(
+    addressLine1: addressLine1 ?? this.addressLine1,
+    addressLine2: addressLine2 ?? this.addressLine2,
+    addressLine3: addressLine3 ?? this.addressLine3,
+    city: city ?? this.city,
+    state: state ?? this.state,
+    pincode: pincode ?? this.pincode,
+  );
+
+  Map<String, dynamic> toJson() => {
+    'addressLine1': addressLine1,
+    'addressLine2': addressLine2,
+    'addressLine3': addressLine3,
+    'city': city,
+    'state': state,
+    'pincode': pincode,
+  };
 }
 
 class KycDocuments {
@@ -115,6 +140,16 @@ class KycDocumentsSubmission {
     required this.aadhaarBackPath,
     required this.addressProofPath,
   });
+
+  KycDocumentsSubmission copyWith({
+    String? aadhaarFrontPath,
+    String? aadhaarBackPath,
+    String? addressProofPath,
+  }) => KycDocumentsSubmission(
+    aadhaarFrontPath: aadhaarFrontPath ?? this.aadhaarFrontPath,
+    aadhaarBackPath: aadhaarBackPath ?? this.aadhaarBackPath,
+    addressProofPath: addressProofPath ?? this.addressProofPath,
+  );
 
   Map<String, dynamic> toJson() => {
     'aadhaarFront': aadhaarFrontPath,
@@ -176,6 +211,16 @@ class KycDetails {
   final String firstName;
   final String lastName;
   final KycAddress address;
+
+  KycDetails copyWith({
+    String? firstName,
+    String? lastName,
+    KycAddress? address,
+  }) => KycDetails(
+    firstName: firstName ?? this.firstName,
+    lastName: lastName ?? this.lastName,
+    address: address ?? this.address,
+  );
 
   Map<String, dynamic> toJson() => {
     'firstName': firstName,

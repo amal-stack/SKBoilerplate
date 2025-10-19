@@ -10,6 +10,8 @@ import 'package:boilerplate/src/features/dashboard/data/data_sources/dashboard_d
 import 'package:boilerplate/src/features/dashboard/data/data_sources/remote/remote_dashboard_data_source.dart';
 import 'package:boilerplate/src/features/kyc/domain/data/data_sources/kyc_data_source.dart';
 import 'package:boilerplate/src/features/kyc/domain/data/data_sources/remote/remote_kyc_data_source.dart';
+import 'package:boilerplate/src/features/orders/data/data_sources/orders_data_source.dart';
+import 'package:boilerplate/src/features/orders/data/data_sources/remote/remote_orders_data_source.dart';
 
 import 'package:boilerplate/src/features/products/data/data_sources/products_data_source.dart';
 import 'package:boilerplate/src/features/products/data/data_sources/remote/remote_products_data_source.dart';
@@ -20,6 +22,8 @@ import 'package:boilerplate/src/features/questionaire/data/data_sources/quotes_d
 import 'package:boilerplate/src/features/questionaire/data/data_sources/remote/remote_grades_data_source.dart';
 import 'package:boilerplate/src/features/questionaire/data/data_sources/remote/remote_quotes_data_source.dart';
 import 'package:dio/dio.dart';
+
+const _tokenKey = 'switchkart.auth.token';
 
 final class Dependencies {
   Dependencies({
@@ -32,6 +36,7 @@ final class Dependencies {
     GradesDataSource? gradesDataSource,
     QuotesDataSource? quotesDataSource,
     KycDataSource? kycDataSource,
+    OrdersDataSource? ordersDataSource,
   }) : authSource = authClient ?? RemoteAuthSource(apiClient),
        brandsDataSource = brandsDataSource ?? RemoteBrandsDataSource(apiClient),
        productsDataSource =
@@ -42,7 +47,8 @@ final class Dependencies {
            questionnaireDataSource ?? const LocalQuestionnaireDataSource(),
        gradesDataSource = gradesDataSource ?? RemoteGradesDataSource(apiClient),
        quotesDataSource = quotesDataSource ?? RemoteQuotesDataSource(apiClient),
-        kycDataSource = kycDataSource ?? RemoteKycDataSource(apiClient);
+       kycDataSource = kycDataSource ?? RemoteKycDataSource(apiClient),
+       ordersDataSource = ordersDataSource ?? RemoteOrdersDataSource(apiClient);
 
   factory Dependencies.defaults() => Dependencies(
     apiClient: DioApiClient.fromOptions(
@@ -51,7 +57,7 @@ final class Dependencies {
       sendTimeout: ApiOptions.sendTimeout,
       receiveTimeout: ApiOptions.receiveTimeout
       ),
-      InMemoryTokenStore(),
+      SecureTokenStore(_tokenKey),
     ),
   );
   final ApiClient apiClient;
@@ -71,4 +77,6 @@ final class Dependencies {
   final GradesDataSource gradesDataSource;
 
   final KycDataSource kycDataSource;
+
+  final OrdersDataSource ordersDataSource;
 }

@@ -1,86 +1,31 @@
-import 'dart:io';
+import 'package:boilerplate/src/features/kyc/presentation/cubits/kyc_upload_documents_cubit.dart';
 import 'package:boilerplate/src/shared/themes/text.dart' as custom;
 
 import 'package:boilerplate/src/shared/themes/text.dart';
 import 'package:boilerplate/src/shared/utils/app_colors.dart';
 import 'package:boilerplate/src/shared/utils/app_texts.dart';
 import 'package:boilerplate/src/shared/widgets/animated_button.dart';
+import 'package:boilerplate/src/shared/widgets/image_upload.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 class UploadDocumentScreen extends StatefulWidget {
-  const UploadDocumentScreen({super.key});
+  const UploadDocumentScreen({super.key, required this.quoteId});
+
+  final String quoteId;
 
   @override
   State<UploadDocumentScreen> createState() => _UploadDocumentScreenState();
 }
 
 class _UploadDocumentScreenState extends State<UploadDocumentScreen> {
-  File? frontImageFile;
-  File? backImageFile;
-  File? leftImageFile;
-  File? rightImageFile;
-  File? topImageFile;
-  File? deviceBrokenFile;
-
-  File? selectedInvoice;
-
-  final ImagePicker _picker = ImagePicker();
-
-  XFile? pickedFileDoc;
-  bool isLoading = false;
-
-  // Request camera & gallery permission
-  Future<bool> requestCameraAndGalleryPermissions() async {
-    final cameraStatus = await Permission.camera.request();
-    final galleryStatus = await Permission.photos.request();
-
-    return cameraStatus.isGranted && galleryStatus.isGranted;
-  }
-
-  Future<void> pickImage(int index, int selectedIndex) async {
-    try {
-      XFile? pickedFile;
-
-      if (index == 0) {
-        // Camera
-        if (await Permission.camera.request().isDenied) {
-          print("Camera permission denied");
-          return;
-        }
-        pickedFile = await _picker.pickImage(source: ImageSource.camera);
-      } else {
-        // Gallery
-        if (!await requestCameraAndGalleryPermissions()) {
-          print("Gallery permission denied");
-          return;
-        }
-        pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-      }
-
-      if (pickedFile != null) {
-        setState(() {
-          pickedFileDoc = pickedFile;
-          if (selectedIndex == 1) {
-            frontImageFile = File(pickedFileDoc!.path);
-          } else if (selectedIndex == 2) {
-            backImageFile = File(pickedFileDoc!.path);
-          } else if (selectedIndex == 3) {
-            leftImageFile = File(pickedFileDoc!.path);
-          }
-        });
-      }
-    } catch (e) {
-      print("Error picking image: $e");
-    }
-  }
-
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
+  Widget build(BuildContext context) => BlocProvider(
+    create: (context) =>
+        KycUploadDocumentsCubit(context.read(), quoteId: widget.quoteId),
+    child: Scaffold(
       backgroundColor: AppColors.white,
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -113,7 +58,7 @@ class _UploadDocumentScreenState extends State<UploadDocumentScreen> {
           fontWeight: FontWeight.w700,
           textColor: AppColors.black,
           textOverflow: TextOverflow.ellipsis,
-          text: "Verify product condition",
+          text: "Upload Documents",
         ),
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(1),
@@ -126,332 +71,160 @@ class _UploadDocumentScreenState extends State<UploadDocumentScreen> {
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 24.w),
-          child: Column(
-            children: [
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+          child: KycUploadDocumentsForm(quoteId: widget.quoteId),
+        ),
+      ),
+    ),
+  );
+}
+
+class KycUploadDocumentsForm extends StatelessWidget {
+  const KycUploadDocumentsForm({super.key, required this.quoteId});
+
+  final String quoteId;
+
+  @override
+  Widget build(
+    BuildContext context,
+  ) => BlocListener<KycUploadDocumentsCubit, KycUploadDocumentsState>(
+    listener: (context, state) {
+      switch (state) {
+        case KycUploadDocumentsSubmitted():
+          context.push('/upload-invoice-screen/$quoteId');
+        case KycUploadDocumentsError(:final message):
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(message)));
+        case KycUploadDocumentsInput() || KycUploadDocumentsSubmitting():
+          // Do nothing
+          break;
+      }
+    },
+    child: BlocBuilder<KycUploadDocumentsCubit, KycUploadDocumentsState>(
+      builder: (context, state) => Column(
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: 30.h),
+                  RegularText(
+                    textAlign: TextAlign.start,
+                    textSize: 16.sp,
+                    maxLines: 2,
+                    fontWeight: FontWeight.w600,
+                    textColor: AppColors.black,
+                    textOverflow: TextOverflow.ellipsis,
+                    text: "Upload KYC documents",
+                  ),
+                  SizedBox(height: 8.h),
+                  RegularText(
+                    textAlign: TextAlign.start,
+                    textSize: 14.sp,
+                    maxLines: 2,
+                    fontWeight: FontWeight.w600,
+                    textColor: AppColors.borderBlack,
+                    textOverflow: TextOverflow.ellipsis,
+                    text: "Aadhaar card",
+                  ),
+                  SizedBox(height: 24.h),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      SizedBox(height: 30.h),
-                      RegularText(
-                        textAlign: TextAlign.start,
-                        textSize: 16.sp,
-                        maxLines: 2,
-                        fontWeight: FontWeight.w600,
-                        textColor: AppColors.black,
-                        textOverflow: TextOverflow.ellipsis,
-                        text: "Upload KYC documents",
-                      ),
-                      SizedBox(height: 8.h),
-                      RegularText(
-                        textAlign: TextAlign.start,
-                        textSize: 14.sp,
-                        maxLines: 2,
-                        fontWeight: FontWeight.w600,
-                        textColor: AppColors.borderBlack,
-                        textOverflow: TextOverflow.ellipsis,
-                        text: "Aadhar card",
-                      ),
-                      SizedBox(height: 24.h),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          GestureDetector(
-                            onTap:
-                                () => showUploadBottomSheet(
-                                  context: context,
-                                  selectedImage: 1,
+                      ImageUploadCard(
+                        title: "Aadhaar Card (from front)",
+                        image: "assets/images/question/scratch_1.png",
+                        selectedImage: state.documents.aadhaarFrontPath,
+                        onSelected: (image) {
+                          context
+                              .read<KycUploadDocumentsCubit>()
+                              .documentUploaded(
+                                state.documents.copyWith(
+                                  aadhaarFrontPath: image,
                                 ),
-                            child:
-                                frontImageFile == null
-                                    ? documentWidget(
-                                      title: "Aadhar card front",
-                                      image:
-                                          "assets/images/question/scratch_1.png",
-                                      isFile: false,
-                                    )
-                                    : documentWidget(
-                                      title: "Aadhar card front",
-                                      image: frontImageFile!.path,
-                                      isFile: true,
-                                    ),
-                          ),
-                          GestureDetector(
-                            onTap:
-                                () => showUploadBottomSheet(
-                                  context: context,
-                                  selectedImage: 2,
+                              );
+                        },
+                      ),
+                      ImageUploadCard(
+                        title: "Aadhaar Card (from back)",
+                        image: "assets/images/question/scratch_1.png",
+                        selectedImage: state.documents.aadhaarBackPath,
+                        onSelected: (image) {
+                          context
+                              .read<KycUploadDocumentsCubit>()
+                              .documentUploaded(
+                                state.documents.copyWith(
+                                  aadhaarBackPath: image,
                                 ),
-                            child:
-                                backImageFile == null
-                                    ? documentWidget(
-                                      title: "Aadhar card back",
-                                      image:
-                                          "assets/images/question/scratch_1.png",
-                                      isFile: false,
-                                    )
-                                    : documentWidget(
-                                      title: "Aadhar card back",
-                                      image: backImageFile!.path,
-                                      isFile: true,
-                                    ),
-                          ),
-                        ],
+                              );
+                        },
                       ),
-                      SizedBox(height: 24.h),
-
-                      Container(
-                        alignment: Alignment.topLeft,
-                        child: custom.RichText(
-                          texts: [
-                            TextModel(
-                              "Address Proof ",
-                              size: 14.sp,
-                              fontWeight: FontWeight.w600,
-                              color: AppColors.borderBlack,
-                            ),
-                            TextModel(
-                              " (Voter ID, Driving License)",
-                              size: 12.sp,
-                              fontWeight: FontWeight.w500,
-                              color: AppColors.borderBlack
-                            ),
-                          ],
-                          maxLines: 3,
-                        ),
-                      ),
-                      SizedBox(height: 8.h),
-                      GestureDetector(
-                        onTap:
-                            () => showUploadBottomSheet(
-                          context: context,
-                          selectedImage: 3,
-                        ),
-                        child:
-                        leftImageFile == null
-                            ? documentWidget(
-                          title: "Address proof",
-                          image:
-                          "assets/images/question/scratch_1.png",
-                          isFile: false,
-                        )
-                            : documentWidget(
-                          title: "Address proof",
-                          image: leftImageFile!.path,
-                          isFile: true,
-                        ),
-                      ),
-
-                      SizedBox(height: 8.h),
-
-
                     ],
                   ),
-                ),
-              ),
-              Column(
-                children: [
-                  SizedBox(
-                    height: 45.h,
-                    width: double.infinity,
-                    child: AnimatedButton(
-                      disableButton: false,
-                      isLoading: isLoading ? true : false,
-                      onPressed: () async {
-                        setState(() {
-                          isLoading = true;
-                        });
-                        await Future.delayed(const Duration(seconds: 2));
-                        setState(() {
-                          isLoading = false;
-                        });
-                        context.push('/upload-invoice-screen');
-                      },
-                      label: AppTexts.continueTitle,
-                      fontSize: 12.sp,
-                      isSmallButton: false,
+                  SizedBox(height: 24.h),
+
+                  Container(
+                    alignment: Alignment.topLeft,
+                    child: custom.RichText(
+                      texts: [
+                        TextModel(
+                          "Address Proof ",
+                          size: 14.sp,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.borderBlack,
+                        ),
+                        TextModel(
+                          " (Voter ID, Driving License)",
+                          size: 12.sp,
+                          fontWeight: FontWeight.w500,
+                          color: AppColors.borderBlack,
+                        ),
+                      ],
+                      maxLines: 3,
                     ),
                   ),
-                  SizedBox(height: 20.h),
+                  SizedBox(height: 8.h),
+                  ImageUploadCard(
+                    title: "Address Proof",
+                    image: "assets/images/question/scratch_1.png",
+                    selectedImage: state.documents.addressProofPath,
+                    onSelected: (image) {
+                      context.read<KycUploadDocumentsCubit>().documentUploaded(
+                        state.documents.copyWith(addressProofPath: image),
+                      );
+                    },
+                  ),
+
+                  SizedBox(height: 8.h),
                 ],
               ),
-            ],
+            ),
           ),
-        ),
-      ),
-    );
-  }
-
-  void showUploadBottomSheet({
-    required BuildContext context,
-    required int selectedImage,
-  }) {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: AppColors.white,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16.r)),
-      ),
-      builder: (BuildContext context) {
-        return Container(
-          padding: EdgeInsets.all(16.r),
-          height: 300.h,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              SizedBox(height: 10.h),
-              RegularText(
-                textAlign: TextAlign.center,
-                textSize: 14.sp,
-                maxLines: 2,
-                fontWeight: FontWeight.w700,
-                textColor: AppColors.black,
-                textOverflow: TextOverflow.ellipsis,
-                text: "Upload Image",
-              ),
-              SizedBox(height: 40.h),
-              SizedBox(
-                height: 45.h,
-                width: double.infinity,
-                child: AnimatedButton(
-                  disableButton: false,
-                  isLoading: false,
-                  onPressed: () async {
-                    Navigator.pop(context);
-                    await pickImage(0, selectedImage); // Camera
-                  },
-                  label: "Capture photo",
-                  fontSize: 12.sp,
-                  isSmallButton: false,
-                ),
-              ),
-              SizedBox(height: 16.h),
-              SizedBox(
-                height: 45.h,
-                width: double.infinity,
-                child: AnimatedButton(
-                  disableButton: false,
-                  isLoading: false,
-                  buttonColor: AppColors.white,
-                  borderColor: AppColors.greyBorderColor,
-                  labelColor: AppColors.borderBlack,
-                  onPressed: () async {
-                    if (await requestCameraAndGalleryPermissions()) {
-                      Navigator.pop(context);
-                      await pickImage(1, selectedImage); // Gallery
-                    } else {
-                      print("Permission denied");
-                    }
-                  },
-                  label: "Choose from gallery",
-                  fontSize: 12.sp,
-                  isSmallButton: false,
-                ),
-              ),
-              SizedBox(height: 30.h),
-              GestureDetector(
-                onTap: () => Navigator.pop(context),
-                child: RegularText(
-                  textAlign: TextAlign.center,
-                  textSize: 14.sp,
-                  maxLines: 2,
-                  fontWeight: FontWeight.w700,
-                  textColor: AppColors.baseColor,
-                  textOverflow: TextOverflow.ellipsis,
-                  text: "Cancel",
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  Widget documentWidget({
-    required String image,
-    required String title,
-    bool isFile = false,
-  }) {
-    return Container(
-      width: 155.w,
-      height: 207.h,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: const Color(0x0D2D2E39),
-            offset: const Offset(2, 4),
-            blurRadius: 10,
-            spreadRadius: 2,
-          ),
-        ],
-        border: Border.all(
-          width: 1.w,
-          color: isFile ? AppColors.introSliderCircleColor : Colors.transparent,
-        ),
-        borderRadius: BorderRadius.circular(8.r),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Container(),
           Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              isFile
-                  ? ClipRRect(
-                    borderRadius: BorderRadius.circular(8.r),
-                    child: Image.file(
-                      File(image),
-                      width: 118.w,
-                      height: 118.h,
-                      fit: BoxFit.cover,
-                    ),
-                  )
-                  : Image.asset(
-                    image,
-                    width: 118.w,
-                    height: 118.h,
-                    fit: BoxFit.contain,
-                  ),
-              SizedBox(height: 16.h),
               SizedBox(
-                width: 134.w,
-                child: RegularText(
-                  textAlign: TextAlign.center,
-                  textSize: 12.sp,
-                  maxLines: 4,
-                  fontWeight: FontWeight.w500,
-                  textColor: AppColors.borderColor,
-                  textOverflow: TextOverflow.ellipsis,
-                  text: title,
+                height: 45.h,
+                width: double.infinity,
+                child: AnimatedButton(
+                  disableButton: false,
+                  isLoading: state is KycUploadDocumentsSubmitting,
+                  onPressed: () async {
+                    await context
+                        .read<KycUploadDocumentsCubit>()
+                        .submitDocuments();
+                  },
+                  label: AppTexts.continueTitle,
+                  fontSize: 12.sp,
+                  isSmallButton: false,
                 ),
               ),
+              SizedBox(height: 20.h),
             ],
           ),
-          isFile
-              ? Align(
-                alignment: Alignment.bottomCenter,
-                child: Container(
-                  height: 6.h,
-                  width: 155.w,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                      bottomRight: Radius.circular(8.r),
-                      bottomLeft: Radius.circular(8.r),
-                    ),
-                    color: AppColors.introSliderCircleColor,
-                  ),
-                ),
-              )
-              : Container(),
         ],
       ),
-    );
-  }
+    ),
+  );
 }

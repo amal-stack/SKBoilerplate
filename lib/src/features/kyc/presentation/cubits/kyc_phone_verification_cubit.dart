@@ -1,4 +1,5 @@
 import 'package:boilerplate/src/features/kyc/domain/repositories/kyc_repository.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 sealed class KycVerificationStep {
@@ -22,10 +23,10 @@ class PhoneEntryStep extends KycVerificationStep {
   final PhoneNumberInput input;
 
   PhoneEntryStep withCountryCode(String countryCode) =>
-      PhoneEntryStep.fromInput(input.withCountryCode(countryCode));
+      withInput(input.withCountryCode(countryCode));
 
   PhoneEntryStep withPhoneNumber(String phoneNumber) =>
-      PhoneEntryStep.fromInput(input.withPhoneNumber(phoneNumber));
+      withInput(input.withPhoneNumber(phoneNumber));
 
   PhoneEntryStep withInput(PhoneNumberInput newInput) =>
       PhoneEntryStep.fromInput(newInput);
@@ -60,6 +61,12 @@ class OtpVerificationStep extends KycVerificationStep {
   @override
   bool get isValid => phone.isValid && otp.isNotEmpty && otp.length == 6;
 
+  OtpVerificationStep withOtp(String newOtp) =>
+      OtpVerificationStep(phone: phone, otp: newOtp, canResend: canResend);
+
+  OtpVerificationStep withCanResend(bool canResend) =>
+      OtpVerificationStep(phone: phone, otp: otp, canResend: canResend);
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -93,6 +100,11 @@ class KycPhoneVerificationError<T extends KycVerificationStep>
   const KycPhoneVerificationError(super.step, {required this.error});
 
   final String error;
+}
+
+class KycPhoneVerificationComplete
+    extends KycPhoneVerificationState<OtpVerificationStep> {
+  const KycPhoneVerificationComplete(super.step);
 }
 
 class PhoneNumberInput {
@@ -136,117 +148,165 @@ class PhoneNumberInput {
 }
 
 class KycPhoneVerificationCubit extends Cubit<KycPhoneVerificationState> {
-  KycPhoneVerificationCubit(this.repository)
-    : super(const KycPhoneVerificationInput(PhoneEntryStep.empty));
+  KycPhoneVerificationCubit(
+    this.repository, {
+    required this.quoteId,
+    PhoneNumberInput? initialPhone,
+  }) : super(
+         KycPhoneVerificationInput(
+           PhoneEntryStep.fromInput(initialPhone ?? PhoneNumberInput.empty),
+         ),
+       );
 
   final KycRepository repository;
+
+  final String quoteId;
 
   KycVerificationStep get step => state.step;
 
   void phoneNumberChanged(String phoneNumber) {
-        emit(
-          KycPhoneVerificationInput(
-            PhoneEntryStep(
-              phoneNumber: phoneNumber,
-            )
-          ),
-        );
+    if (step case PhoneEntryStep phoneEntryStep) {
+      emit(
+        KycPhoneVerificationInput(phoneEntryStep.withPhoneNumber(phoneNumber)),
+      );
     }
-
-
+  }
 
   void countryCodeChanged(String countryCode) {
+    if (step case PhoneEntryStep phoneEntryStep) {
       emit(
-        KycPhoneVerificationInput(
-          PhoneEntryStep(
-            countryCode: countryCode,
-          )
-        ),
+        KycPhoneVerificationInput(phoneEntryStep.withCountryCode(countryCode)),
       );
-  }
-
-  void sendOtp({required String quoteId}) async {
-    
-    switch (step) {
-      case PhoneEntryStep phoneEntryStep:
-        _sendOtp(quoteId: quoteId, phone: phoneEntryStep.input);
-        return;
-      case OtpVerificationStep otpStep:
-        if (!otpStep.canResend) {
-          return;
-        }
-        _sendOtp(quoteId: quoteId, phone: otpStep.phone);
-        return;
     }
   }
 
+  void editPhoneNumber() {
+    if (step case OtpVerificationStep otpStep) {
+      emit(
+        KycPhoneVerificationInput(
+          PhoneEntryStep.fromInput(otpStep.phone),
+        ),
+      );
+    }
+  }
+
+  Future<void> sendOtp() async {
+    if (step case PhoneEntryStep phoneEntryStep) {
+      debugPrint('Sending OTP to ${phoneEntryStep.input.fullPhoneNumber}');
+      if (!phoneEntryStep.isValid) {
+        emit(
+          KycPhoneVerificationError(
+            phoneEntryStep,
+            error: 'Please enter a valid phone number.',
+          ),
+        );
+        return;
+      }
+      emit(KycPhoneVerificationInProgress(phoneEntryStep));
+      await _sendOtp(phoneEntryStep.input, phoneEntryStep);
+    }
+  }
 
   void otpChanged(String otp) {
-    // void emitFromSentState(OtpSentState state) {
-    //   emit(state.withOtp(otp));
-    // }
-
-    // switch (state) {
-    //   case OtpSentState sentState:
-    //     emitFromSentState(sentState);
-    //     return;
-    //   case PostInputState<OtpSentState> inProgressState:
-    //     emitFromSentState(inProgressState.toInput());
-    //     return;
-    //   default:
-    //     return;
-    // }
+    if (step case OtpVerificationStep otpStep) {
+      emit(KycPhoneVerificationInput(otpStep.withOtp(otp)));
+    }
   }
 
-  void verifyOtp({required String quoteId}) async {
-    // if (state case OtpSentState currentState) {
-    //   final otp = currentState.otp;
-    //   if (otp == null || otp.isEmpty) {
-    //     emit(currentState.toError('Please enter the OTP.'));
-    //     return;
-    //   }
+  Future<void> verifyOtp({required String quoteId}) async {
+    if (step case OtpVerificationStep currentState) {
+      if (!currentState.isValid) {
+        emit(
+          KycPhoneVerificationError(
+            currentState,
+            error: 'Please enter a valid OTP.',
+          ),
+        );
+        return;
+      }
 
-    //   emit(currentState.toInProgress());
+      emit(KycPhoneVerificationInProgress(currentState));
 
-    //   try {
-    //     final success = await repository.verifyOtp(quoteId: quoteId, otp: otp);
-    //     if (!success) {
-    //       emit(currentState.toError('Invalid OTP. Please try again.'));
-    //       return;
-    //     }
-    //     emit(currentState.toCompleted());
-    //   } catch (e) {
-    //     emit(currentState.toError('An error occurred. Please try again.'));
-    //   }
-    // }
+      try {
+        final success = await repository.verifyOtp(
+          quoteId: quoteId,
+          otp: currentState.otp,
+        );
+
+        if (!success) {
+          emit(
+            KycPhoneVerificationError(
+              currentState,
+              error: 'Invalid OTP. Please try again.',
+            ),
+          );
+          return;
+        }
+        emit(KycPhoneVerificationComplete(currentState));
+      } catch (e, s) {
+        emit(
+          KycPhoneVerificationError(
+            currentState,
+            error: 'An error occurred. Please try again.',
+          ),
+          
+        );
+        debugPrint('Error during OTP verification: $e');
+        debugPrintStack(stackTrace: s);
+        debugPrint('Quote ID: $quoteId, OTP: ${currentState.otp}');
+      }
+    }
   }
 
-  void reset() {
-    //emit(const EnteringPhoneState());
+  void enableResendOtp() {
+    if (step case OtpVerificationStep otpStep) {
+      emit(KycPhoneVerificationInput(otpStep.withCanResend(true)));
+    }
   }
 
-  void _sendOtp({
-    required String quoteId,
-    required PhoneNumberInput phone,
-  }) async {
-    // if (!phone.isValid) {
-    //     emit(state.toError('Please enter a valid phone number'));
-    //     return;
-    //   }
-    //   emit(currentState.toInProgress());
+  Future<void> resendOtp() {
+    if (step case OtpVerificationStep otpStep) {
+      if (!otpStep.canResend) {
+        return Future.value();
+      }
+      return _sendOtp(otpStep.phone, otpStep);
+    }
+    return Future.value();
+  }
 
-    //   try {
-    //     final success = await repository.sendOtp(
-    //       quoteId: quoteId,
-    //       phoneNumber: currentState.phone.fullPhoneNumber,
-    //     );
-    //     if (!success) {
-    //       emit(currentState.toError('Failed to send OTP. Please try again.'));
-    //       return;
-    //     }
-    //     emit(currentState.toOtpSent());
-    //   } catch (e) {
-    //     emit(currentState.toError('An error occurred. Please try again.'));
-    //   }
+  Future<void> _sendOtp(
+    PhoneNumberInput phone,
+    KycVerificationStep currentStep,
+  ) async {
+    try {
+      final success = await repository.sendOtp(
+        quoteId: quoteId,
+        phoneNumber: phone.fullPhoneNumber,
+      );
+      if (!success) {
+        emit(
+          KycPhoneVerificationError(
+            currentStep,
+            error: 'Failed to send OTP. Please try again.',
+          ),
+        );
+        return;
+      }
+      emit(
+        KycPhoneVerificationInput(
+          OtpVerificationStep(phone: phone, otp: '', canResend: false),
+        ),
+      );
+    } catch (e, s) {
+      emit(
+        KycPhoneVerificationError(
+          currentStep,
+          error: 'An error occurred. Please try again.',
+        ),
+      );
+      debugPrint('Error during sending OTP: $e');
+      debugPrintStack(stackTrace: s);
+      debugPrint('Quote ID: $quoteId, Phone Number: ${phone.fullPhoneNumber}');
+    }
   }
 }

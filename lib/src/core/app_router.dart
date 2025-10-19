@@ -1,5 +1,6 @@
 import 'package:boilerplate/src/features/auth/presentation/screens/verify_otp_screen.dart';
 import 'package:boilerplate/src/features/dashboard/presentation/screens/faq_screen.dart';
+import 'package:boilerplate/src/features/orders/domain/entities/order.dart';
 import 'package:boilerplate/src/features/products/domain/product_variant.dart';
 import 'package:boilerplate/src/features/products/presentation/screens/phone_details_screen.dart';
 import 'package:boilerplate/src/features/questionaire/domain/entities/device_grade.dart';
@@ -132,24 +133,33 @@ final GoRouter appRouter = GoRouter(
       ),
     ),
     GoRoute(
-      path: '/kyc-details-screen',
-      builder: (context, state) => KycDetailsScreen(),
+      path: '/kyc-details-screen/:quoteId',
+      builder: (context, state) => KycDetailsScreen(
+        quoteId: AppRouter.pathParameter<String>(state, 'quoteId'),
+      ),
     ),
     GoRoute(
-      path: '/phone-number-verification-success-screen',
-      builder: (context, state) => PhoneVerificationSuccessScreen(),
+      path: '/phone-verification-success-screen/:quoteId',
+      builder: (context, state) => PhoneVerificationSuccessScreen(
+        quoteId: AppRouter.pathParameter<String>(state, 'quoteId'),
+      ),
     ),
     GoRoute(
-      path: '/upload-document-screen',
-      builder: (context, state) => UploadDocumentScreen(),
+      path: '/upload-documents-screen/:quoteId',
+      builder: (context, state) => UploadDocumentScreen(
+        quoteId: AppRouter.pathParameter<String>(state, 'quoteId'),
+      ),
     ),
     GoRoute(
-      path: '/upload-invoice-screen',
-      builder: (context, state) => UploadInvoiceScreen(),
+      path: '/upload-invoice-screen/:quoteId',
+      builder: (context, state) => UploadInvoiceScreen(
+        quoteId: AppRouter.pathParameter<String>(state, 'quoteId'),
+      ),
     ),
     GoRoute(
       path: '/order-success-screen',
-      builder: (context, state) => OrderSuccessScreen(),
+      builder: (context, state) =>
+          OrderSuccessScreen(order: AppRouter.extra<Order>(state)),
     ),
     GoRoute(
       path: '/pending-order-screen',
@@ -157,7 +167,9 @@ final GoRouter appRouter = GoRouter(
     ),
     GoRoute(
       path: '/completed-order-details-screen',
-      builder: (context, state) => CompletedOrderDetailsScreen(),
+      builder: (context, state) => CompletedOrderDetailsScreen(
+        order: AppRouter.extra<Order>(state),
+      ),
     ),
   ],
 );
