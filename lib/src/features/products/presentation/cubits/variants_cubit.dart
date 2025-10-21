@@ -4,29 +4,11 @@ import 'package:boilerplate/src/shared/cubits/state.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-sealed class ProductVariantsState {
-  const ProductVariantsState();
-}
 
-class ProductVariantsInitial extends ProductVariantsState {
-  const ProductVariantsInitial();
-}
 
-class ProductVariantsFetched extends ProductVariantsState {
-  const ProductVariantsFetched(this.variants);
-
-  final List<ProductVariant> variants;
-}
-
-class ProductVariantsError extends ProductVariantsState {
-  const ProductVariantsError(this.message);
-
-  final String message;
-}
-
-class ProductVariantsCubit extends Cubit<ProductVariantsState> {
+class ProductVariantsCubit extends Cubit<ViewState<List<ProductVariant>>> {
   ProductVariantsCubit(this._repository)
-    : super(const ProductVariantsInitial());
+    : super(const ViewState.initial());
 
   final ProductsRepository _repository;
 
@@ -37,9 +19,9 @@ class ProductVariantsCubit extends Cubit<ProductVariantsState> {
   }) async {
     try {
       final result = await _repository.variants(modelId: modelId);
-      emit(ProductVariantsFetched(result));
+      emit(ViewState.success(result));
     } catch (e) {
-      emit(ProductVariantsError(e.toString()));
+      emit(ViewState.error(e.toString()));
     }
   }
 }
